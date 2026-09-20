@@ -69,11 +69,11 @@ async function fetchOutput(value, fallbackType = "image/png") {
   throw new Error("The AI service returned an unsupported output format.");
 }
 
-async function gradioCall(space, apiName, input) {
+async function gradioCall(space, token, apiName, input) {
   const endpoint = `${space.replace(/\/$/, "")}/gradio_api/call/${encodeURIComponent(apiName.replace(/^\//, ""))}`;
   const start = await fetch(endpoint, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${space.__token || ""}` },
+    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
     body: JSON.stringify({ data: [input] })
   });
   if (!start.ok) throw new Error(`Hugging Face Space request failed (${start.status}).`);
