@@ -1,0 +1,13 @@
+{
+  "name": "flythebg",
+  "private": true,
+  "version": "2.0.0",
+  "description": "FlyThe BG - privacy-first browser media tools with a Cloudflare/Hugging Face background remover",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
