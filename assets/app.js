@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('[data-input]').forEach(function(input){input.addEventListener('change',function(){var f=input.files&&input.files[0];if(!f)return;var s=document.querySelector('[data-status="'+input.dataset.input+'"]');if(s)s.textContent='Selected '+f.name;});});});
