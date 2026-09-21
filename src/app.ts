@@ -141,7 +141,7 @@ function contact(): string {
 }
 
 function normalizePath(): Route {
-  const p = window.location.pathname.replace(/\\/+$/, "") || "/";
+  const p = window.location.pathname.replace(/\/+$/, "") || "/";
   if (p === "/features" || p === "/features.html") return "/features";
   if (p === "/about" || p === "/about.html") return "/about";
   if (p === "/faq" || p === "/faq.html") return "/faq";
@@ -172,7 +172,7 @@ async function removeBackground(file: File): Promise<void> {
   const response = await fetch("/api/remove-bg", { method: "POST", headers: { "Content-Type": file.type }, body: file });
   if (!response.ok) throw new Error((await response.text().catch(() => "")) || `Request failed (${response.status})`);
   const blob = await response.blob();
-  downloadBlob(blob, file.name.replace(/\\.[^.]+$/, "") + "-no-bg.png");
+  downloadBlob(blob, file.name.replace(/\.[^.]+$/, "") + "-no-bg.png");
   status("remove-bg", "Done — PNG downloaded.");
 }
 
@@ -189,7 +189,7 @@ async function compressImage(file: File): Promise<void> {
   ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   bitmap.close();
   const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(v => v ? resolve(v) : reject(new Error("Compression failed.")), "image/jpeg", .72));
-  downloadBlob(blob, file.name.replace(/\\.[^.]+$/, "") + "-compressed.jpg");
+  downloadBlob(blob, file.name.replace(/\.[^.]+$/, "") + "-compressed.jpg");
   status("image-compressor", "Done — original stayed in your browser.");
 }
 
@@ -253,7 +253,7 @@ function wireTools(): void {
   });
   document.querySelectorAll<HTMLElement>(".reveal").forEach(el => {
     const observer = new IntersectionObserver(entries => entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); }
+      if (e.isIntersecting) { (e.target as HTMLElement).classList.add("visible"); observer.unobserve(e.target); }
     }), { threshold: .1 });
     observer.observe(el);
   });
