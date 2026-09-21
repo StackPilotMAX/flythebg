@@ -6,7 +6,7 @@ const POSTER="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07
 const GITHUB_REPO="StackPilotMAX/flythebg";
 const GITHUB_URL="https://github.com/StackPilotMAX/flythebg";
 const COFFEE_URL="https://www.buymeacoffee.com/flythebg";
-const state:Record<ToolId,boolean>={"remove-bg":false,"image-compressor":false,"video-compressor":false};
+const state:Record<ToolId,boolean>={"remove-bg":false,"image-compressor":false,"video-compressor":false};\nconst pendingFiles:Partial<Record<ToolId,File>>={};
 
 function shell(content:string,title:string):string{
  document.title=title;
@@ -61,11 +61,33 @@ async function compressImage(file:File):Promise<void>{setProgress("image-compres
 
 async function compressVideo(file:File):Promise<void>{if(!("MediaRecorder"in window))throw new Error("MediaRecorder is unavailable in this browser.");setProgress("video-compressor",3,"loading");updateStatus("video-compressor","Loading video locally… no upload is happening.");const source=document.createElement("video");source.muted=true;source.playsInline=true;source.src=URL.createObjectURL(file);await new Promise<void>((resolve,reject)=>{source.onloadedmetadata=()=>resolve();source.onerror=()=>reject(new Error("Video could not be read."));});const canvas=document.createElement("canvas");const scale=Math.min(1,1280/Math.max(1,source.videoWidth));canvas.width=Math.max(2,Math.round(source.videoWidth*scale));canvas.height=Math.max(2,Math.round(source.videoHeight*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Video canvas is unavailable.");const stream=canvas.captureStream(30);const mime=MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":"video/webm";const recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:2000000});const chunks:Blob[]=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};const done=new Promise<void>((resolve,reject)=>{recorder.onstop=()=>resolve();recorder.onerror=()=>reject(new Error("Video compression failed."));});recorder.start(250);await source.play();const draw=()=>{if(source.ended){recorder.stop();return;}ctx.drawImage(source,0,0,canvas.width,canvas.height);const pct=source.duration?Math.min(99,Math.round(source.currentTime/source.duration*100)):0;setProgress("video-compressor",pct,\`\${pct}%\`);updateStatus("video-compressor",\`Processing locally… \${pct}%\`);requestAnimationFrame(draw)};draw();await done;URL.revokeObjectURL(source.src);setProgress("video-compressor",98,"encoding");downloadBlob(new Blob(chunks,{type:"video/webm"}),file.name.replace(/\\.[^.]+$/,"")+"-compressed.webm");setProgress("video-compressor",100,"done");updateStatus("video-compressor","Done — compressed WebM downloaded. Original stayed local.");postWork("video compression");}
 
-function wireTools():void{document.querySelectorAll<HTMLInputElement>("[data-input]").forEach(input=>input.addEventListener("change",async()=>{const file=input.files?.[0],tool=input.dataset.input as ToolId|undefined;if(!file||!tool||state[tool])return;if(tool==="remove-bg"&&!document.querySelector<HTMLInputElement>('[data-consent="remove-bg"]')?.checked){updateStatus(tool,"Please accept the processing notice before uploading.");input.value="";return;}state[tool]=true;const zone=document.querySelector<HTMLElement>(\`[data-dropzone="\${tool}"]\`);zone?.classList.add("is-working");try{if(tool==="remove-bg")await removeBackground(file);else if(tool==="image-compressor")await compressImage(file);else await compressVideo(file);}catch(error){updateStatus(tool,error instanceof Error?error.message:"Something went wrong.");setProgress(tool,0,"retry");}finally{state[tool]=false;input.value="";zone?.classList.remove("is-working");}}));document.querySelectorAll<HTMLElement>("[data-dropzone]").forEach(zone=>{const tool=zone.dataset.dropzone as ToolId;["dragenter","dragover"].forEach(t=>zone.addEventListener(t,e=>{e.preventDefault();zone.classList.add("dragging")}));["dragleave","drop"].forEach(t=>zone.addEventListener(t,e=>{e.preventDefault();zone.classList.remove("dragging")}));zone.addEventListener("drop",e=>{const file=(e as DragEvent).dataTransfer?.files?.[0];const input=zone.querySelector<HTMLInputElement>("[data-input]");if(file&&input&&!state[tool]){const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;input.dispatchEvent(new Event("change",{bubbles:true}))}});});}
-
-async function loadStars():Promise<void>{const targets=document.querySelectorAll<HTMLElement>("[data-stars]");if(!targets.length)return;try{const r=await fetch(\`https://api.github.com/repos/\${GITHUB_REPO}\`,{headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw new Error();const d=await r.json() as {stargazers_count?:number};const value=typeof d.stargazers_count==="number"?d.stargazers_count.toLocaleString():"—";targets.forEach(el=>el.textContent=value);}catch{targets.forEach(el=>el.textContent="★");}}
-
-function animateOnScroll():void{const items=document.querySelectorAll<HTMLElement>(".reveal");if(!("IntersectionObserver"in window)){items.forEach(x=>x.classList.add("visible"));return;}const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");observer.unobserve(e.target)}}),{threshold:.12});items.forEach(x=>observer.observe(x));}
-
-function mount():void{const route=normalizePath();let content:string;if(route==="/")content=home();else if(route==="/remove-bg")content=toolPage("remove-bg","01","Remove Background","Remove the background from your image with FlyThe BG's protected AI workflow.","image/png,image/jpeg,image/webp","PNG · JPG · WEBP · max 15 MB","Only this tool sends your selected image to the protected processing service.");else if(route==="/image-compressor")content=toolPage("image-compressor","02","Compress Image","Shrink an image directly in your browser without uploading the original.","image/*","Local processing · no upload","Your original image stays in your browser.");else if(route==="/video-compressor")content=toolPage("video-compressor","03","Compress Video","Reduce video size locally using browser MediaRecorder support.","video/*","Local processing · WebM output","Your original video stays in your browser.");else if(route==="/features")content=features();else if(route==="/about")content=about();else if(route==="/faq")content=faq();else if(route==="/privacy")content=privacy();else if(route==="/terms")content=terms();else if(route==="/support")content=support();else content=contact();const app=document.getElementById("app");if(app)app.innerHTML=content;wireTools();animateOnScroll();loadStars();}
-mount();
+function wireTools():void{
+ document.querySelectorAll<HTMLInputElement>("[data-input]").forEach(input=>input.addEventListener("change",()=>{
+  const file=input.files?.[0],tool=input.dataset.input as ToolId|undefined;
+  if(!file||!tool||state[tool])return;
+  pendingFiles[tool]=file;
+  const name=document.querySelector<HTMLElement>(`[data-file-name="${tool}"]`);
+  if(name)name.textContent=file.name+" selected — nothing sent yet.";
+  const button=document.querySelector<HTMLButtonElement>(`[data-process="${tool}"]`);
+  if(button)button.disabled=false;
+  updateStatus(tool,tool==="remove-bg"?"Ready. Nothing is uploaded until you press “Remove background” and accept the notice.":"Ready. Nothing is processed until you press the button.");
+ }));
+ document.querySelectorAll<HTMLButtonElement>("[data-process]").forEach(button=>button.addEventListener("click",async()=>{
+  const tool=button.dataset.process as ToolId|undefined,file=tool?pendingFiles[tool]:undefined;
+  if(!tool||!file||state[tool])return;
+  if(tool==="remove-bg"&&!document.querySelector<HTMLInputElement>('[data-consent="remove-bg"]')?.checked){updateStatus(tool,"Please accept the processing notice before uploading.");return;}
+  state[tool]=true;button.disabled=true;const zone=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`);zone?.classList.add("is-working");
+  try{if(tool==="remove-bg")await removeBackground(file);else if(tool==="image-compressor")await compressImage(file);else await compressVideo(file);}
+  catch(error){updateStatus(tool,error instanceof Error?error.message:"Something went wrong.");setProgress(tool,0,"retry");}
+  finally{state[tool]=false;delete pendingFiles[tool];button.disabled=true;zone?.classList.remove("is-working");}
+ }));
+ document.querySelectorAll<HTMLElement>("[data-dropzone]").forEach(zone=>{
+  const tool=zone.dataset.dropzone as ToolId;
+  ["dragenter","dragover"].forEach(t=>zone.addEventListener(t,e=>{e.preventDefault();zone.classList.add("dragging")}));
+  ["dragleave","drop"].forEach(t=>zone.addEventListener(t,e=>{e.preventDefault();zone.classList.remove("dragging")}));
+  zone.addEventListener("drop",e=>{
+   const file=(e as DragEvent).dataTransfer?.files?.[0],input=zone.querySelector<HTMLInputElement>("[data-input]");
+   if(file&&input&&!state[tool]){const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;input.dispatchEvent(new Event("change",{bubbles:true}))}
+  });
+ });
+}
