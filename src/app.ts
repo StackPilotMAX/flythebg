@@ -217,7 +217,7 @@ async function compressVideo(file: File): Promise<void> {
   const draw = () => {
     if (source.ended) { recorder.stop(); return; }
     ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
-    if (source.duration) status("video-compressor", `Processing locally… ${Math.min(99, Math.round(source.currentTime / source.duration * 100))}%`);
+    if (source.duration) updateStatus("video-compressor", `Processing locally… ${Math.min(99, Math.round(source.currentTime / source.duration * 100))}%`);
     requestAnimationFrame(draw);
   };
   draw();
