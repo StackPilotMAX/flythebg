@@ -1,5 +1,8 @@
 name = "flythebg"
-compatibility_date = "2024-09-23"
-pages_build_output_dir = "."
-# Secrets (HF_ACCESS_TOKEN, HF_SPACE_URL, HF_SPACE_API) are set in the
-# Cloudflare Pages dashboard, never here.
+main = "worker.js"
+compatibility_date = "2026-09-21"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
