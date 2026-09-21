@@ -7,7 +7,7 @@ const SECURITY_HEADERS = {
   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
   "Cross-Origin-Opener-Policy": "same-origin",
-  "Content-Security-Policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data: blob: https://d2ol7oe51mr4n9d.cloudfront.net; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'"
+  "Content-Security-Policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://d2ol7oe51mr4n9d.cloudfront.net; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'"
 };
 
 function withSecurityHeaders(response) {
