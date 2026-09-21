@@ -1,42 +1,27 @@
-const json = (data, status = 200) => new Response(JSON.stringify(data), {
-  status,
-  headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
-});
+const MAX_BYTES = 15 * 1024 * 1024;
+const ALLOWED_TYPES = new Set(["image/png","image/jpeg","image/webp"]);
+const ORIGIN = "https://flythebg.com";
 
-function corsHeaders() {
+function headers(extra = {}) {
   return {
-    "Access-Control-Allow-Origin": "https://flythebg.com",
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Access-Control-Allow-Origin": ORIGIN,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Max-Age": "86400"
+    "Access-Control-Max-Age": "86400",
+    ...extra
   };
 }
-
-function withCors(response) {
-  const headers = new Headers(response.headers);
-  for (const [key, value] of Object.entries(corsHeaders())) headers.set(key, value);
-  return new Response(response.body, { status: response.status, headers });
-}
-
-function error(message, status = 400) {
-  return withCors(json({ error: message }, status));
-}
-
-function dataUrlFromBytes(bytes, contentType) {
-  let binary = "";
-  const chunk = 0x8000;
-  for (let i = 0; i < bytes.length; i += chunk) {
-    binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunk, bytes.length)));
-  }
-  return `data:${contentType};base64,${btoa(binary)}`;
-}
+function json(data, status) { return new Response(JSON.stringify(data), { status, headers: headers({"Content-Type":"application/json; charset=utf-8"}) }); }
+function fail(message, status=400) { return json({error:message}, status); }
 
 async function readSseResult(response) {
   const text = await response.text();
-  const events = text.split(/\n\n+/);
   let result = null;
-  for (const event of events) {
-    const line = event.split("\n").find(value => value.startsWith("data:"));
+  for (const event of text.split(/\\n\\n+/)) {
+    const line = event.split("\\n").find(v => v.startsWith("data:"));
     if (!line) continue;
     const payload = line.slice(5).trim();
     if (!payload || payload === "[DONE]") continue;
@@ -49,81 +34,76 @@ async function readSseResult(response) {
   return result;
 }
 
-async function fetchOutput(value, fallbackType = "image/png") {
-  if (typeof value === "string" && /^https?:\/\//i.test(value)) {
-    const response = await fetch(value);
-    if (!response.ok) throw new Error("The AI service returned an unreadable result.");
-    return response;
-  }
-  if (typeof value === "string" && value.startsWith("data:")) {
-    const match = value.match(/^data:([^;]+);base64,(.*)$/s);
-    if (!match) throw new Error("The AI service returned an invalid image.");
-    const binary = Uint8Array.from(atob(match[2]), c => c.charCodeAt(0));
-    return new Response(binary, { headers: { "Content-Type": match[1] || fallbackType } });
-  }
-  if (value && typeof value === "object") {
-    if (typeof value.url === "string") return fetchOutput(value.url, fallbackType);
-    if (typeof value.path === "string" && /^https?:\/\//i.test(value.path)) return fetchOutput(value.path, fallbackType);
-    if (typeof value.data === "string") return fetchOutput(value.data, fallbackType);
-  }
-  throw new Error("The AI service returned an unsupported output format.");
-}
-
 async function gradioCall(space, token, apiName, input) {
-  const endpoint = `${space.replace(/\/$/, "")}/gradio_api/call/${encodeURIComponent(apiName.replace(/^\//, ""))}`;
+  const endpoint = `${space.replace(/\\/$/, "")}/gradio_api/call/${encodeURIComponent(apiName.replace(/^\\//, ""))}`;
   const start = await fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-    body: JSON.stringify({ data: [input] })
+    method:"POST",
+    headers:{"Content-Type":"application/json","Authorization:`Bearer ${token}`},
+    body:JSON.stringify({data:[input]})
   });
-  if (!start.ok) throw new Error(`Hugging Face Space request failed (${start.status}).`);
+  if (!start.ok) throw new Error(`AI processor rejected the request (${start.status}).`);
   const payload = await start.json();
   if (!payload.event_id) return payload.data ?? payload;
-  const events = await fetch(`${endpoint}/${encodeURIComponent(payload.event_id)}`, {
-    headers: { "Accept": "text/event-stream" }
-  });
-  if (!events.ok) throw new Error("The Hugging Face Space did not return a completed result.");
+  const events = await fetch(`${endpoint}/${encodeURIComponent(payload.event_id)}`, {headers:{"Accept":"text/event-stream","Authorization:`Bearer ${token}`}});
+  if (!events.ok) throw new Error("AI processor did not return a completed result.");
   return readSseResult(events);
 }
 
+function dataUrl(bytes, type) {
+  let binary = "";
+  for (let i=0;i<bytes.length;i+=0x8000) binary += String.fromCharCode(...bytes.subarray(i,Math.min(i+0x8000,bytes.length)));
+  return `data:${type};base64,${btoa(binary)}`;
+}
+
+async function outputResponse(value) {
+  if (typeof value === "string" && /^https?:\\/\\//i.test(value)) {
+    const r = await fetch(value); if (!r.ok) throw new Error("AI result could not be retrieved."); return r;
+  }
+  if (typeof value === "string" && value.startsWith("data:")) {
+    const m = value.match(/^data:([^;]+);base64,(.*)$/s); if (!m) throw new Error("Invalid AI result.");
+    const bytes = Uint8Array.from(atob(m[2]), c=>c.charCodeAt(0));
+    return new Response(bytes,{headers:{"Content-Type":m[1]||"image/png"}});
+  }
+  if (value && typeof value === "object") {
+    if (value.url) return outputResponse(value.url);
+    if (value.path && /^https?:\\/\\//i.test(value.path)) return outputResponse(value.path);
+    if (value.data) return outputResponse(value.data);
+  }
+  throw new Error("AI processor returned an unsupported result format.");
+}
+
 export async function onRequest(context) {
-  if (context.request.method === "OPTIONS") return withCors(new Response(null, { status: 204 }));
-  if (context.request.method !== "POST") return error("POST an image to this endpoint.", 405);
+  if (context.request.method === "OPTIONS") return new Response(null,{status:204,headers:headers()});
+  if (context.request.method !== "POST") return fail("POST one image to this endpoint.",405);
 
   const token = context.env.HF_ACCESS_TOKEN;
-  const spaceUrl = context.env.HF_SPACE_URL;
-  const apiName = context.env.HF_SPACE_API || "predict";
+  const space = context.env.HF_SPACE_URL;
+  const apiName = context.env.HF_SPACE_API;
+  if (!token || !space || !apiName) return fail("Background removal is not configured.",503);
 
-  if (!token || !spaceUrl) return error("Background removal is not configured on the server.", 503);
+  const contentType = (context.request.headers.get("content-type") || "").split(";")[0].toLowerCase();
+  if (!ALLOWED_TYPES.has(contentType)) return fail("Only PNG, JPG and WEBP images are accepted.",415);
 
-  const contentType = context.request.headers.get("content-type") || "";
-  if (!/^image\/(png|jpeg|webp)$/i.test(contentType)) return error("Only PNG, JPG, and WEBP images are accepted.", 415);
+  const length = Number(context.request.headers.get("content-length") || "0");
+  if (length > MAX_BYTES) return fail("Image exceeds the 15 MB limit.",413);
 
   const body = await context.request.arrayBuffer();
-  if (!body.byteLength) return error("No image was received.");
-  if (body.byteLength > 15 * 1024 * 1024) return error("Image is too large. Maximum size is 15 MB.", 413);
-
-  const bytes = new Uint8Array(body);
-  const input = {
-    path: "input",
-    url: dataUrlFromBytes(bytes, contentType),
-    meta: { _type: "gradio.FileData" }
-  };
+  if (!body.byteLength) return fail("No image was received.");
+  if (body.byteLength > MAX_BYTES) return fail("Image exceeds the 15 MB limit.",413);
 
   try {
-    // The token exists only inside this server-side function and is never
-    // returned to the browser.
-    const space = new String(spaceUrl);
-    space.__token = token;
-    const result = await gradioCall(space, apiName, input);
+    // The Hugging Face credential is read only inside this server-side function.
+    // It is never sent to the browser or committed to the repository.
+    const input = {path:"input", url:dataUrl(new Uint8Array(body),contentType), meta:{_type:"gradio.FileData"}};
+    const result = await gradioCall(space, token, apiName, input);
     const output = Array.isArray(result) ? result[0] : result;
-    const image = await fetchOutput(output);
-    const headers = new Headers(image.headers);
-    headers.set("Content-Type", "image/png");
-    headers.set("Content-Disposition", 'attachment; filename="flythebg-no-bg.png"');
-    headers.set("Cache-Control", "no-store");
-    return withCors(new Response(image.body, { status: 200, headers }));
-  } catch (err) {
-    return error(err instanceof Error ? err.message : "Background removal failed.", 502);
+    const image = await outputResponse(output);
+    return new Response(image.body,{status:200,headers:headers({
+      "Content-Type":"image/png",
+      "Content-Disposition":'attachment; filename="flythebg-no-bg.png"'
+    })});
+  } catch (error) {
+    // Do not expose provider credentials, stack traces, or internal configuration.
+    return fail(error instanceof Error ? error.message : "Background removal failed.",502);
   }
 }
