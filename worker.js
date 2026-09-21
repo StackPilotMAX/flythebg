@@ -1,4 +1,4 @@
-import { onRequest } from "./functions/api/remove-bg.js";
+import { onRequest } from "../functions/api/remove-bg.js";
 
 const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
