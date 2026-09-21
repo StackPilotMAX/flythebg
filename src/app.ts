@@ -162,22 +162,22 @@ function downloadBlob(blob: Blob, filename: string): void {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function status(tool: ToolId, message: string): void {
+function updateStatus(tool: ToolId, message: string): void {
   const el = document.querySelector<HTMLElement>(`[data-status="${tool}"]`);
   if (el) el.textContent = message;
 }
 
 async function removeBackground(file: File): Promise<void> {
-  status("remove-bg", "Uploading to the protected processing route…");
+  updateStatus("remove-bg", "Uploading to the protected processing route…");
   const response = await fetch("/api/remove-bg", { method: "POST", headers: { "Content-Type": file.type }, body: file });
   if (!response.ok) throw new Error((await response.text().catch(() => "")) || `Request failed (${response.status})`);
   const blob = await response.blob();
   downloadBlob(blob, file.name.replace(/\.[^.]+$/, "") + "-no-bg.png");
-  status("remove-bg", "Done — PNG downloaded.");
+  updateStatus("remove-bg", "Done — PNG downloaded.");
 }
 
 async function compressImage(file: File): Promise<void> {
-  status("image-compressor", "Processing locally…");
+  updateStatus("image-compressor", "Processing locally…");
   const bitmap = await createImageBitmap(file);
   const maxSide = 2400;
   const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
@@ -190,12 +190,12 @@ async function compressImage(file: File): Promise<void> {
   bitmap.close();
   const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(v => v ? resolve(v) : reject(new Error("Compression failed.")), "image/jpeg", .72));
   downloadBlob(blob, file.name.replace(/\.[^.]+$/, "") + "-compressed.jpg");
-  status("image-compressor", "Done — original stayed in your browser.");
+  updateStatus("image-compressor", "Done — original stayed in your browser.");
 }
 
 async function compressVideo(file: File): Promise<void> {
   if (!("MediaRecorder" in window)) throw new Error("MediaRecorder is unavailable in this browser.");
-  status("video-compressor", "Processing locally…");
+  updateStatus("video-compressor", "Processing locally…");
   const source = document.createElement("video");
   source.muted = true; source.playsInline = true; source.src = URL.createObjectURL(file);
   await new Promise<void>((resolve, reject) => { source.onloadedmetadata = () => resolve(); source.onerror = () => reject(new Error("Video could not be read.")); });
@@ -224,7 +224,7 @@ async function compressVideo(file: File): Promise<void> {
   await done;
   URL.revokeObjectURL(source.src);
   downloadBlob(new Blob(chunks, { type: "video/webm" }), file.name.replace(/\\.[^.]+$/, "") + "-compressed.webm");
-  status("video-compressor", "Done — original stayed in your browser.");
+  updateStatus("video-compressor", "Done — original stayed in your browser.");
 }
 
 function wireTools(): void {
@@ -234,7 +234,7 @@ function wireTools(): void {
       const tool = input.dataset.input as ToolId | undefined;
       if (!file || !tool || state[tool]) return;
       if (tool === "remove-bg" && !document.querySelector<HTMLInputElement>('[data-consent="remove-bg"]')?.checked) {
-        status(tool, "Please confirm the processing notice before uploading.");
+        updateStatus(tool, "Please confirm the processing notice before uploading.");
         input.value = "";
         return;
       }
@@ -244,7 +244,7 @@ function wireTools(): void {
         else if (tool === "image-compressor") await compressImage(file);
         else await compressVideo(file);
       } catch (error) {
-        status(tool, error instanceof Error ? error.message : "Something went wrong.");
+        updateStatus(tool, error instanceof Error ? error.message : "Something went wrong.");
       } finally {
         state[tool] = false;
         input.value = "";
