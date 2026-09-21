@@ -69,7 +69,7 @@ async function readSseResult(response) {
 async function uploadFile(token, bytes, type) {
   const form = new FormData();
   form.append("files", new Blob([bytes], { type }), "input");
-  const response = await fetch(SPACE_URL.replace(/\\/$/, "") + "/gradio_api/upload", {
+  const response = await fetch(SPACE_URL.replace(/\/$/, "") + "/gradio_api/upload", {
     method: "POST",
     headers: { "Authorization": "Bearer " + token },
     body: form
@@ -90,7 +90,7 @@ async function uploadFile(token, bytes, type) {
 }
 
 async function gradioCall(token, input) {
-  const endpoint = SPACE_URL.replace(/\\/$/, "") + "/gradio_api/call/" + API_NAME.slice(1);
+  const endpoint = SPACE_URL.replace(/\/$/, "") + "/gradio_api/call/" + API_NAME.slice(1);
   let lastStatus = 0;
 
   // A sleeping Space can take time to boot. Start it before uploading.
