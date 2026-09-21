@@ -28,6 +28,19 @@ function fail(message, status = 400) {
   return json({ error: message }, status);
 }
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function wakeSpace(token) {
+  // A visitor request to a sleeping Space causes Hugging Face to start it.
+  // We authenticate this request because the Space is private.
+  const response = await fetch(SPACE_URL, {
+    method: "GET",
+    headers: { "Authorization": "Bearer " + token }
+  });
+
+  return response.status;
+}
+
 async function readSseResult(response) {
   const text = await response.text();
 
@@ -55,30 +68,52 @@ async function readSseResult(response) {
 
 async function gradioCall(token, input) {
   const endpoint = SPACE_URL.replace(/\/$/, "") + "/gradio_api/call/" + API_NAME.slice(1);
+  let lastStatus = 0;
 
-  const start = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
-    body: JSON.stringify({ data: [input] })
-  });
+  // Give a sleeping Space time to boot. The warm-up request is deliberately
+  // made before the Gradio call so users don't have to retry manually.
+  await wakeSpace(token).catch(() => {});
+  await sleep(1200);
 
-  if (!start.ok) throw new Error("AI processor rejected the request (" + start.status + ").");
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    const start = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ data: [input] })
+    });
 
-  const payload = await start.json();
-  if (!payload?.event_id) return payload?.data?.[0] ?? payload?.data ?? payload;
+    lastStatus = start.status;
 
-  const events = await fetch(endpoint + "/" + encodeURIComponent(payload.event_id), {
-    headers: {
-      "Accept": "text/event-stream",
-      "Authorization": "Bearer " + token
+    if (start.ok) {
+      const payload = await start.json();
+      if (!payload?.event_id) return payload?.data?.[0] ?? payload?.data ?? payload;
+
+      const events = await fetch(endpoint + "/" + encodeURIComponent(payload.event_id), {
+        headers: {
+          "Accept": "text/event-stream",
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      if (!events.ok) throw new Error("AI processor did not return a completed result.");
+      return readSseResult(events);
     }
-  });
 
-  if (!events.ok) throw new Error("AI processor did not return a completed result.");
-  return readSseResult(events);
+    // 404/503 can occur while a sleeping Space is waking or its Gradio
+    // service is becoming ready. Warm it again and retry with backoff.
+    if (lastStatus === 404 || lastStatus === 502 || lastStatus === 503) {
+      await wakeSpace(token).catch(() => {});
+      await sleep(1500 * attempt);
+      continue;
+    }
+
+    throw new Error("AI processor rejected the request (" + lastStatus + ").");
+  }
+
+  throw new Error("AI processor is waking up. Please try again in a few seconds (" + lastStatus + ").");
 }
 
 function dataUrl(bytes, type) {
