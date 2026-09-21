@@ -66,56 +66,87 @@ async function readSseResult(response) {
   throw new Error("The background-removal processor returned no result.");
 }
 
+async function uploadFile(token, bytes, type) {
+  const form = new FormData();
+  form.append("files", new Blob([bytes], { type }), "input");
+  const response = await fetch(SPACE_URL.replace(/\\/$/, "") + "/gradio_api/upload", {
+    method: "POST",
+    headers: { "Authorization": "Bearer " + token },
+    body: form
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      response.status === 404
+        ? "Hugging Face Space is unavailable or the token does not have access (404)."
+        : "AI processor rejected the file upload (" + response.status + ")."
+    );
+  }
+
+  const uploaded = await response.json();
+  const path = Array.isArray(uploaded) ? uploaded[0] : uploaded?.path;
+  if (!path) throw new Error("AI processor returned no uploaded file path.");
+  return path;
+}
+
 async function gradioCall(token, input) {
-  const endpoint = SPACE_URL.replace(/\/$/, "") + "/gradio_api/call/" + API_NAME.slice(1);
+  const endpoint = SPACE_URL.replace(/\\/$/, "") + "/gradio_api/call/" + API_NAME.slice(1);
   let lastStatus = 0;
 
-  // Give a sleeping Space time to boot. The warm-up request is deliberately
-  // made before the Gradio call so users don't have to retry manually.
+  // A sleeping Space can take time to boot. Start it before uploading.
   await wakeSpace(token).catch(() => {});
-  await sleep(1200);
+  await sleep(1500);
 
-  for (let attempt = 1; attempt <= 4; attempt++) {
-    const start = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token
-      },
-      body: JSON.stringify({ data: [input] })
-    });
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    try {
+      const filePath = await uploadFile(token, input.bytes, input.type);
 
-    lastStatus = start.status;
-
-    if (start.ok) {
-      const payload = await start.json();
-      if (!payload?.event_id) return payload?.data?.[0] ?? payload?.data ?? payload;
-
-      const events = await fetch(endpoint + "/" + encodeURIComponent(payload.event_id), {
+      const start = await fetch(endpoint, {
+        method: "POST",
         headers: {
-          "Accept": "text/event-stream",
+          "Content-Type": "application/json",
           "Authorization": "Bearer " + token
-        }
+        },
+        body: JSON.stringify({
+          data: [{
+            path: filePath,
+            meta: { _type: "gradio.FileData" },
+            orig_name: "input"
+          }]
+        })
       });
 
-      if (!events.ok) throw new Error("AI processor did not return a completed result.");
-      return readSseResult(events);
+      lastStatus = start.status;
+
+      if (start.ok) {
+        const payload = await start.json();
+        if (!payload?.event_id) return payload?.data?.[0] ?? payload?.data ?? payload;
+
+        const events = await fetch(endpoint + "/" + encodeURIComponent(payload.event_id), {
+          headers: {
+            "Accept": "text/event-stream",
+            "Authorization": "Bearer " + token
+          }
+        });
+
+        if (!events.ok) throw new Error("AI processor did not return a completed result.");
+        return readSseResult(events);
+      }
+    } catch (error) {
+      if (error instanceof Error && !/\\b(404|502|503)\\b/.test(error.message)) throw error;
     }
 
-    // 404/503 can occur while a sleeping Space is waking or its Gradio
-    // service is becoming ready. Warm it again and retry with backoff.
-    if (lastStatus === 404 || lastStatus === 502 || lastStatus === 503) {
+    if (lastStatus === 404 || lastStatus === 502 || lastStatus === 503 || lastStatus === 0) {
       await wakeSpace(token).catch(() => {});
-      await sleep(1500 * attempt);
+      await sleep(1800 * attempt);
       continue;
     }
 
     throw new Error("AI processor rejected the request (" + lastStatus + ").");
   }
 
-  throw new Error("AI processor is waking up. Please try again in a few seconds (" + lastStatus + ").");
+  throw new Error("AI processor is unavailable after multiple startup attempts (" + lastStatus + ").");
 }
-
 function dataUrl(bytes, type) {
   let binary = "";
   for (let i = 0; i < bytes.length; i += 0x8000) {
@@ -166,9 +197,8 @@ export async function onRequest(context) {
 
   try {
     const input = {
-      path: "input",
-      url: dataUrl(new Uint8Array(body), contentType),
-      meta: { _type: "gradio.FileData" }
+      bytes: new Uint8Array(body),
+      type: contentType
     };
 
     const result = await gradioCall(token, input);
