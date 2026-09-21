@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "description": "FlyThe BG - privacy-first browser media tools with a Cloudflare/Hugging Face background remover",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/prepare-public.mjs",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
