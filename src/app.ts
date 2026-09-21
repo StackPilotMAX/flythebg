@@ -51,16 +51,16 @@ function terms():string{return shell(`<main class="page prose legal reveal"><p c
 
 function contact():string{return shell(`<main class="page prose reveal"><p class="eyebrow">CONTACT</p><h1>Talk to the project.</h1><p>For privacy requests, security reports, feedback or project communication:</p><a class="contact-card" href="mailto:stackpilotfe@outlook.com"><span>Email</span><strong>stackpilotfe@outlook.com</strong></a></main>`,"Contact — FlyThe BG");}
 
-function normalizePath():Route{const p=window.location.pathname.replace(/\\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support"};return routes[p]||"/";}
+function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function setProgress(tool:ToolId,value:number,label?:string):void{const n=Math.max(0,Math.min(100,value));const bar=document.querySelector<HTMLElement>(`[data-progress="${tool}"]`);if(bar)bar.style.width=`${n}%`;const text=document.querySelector<HTMLElement>(`[data-progress-label="${tool}"]`);if(text)text.textContent=label??`${Math.round(n)}%`;}
 function updateStatus(tool:ToolId,message:string):void{const el=document.querySelector<HTMLElement>(`[data-status="${tool}"]`);if(el)el.textContent=message;}
 
-async function removeBackground(file:File):Promise<void>{setProgress("remove-bg",8,"uploading");updateStatus("remove-bg","Uploading securely… this is the one tool that needs the internet.");const response=await fetch("/api/remove-bg",{method:"POST",headers:{"Content-Type":file.type},body:file});setProgress("remove-bg",72,"AI processing");if(!response.ok){let message="Background removal failed.";try{const data=await response.json() as {error?:string};if(data.error)message=data.error;}catch{}throw new Error(message);}setProgress("remove-bg",92,"preparing");downloadBlob(await response.blob(),file.name.replace(/\\.[^.]+$/,"")+"-no-bg.png");setProgress("remove-bg",100,"done");updateStatus("remove-bg","Done — transparent PNG downloaded.");postWork("background removal");}
+async function removeBackground(file:File):Promise<void>{setProgress("remove-bg",8,"uploading");updateStatus("remove-bg","Uploading securely… this is the one tool that needs the internet.");const response=await fetch("/api/remove-bg",{method:"POST",headers:{"Content-Type":file.type},body:file});setProgress("remove-bg",72,"AI processing");if(!response.ok){let message="Background removal failed.";try{const data=await response.json() as {error?:string};if(data.error)message=data.error;}catch{}throw new Error(message);}setProgress("remove-bg",92,"preparing");downloadBlob(await response.blob(),file.name.replace(/\.[^.]+$/,"")+"-no-bg.png");setProgress("remove-bg",100,"done");updateStatus("remove-bg","Done — transparent PNG downloaded.");postWork("background removal");}
 
-async function compressImage(file:File):Promise<void>{setProgress("image-compressor",10,"reading");updateStatus("image-compressor","Reading the image locally…");const bitmap=await createImageBitmap(file);setProgress("image-compressor",35,"resizing");const maxSide=2400;const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Canvas is unavailable.");ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();setProgress("image-compressor",68,"compressing");const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(v=>v?resolve(v):reject(new Error("Compression failed.")),"image/jpeg",.72));setProgress("image-compressor",92,"downloading");downloadBlob(blob,file.name.replace(/\\.[^.]+$/,"")+"-compressed.jpg");setProgress("image-compressor",100,"done");updateStatus("image-compressor","Done — original stayed in your browser.");postWork("image compression");}
+async function compressImage(file:File):Promise<void>{setProgress("image-compressor",10,"reading");updateStatus("image-compressor","Reading the image locally…");const bitmap=await createImageBitmap(file);setProgress("image-compressor",35,"resizing");const maxSide=2400;const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Canvas is unavailable.");ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();setProgress("image-compressor",68,"compressing");const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(v=>v?resolve(v):reject(new Error("Compression failed.")),"image/jpeg",.72));setProgress("image-compressor",92,"downloading");downloadBlob(blob,file.name.replace(/\.[^.]+$/,"")+"-compressed.jpg");setProgress("image-compressor",100,"done");updateStatus("image-compressor","Done — original stayed in your browser.");postWork("image compression");}
 
-async function compressVideo(file:File):Promise<void>{if(!("MediaRecorder"in window))throw new Error("MediaRecorder is unavailable in this browser.");setProgress("video-compressor",3,"loading");updateStatus("video-compressor","Loading video locally… no upload is happening.");const source=document.createElement("video");source.muted=true;source.playsInline=true;source.src=URL.createObjectURL(file);await new Promise<void>((resolve,reject)=>{source.onloadedmetadata=()=>resolve();source.onerror=()=>reject(new Error("Video could not be read."));});const canvas=document.createElement("canvas");const scale=Math.min(1,1280/Math.max(1,source.videoWidth));canvas.width=Math.max(2,Math.round(source.videoWidth*scale));canvas.height=Math.max(2,Math.round(source.videoHeight*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Video canvas is unavailable.");const stream=canvas.captureStream(30);const mime=MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":"video/webm";const recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:2000000});const chunks:Blob[]=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};const done=new Promise<void>((resolve,reject)=>{recorder.onstop=()=>resolve();recorder.onerror=()=>reject(new Error("Video compression failed."));});recorder.start(250);await source.play();const draw=()=>{if(source.ended){recorder.stop();return;}ctx.drawImage(source,0,0,canvas.width,canvas.height);const pct=source.duration?Math.min(99,Math.round(source.currentTime/source.duration*100)):0;setProgress("video-compressor",pct,`${pct}%`);updateStatus("video-compressor",`Processing locally… ${pct}%`);requestAnimationFrame(draw)};draw();await done;URL.revokeObjectURL(source.src);setProgress("video-compressor",98,"encoding");downloadBlob(new Blob(chunks,{type:"video/webm"}),file.name.replace(/\\.[^.]+$/,"")+"-compressed.webm");setProgress("video-compressor",100,"done");updateStatus("video-compressor","Done — compressed WebM downloaded. Original stayed local.");postWork("video compression");}
+async function compressVideo(file:File):Promise<void>{if(!("MediaRecorder"in window))throw new Error("MediaRecorder is unavailable in this browser.");setProgress("video-compressor",3,"loading");updateStatus("video-compressor","Loading video locally… no upload is happening.");const source=document.createElement("video");source.muted=true;source.playsInline=true;source.src=URL.createObjectURL(file);await new Promise<void>((resolve,reject)=>{source.onloadedmetadata=()=>resolve();source.onerror=()=>reject(new Error("Video could not be read."));});const canvas=document.createElement("canvas");const scale=Math.min(1,1280/Math.max(1,source.videoWidth));canvas.width=Math.max(2,Math.round(source.videoWidth*scale));canvas.height=Math.max(2,Math.round(source.videoHeight*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Video canvas is unavailable.");const stream=canvas.captureStream(30);const mime=MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":"video/webm";const recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:2000000});const chunks:Blob[]=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};const done=new Promise<void>((resolve,reject)=>{recorder.onstop=()=>resolve();recorder.onerror=()=>reject(new Error("Video compression failed."));});recorder.start(250);await source.play();const draw=()=>{if(source.ended){recorder.stop();return;}ctx.drawImage(source,0,0,canvas.width,canvas.height);const pct=source.duration?Math.min(99,Math.round(source.currentTime/source.duration*100)):0;setProgress("video-compressor",pct,`${pct}%`);updateStatus("video-compressor",`Processing locally… ${pct}%`);requestAnimationFrame(draw)};draw();await done;URL.revokeObjectURL(source.src);setProgress("video-compressor",98,"encoding");downloadBlob(new Blob(chunks,{type:"video/webm"}),file.name.replace(/\.[^.]+$/,"")+"-compressed.webm");setProgress("video-compressor",100,"done");updateStatus("video-compressor","Done — compressed WebM downloaded. Original stayed local.");postWork("video compression");}
 
 function wireTools():void{
  document.querySelectorAll<HTMLInputElement>("[data-input]").forEach(input=>input.addEventListener("change",()=>{
@@ -92,3 +92,70 @@ function wireTools():void{
   });
  });
 }
+
+
+async function loadStars():Promise<void>{
+ const targets=document.querySelectorAll<HTMLElement>("[data-stars]");
+ if(!targets.length)return;
+ try{
+  const response=await fetch("https://api.github.com/repos/"+GITHUB_REPO,{headers:{"Accept":"application/vnd.github+json"}});
+  if(!response.ok)throw new Error("GitHub request failed");
+  const data=await response.json() as {stargazers_count?:number};
+  const value=typeof data.stargazers_count==="number"?data.stargazers_count.toLocaleString():"—";
+  targets.forEach(el=>el.textContent=value);
+ }catch{targets.forEach(el=>el.textContent="★");}
+}
+
+function wireNavigation():void{
+ document.addEventListener("click",event=>{
+  const target=event.target as HTMLElement|null;
+  const link=target?.closest<HTMLAnchorElement>('a[href^="/"]');
+  if(!link||link.target||event.defaultPrevented)return;
+  const url=new URL(link.href,window.location.origin);
+  if(url.origin!==window.location.origin)return;
+  event.preventDefault();
+  history.pushState({}, "", url.pathname);
+  render();
+ });
+ window.addEventListener("popstate",render);
+}
+
+function revealElements():void{
+ const items=document.querySelectorAll<HTMLElement>(".reveal");
+ if(!("IntersectionObserver" in window)){items.forEach(el=>el.classList.add("visible"));return;}
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible");observer.unobserve(entry.target);}});
+ },{threshold:.08});
+ items.forEach(el=>observer.observe(el));
+}
+
+function render():void{
+ const app=document.querySelector<HTMLElement>("#app");
+ if(!app)return;
+ const route=normalizePath();
+ let page="";
+ switch(route){
+  case "/remove-bg":page=toolPage("remove-bg","01","Remove Background","Remove an image background with the protected FlyThe BG AI route.","image/png,image/jpeg,image/webp","15 MB max","Your image is sent only after you choose a file, accept the notice and press Remove background.");
+  break;
+  case "/image-compressor":page=toolPage("image-compressor","02","Compress Image","Shrink an image locally in your browser without uploading the original.","image/png,image/jpeg,image/webp,image/gif","local processing","The original image stays in your browser during compression.");
+  break;
+  case "/video-compressor":page=toolPage("video-compressor","03","Compress Video","Create a smaller WebM locally in your browser with visible progress.","video/*","local processing","The original video stays in your browser during compression.");
+  break;
+  case "/features":page=features();break;
+  case "/about":page=about();break;
+  case "/faq":page=faq();break;
+  case "/privacy":page=privacy();break;
+  case "/terms":page=terms();break;
+  case "/contact":page=contact();break;
+  case "/support":page=support();break;
+  default:page=home();
+ }
+ app.innerHTML=page;
+ wireTools();
+ loadStars();
+ revealElements();
+}
+
+wireNavigation();
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",render,{once:true});
+else render();
