@@ -12,7 +12,7 @@ function shell(content:string,title:string):string{
  document.title=title;
  return \`<div class="notice">tiny legal brain activated 🧠 · By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>.</div>
  <header class="nav"><a class="brand" href="/"><span class="brand-mark">F</span><span>FlyThe BG</span></a><nav><a href="/features">Tools</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/support">☕ Support</a></nav></header>\${content}
- <footer class="footer"><div><strong>FlyThe BG</strong><span>make media less meh.</span></div><nav><a href="/features">Get started</a><a href="/support">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/faq">FAQ</a><a href="/contact">Contact</a></nav><small>© 2026 FlyThe BG · AGPL-3.0 · independent project · stackpilotfe@outlook.com</small></footer>\`;
+ <footer class="footer"><div><strong>FlyThe BG</strong><span>make media less meh.</span><span class="star-count">★ <b data-stars>—</b> GitHub stars</span></div><nav><a href="/features">Get started</a><a href="/support">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/faq">FAQ</a><a href="/contact">Contact</a></nav><small>© 2026 FlyThe BG · AGPL-3.0 · independent project · stackpilotfe@outlook.com</small></footer>\`;
 }
 
 function aiPulse():string{return \`<section class="section ai-section reveal"><div class="section-kicker"><span>AI INTERNET PULSE</span><span>21 SEP 2026</span></div><div class="ai-grid">
