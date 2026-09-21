@@ -36,48 +36,29 @@ Official sources:
 - https://www.meity.gov.in/static/uploads/2024/02/Digital-Personal-Data-Protection-Act-2023-1.pdf
 - https://www.meity.gov.in/static/uploads/2025/11/53450e6e5dc0bfa85ebd78686cadad39.pdf
 
-## Cloudflare Pages deployment
+## Cloudflare Workers deployment
 
-Use the GitHub repository directly on the main branch.
+Production runs on Cloudflare Workers + Workers Assets. Keep the repository on the `main` branch; production changes are committed directly there.
 
-Build settings:
-- Framework preset: None
-- Build command: npm run build
-- Build output directory: .
-- Production branch: main
+Build:
+- `npm install`
+- `npm run build`
+- `npx wrangler deploy`
 
-The build compiles src/app.ts to assets/app.js.
+Required Cloudflare secret:
+- `HF_ACCESS_TOKEN` — Secret only.
 
-### Required Cloudflare environment secrets
+The private Hugging Face Space and API name are fixed in the server-side Worker. Never put the Hugging Face token in GitHub, HTML, TypeScript, public build output, localStorage, sessionStorage or `wrangler.toml`.
 
-Set these in the Cloudflare Pages project under the production environment:
+The browser may read the public GitHub repository API only to show the current star count. It does not use a GitHub token.
 
-- HF_ACCESS_TOKEN — Secret
-- HF_SPACE_URL — environment variable
-- HF_SPACE_API — exact Gradio API name from the private Space's Use via API panel
+### Support payments
 
-Never put the Hugging Face token in GitHub, HTML, TypeScript, Python, wrangler.toml, public build output, localStorage or sessionStorage.
+The `/support` page links to `https://www.buymeacoffee.com/flythebg`. Payment is completed on Buy Me a Coffee's own page. FlyThe BG does not process cards, verify payment status, or mark a user as having paid after a redirect.
 
-### Cloudflare security settings
+### Brand / trademark notice
 
-Enable/configure in the Cloudflare dashboard:
-
-- Always Use HTTPS
-- Modern TLS settings
-- WAF managed rules
-- Bot protection appropriate to your traffic
-- Rate limiting for POST /api/remove-bg
-- Conservative per-IP upload/request limits
-- Security notifications for the zone
-- Do not cache /api/*
-
-The repository _headers file is an application-level layer; dashboard controls should remain enabled as a second layer.
-
-## Hugging Face / Gradio
-
-The exact private Space API schema is deployment-specific. HF_SPACE_API must match the API name exposed by the Space. The function uses the Gradio HTTP call/event pattern and supports common URL/data outputs.
-
-Before production use, test the private Space's exact FileData input/output schema. The repository deliberately does not hard-code or publish the private Space credential.
+FlyThe BG is independent. OpenAI, GPT, ChatGPT, Anthropic, Claude, Google, Gemini, xAI, Grok, Hugging Face, GitHub, Buy Me a Coffee and other names or marks referenced in the site belong to their respective owners. References are descriptive and do not imply sponsorship, endorsement, partnership or ownership by FlyThe BG.
 
 ## Local Python
 
