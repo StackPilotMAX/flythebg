@@ -43,26 +43,21 @@ async function wakeSpace(token) {
 
 async function readSseResult(response) {
   const text = await response.text();
-
   for (const event of text.split(/\n\n+/)) {
+    const eventName = event.split(/\n/).find(value => value.startsWith("event:"))?.slice(6).trim();
     const line = event.split(/\n/).find(value => value.startsWith("data:"));
     if (!line) continue;
     const payload = line.slice(5).trim();
     if (!payload || payload === "[DONE]") continue;
-
     try {
       const parsed = JSON.parse(payload);
-      if (parsed?.msg === "process_completed") {
-        return parsed.output?.data?.[0] ?? parsed.output?.data ?? parsed.data?.[0] ?? parsed.data;
-      }
-      if (parsed?.msg === "process_error") {
-        throw new Error("The background-removal processor failed.");
-      }
+      if (eventName === "complete") return parsed?.[0] ?? parsed;
+      if (parsed?.msg === "process_completed") return parsed.output?.data?.[0] ?? parsed.output?.data ?? parsed.data?.[0] ?? parsed.data;
+      if (eventName === "error" || parsed?.msg === "process_error") throw new Error("The background-removal processor failed.");
     } catch (error) {
       if (error instanceof Error && error.message === "The background-removal processor failed.") throw error;
     }
   }
-
   throw new Error("The background-removal processor returned no result.");
 }
 
