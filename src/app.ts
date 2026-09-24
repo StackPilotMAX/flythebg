@@ -41,17 +41,17 @@ function home():string{
  const TO_MARS=BASE+"/5fc5651c-3b5d-4171-b507-87f7e635d1b4.mp4";
  const MERCURY=BASE+"/d6fb8b6b-c15e-4aaa-9cf7-45bbb5e33372.jpg";
  const LOGO=BASE+"/eb7e0f53-50cd-4af5-abc4-8b9a52cdc01b.svg";
- return shell(\`<main class="experience" data-planet="mars">
+ return shell(`<main class="experience" data-planet="mars">
   <div class="backgrounds" aria-hidden="true">
-   <video id="mars-background" class="background is-visible" muted playsinline preload="auto" src="\${MARS_BG}"></video>
-   <video id="earth-background" class="background" muted playsinline preload="auto" src="\${TO_EARTH}"></video>
-   <video id="venus-background" class="background" muted playsinline preload="auto" src="\${TO_VENUS}"></video>
+   <video id="mars-background" class="background is-visible" muted playsinline preload="auto" src="${MARS_BG}"></video>
+   <video id="earth-background" class="background" muted playsinline preload="auto" src="${TO_EARTH}"></video>
+   <video id="venus-background" class="background" muted playsinline preload="auto" src="${TO_VENUS}"></video>
   </div>
   <div class="preloader" id="preloader" aria-label="Loading FlyThe BG">
-   <video id="preloader-video" muted playsinline preload="auto" src="\${TO_MARS}"></video>
+   <video id="preloader-video" muted playsinline preload="auto" src="${TO_MARS}"></video>
    <div class="preloader-shade"></div>
   </div>
-  <img class="floating-logo" id="floating-logo" src="\${LOGO}" alt="FlyThe BG">
+  <img class="floating-logo" id="floating-logo" src="${LOGO}" alt="FlyThe BG">
   <div class="preloader-count" id="preloader-count" aria-live="polite"><span id="preloader-value">0</span><span class="percent">%</span></div>
   <canvas id="scene-canvas" class="scene-canvas" aria-hidden="true"></canvas>
   <div class="shade" aria-hidden="true"></div>
@@ -68,8 +68,8 @@ function home():string{
   <section class="portal-wrap chrome" aria-label="Next FlyThe BG destination">
    <div class="portal-heading"><span>Next:</span><span><span id="next-number">[02]</span> <strong id="next-name">Image Compressor</strong></span></div>
    <button class="portal" id="portal" type="button" aria-label="Open Image Compressor">
-    <video id="portal-video" muted playsinline preload="auto" src="\${TO_EARTH}"></video>
-    <img id="portal-image" src="\${MERCURY}" alt="Mercury">
+    <video id="portal-video" muted playsinline preload="auto" src="${TO_EARTH}"></video>
+    <img id="portal-image" src="${MERCURY}" alt="Mercury">
    </button>
   </section>
   <section class="planet-content chrome" aria-live="polite">
@@ -81,7 +81,7 @@ function home():string{
   </section>
   <div class="transition-layer" aria-hidden="true"><video id="transition-video" muted playsinline preload="auto"></video></div>
   <div class="loading" aria-hidden="true">Preparing next orbit…</div>
- </main>\`,\`FlyThe BG — Create. Clean. Fly.\`);
+ </main>`,`FlyThe BG — Create. Clean. Fly.`);
 }
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose your weapon.<br>metaphorically. 😭</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>pookie tip:</b> close giant tabs before compressing a giant video. Your RAM will send a thank-you note.</div></main>`,"Get Started — FlyThe BG");}
 
@@ -181,10 +181,10 @@ function wireSpaceExperience():void{
   nextName.textContent=s.next==="Mercury"?"Mercury":"FlyThe BG · "+n.name;
   nextNumber.textContent=s.number;
   portal.setAttribute("aria-label",s.key==="venus"?"Open Video Compressor":"Travel to "+s.next);
-  list.innerHTML=planets.map(p=>\`<span class="planet-item \${p.toLowerCase()===s.key?"active":""}"><i class="planet-dot planet-\${p.toLowerCase()}"></i><span>\${p}</span></span>\`).join("");
+  list.innerHTML=planets.map(p=>`<span class="planet-item ${p.toLowerCase()===s.key?"active":""}"><i class="planet-dot planet-${p.toLowerCase()}"></i><span>${p}</span></span>`).join("");
   if(list.dataset.rendered==="1"){list.classList.remove("is-switching");void list.offsetWidth;list.classList.add("is-switching");}
   list.dataset.rendered="1";
-  facts.innerHTML=s.facts.map(([k,v])=>\`<div class="fact"><dt>\${k}</dt><dd>\${v}</dd></div>\`).join("");
+  facts.innerHTML=s.facts.map(([k,v])=>`<div class="fact"><dt>${k}</dt><dd>${v}</dd></div>`).join("");
   document.querySelectorAll<HTMLVideoElement>(".background").forEach(v=>v.classList.toggle("is-visible",v.id===s.background));
   if(s.image){portalImage.style.display="block";portalVideo.style.display="none";}else{portalImage.style.display="none";portalVideo.style.display="block";if(portalVideo.src!==s.portal)portalVideo.src=s.portal;portalVideo.load();portalVideo.muted=true;portalVideo.playsInline=true;}
  }
