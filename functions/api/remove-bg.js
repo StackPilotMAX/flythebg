@@ -3,6 +3,7 @@ const ALLOWED_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 const ORIGIN = "https://flythebg.com";
 const SPACE_URL = "https://StackPilotMAX-bg-remover-api.hf.space";
 const API_NAME = "/remove_background";
+const STARTUP_GRACE_MS = 25_000;
 
 function headers(extra = {}) {
   return {
@@ -31,8 +32,8 @@ function fail(message, status = 400) {
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function wakeSpace(token) {
-  // A visitor request to a sleeping Space causes Hugging Face to start it.
-  // We authenticate this request because the Space is private.
+  // An authenticated request wakes a sleeping Space. The model itself may then
+  // need roughly 20–25 seconds to finish loading before the API is ready.
   const response = await fetch(SPACE_URL, {
     method: "GET",
     headers: { "Authorization": "Bearer " + token }
@@ -88,11 +89,12 @@ async function gradioCall(token, input) {
   const endpoint = SPACE_URL.replace(/\/$/, "") + "/gradio_api/call/" + API_NAME.slice(1);
   let lastStatus = 0;
 
-  // A sleeping Space can take time to boot. Start it before uploading.
+  // A sleeping Space can take 20–25 seconds to boot its rembg runtime.
+  // Give it a full 25-second startup window instead of failing early.
+  const startedAt = Date.now();
   await wakeSpace(token).catch(() => {});
-  await sleep(1500);
 
-  for (let attempt = 1; attempt <= 5; attempt++) {
+  for (let attempt = 1; attempt <= 6; attempt++) {
     try {
       const filePath = await uploadFile(token, input.bytes, input.type);
 
@@ -133,14 +135,16 @@ async function gradioCall(token, input) {
 
     if (lastStatus === 404 || lastStatus === 502 || lastStatus === 503 || lastStatus === 0) {
       await wakeSpace(token).catch(() => {});
-      await sleep(1800 * attempt);
+      const elapsed = Date.now() - startedAt;
+      if (elapsed >= STARTUP_GRACE_MS) break;
+      await sleep(Math.min(5000, STARTUP_GRACE_MS - elapsed));
       continue;
     }
 
     throw new Error("AI processor rejected the request (" + lastStatus + ").");
   }
 
-  throw new Error("AI processor is unavailable after multiple startup attempts (" + lastStatus + ").");
+  throw new Error("The AI processor did not become ready within the 25-second startup window (" + lastStatus + ").");
 }
 function dataUrl(bytes, type) {
   let binary = "";
