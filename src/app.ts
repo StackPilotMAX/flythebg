@@ -34,39 +34,54 @@ function toolPage(id:ToolId,num:string,title:string,description:string,accept:st
 }
 
 function home():string{
- const portalStates=[
-  {id:"remove-bg",name:"Remove Background",number:"[01]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/3c83091e-4046-4fd6-adbb-2edb728be79a.mp4",facts:[["PROCESSING:","AI background removal through the FlyThe BG Cloudflare Worker."],["MODEL:","rembg running inside Hugging Face Spaces."],["STARTUP:","Cold starts can take around 20–25 seconds."],["UPLOAD:","Only after you choose the file, accept the notice and start processing."]]},
-  {id:"image-compressor",name:"Image Compressor",number:"[02]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/fc3ded42-e845-41f3-a830-5cab512d79cd.mp4",facts:[["PROCESSING:","Image compression runs locally in your browser."],["UPLOAD:","Your original image does not need to leave your device."],["OUTPUT:","JPEG output with visible compression progress."],["ACCOUNT:","No FlyThe BG account required."]]},
-  {id:"video-compressor",name:"Video Compressor",number:"[03]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/b30f64d9-1637-477a-83df-d0fc6461a422.mp4",facts:[["PROCESSING:","Video compression runs locally in your browser."],["UPLOAD:","Your original video stays on your device."],["OUTPUT:","WebM output with live progress."],["ACCOUNT:","No FlyThe BG account required."]]}
- ];
- return shell(`<main class="space-experience" data-tool="remove-bg">
-  <div class="space-backgrounds" aria-hidden="true">
-   <video id="space-remove-bg" class="space-background is-visible" muted playsinline preload="auto" src="${portalStates[0].video}"></video>
-   <video id="space-image-compressor" class="space-background" muted playsinline preload="auto" src="${portalStates[1].video}"></video>
-   <video id="space-video-compressor" class="space-background" muted playsinline preload="auto" src="${portalStates[2].video}"></video>
+ const BASE="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P";
+ const MARS_BG=BASE+"/3c83091e-4046-4fd6-adbb-2edb728be79a.mp4";
+ const TO_EARTH=BASE+"/fc3ded42-e845-41f3-a830-5cab512d79cd.mp4";
+ const TO_VENUS=BASE+"/b30f64d9-1637-477a-83df-d0fc6461a422.mp4";
+ const TO_MARS=BASE+"/5fc5651c-3b5d-4171-b507-87f7e635d1b4.mp4";
+ const MERCURY=BASE+"/d6fb8b6b-c15e-4aaa-9cf7-45bbb5e33372.jpg";
+ const LOGO=BASE+"/eb7e0f53-50cd-4af5-abc4-8b9a52cdc01b.svg";
+ return shell(\`<main class="experience" data-planet="mars">
+  <div class="backgrounds" aria-hidden="true">
+   <video id="mars-background" class="background is-visible" muted playsinline preload="auto" src="\${MARS_BG}"></video>
+   <video id="earth-background" class="background" muted playsinline preload="auto" src="\${TO_EARTH}"></video>
+   <video id="venus-background" class="background" muted playsinline preload="auto" src="\${TO_VENUS}"></video>
   </div>
-  <div class="space-shade" aria-hidden="true"></div>
-  <header class="space-header">
-   <a class="space-brand" href="/" aria-label="FlyThe BG home"><span class="space-brand-mark">F</span><span>FlyThe BG</span></a>
-   <nav class="space-nav" aria-label="Primary navigation"><a class="active" href="/features">Get Started</a><a href="/about">About</a><a href="/faq">FAQ</a></nav>
-   <a class="space-menu" href="/support">Support ↗</a>
+  <div class="preloader" id="preloader" aria-label="Loading FlyThe BG">
+   <video id="preloader-video" muted playsinline preload="auto" src="\${TO_MARS}"></video>
+   <div class="preloader-shade"></div>
+  </div>
+  <img class="floating-logo" id="floating-logo" src="\${LOGO}" alt="FlyThe BG">
+  <div class="preloader-count" id="preloader-count" aria-live="polite"><span id="preloader-value">0</span><span class="percent">%</span></div>
+  <canvas id="scene-canvas" class="scene-canvas" aria-hidden="true"></canvas>
+  <div class="shade" aria-hidden="true"></div>
+  <header class="header chrome">
+   <div class="header-actions">
+    <nav class="nav" aria-label="Primary navigation">
+     <a class="active" href="/about">About</a><a href="/features">Explore</a><a href="/faq">FAQ</a>
+    </nav>
+    <a class="menu" href="/support">Support</a>
+   </div>
   </header>
-  <aside class="space-tool-list" aria-label="FlyThe BG tools">
-   ${portalStates.map((item,i)=>`<button class="space-tool-item ${i===0?"active":""}" data-space-tool="${item.id}" type="button"><span class="space-dot"></span>${item.name}</button>`).join("")}
-  </aside>
-  <section class="space-portal-wrap" aria-label="Next FlyThe BG tool">
-   <div class="space-portal-heading"><span>Next:</span><span><b id="space-next-number">[02]</b> <strong id="space-next-name">Image Compressor</strong></span></div>
-   <button class="space-portal" id="space-portal" type="button" aria-label="Open Image Compressor"><span class="space-portal-ring"></span><span class="space-portal-core">ENTER</span></button>
+  <aside class="planet-list chrome" aria-label="Solar system planets"></aside>
+  <canvas id="portal-canvas" class="portal-canvas" aria-hidden="true"></canvas>
+  <section class="portal-wrap chrome" aria-label="Next FlyThe BG destination">
+   <div class="portal-heading"><span>Next:</span><span><span id="next-number">[02]</span> <strong id="next-name">Image Compressor</strong></span></div>
+   <button class="portal" id="portal" type="button" aria-label="Open Image Compressor">
+    <video id="portal-video" muted playsinline preload="auto" src="\${TO_EARTH}"></video>
+    <img id="portal-image" src="\${MERCURY}" alt="Mercury">
+   </button>
   </section>
-  <section class="space-content" aria-live="polite">
-   <p class="space-kicker">FLYTHE BG · MEDIA TOOLS</p>
-   <h1 id="space-title">REMOVE<br>BACKGROUND</h1>
-   <dl id="space-facts">${portalStates[0].facts.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
-   <div class="space-actions"><a class="space-primary" id="space-open" href="/remove-bg">Open tool →</a><a class="space-secondary" href="/features">View all tools</a></div>
+  <section class="planet-content chrome" aria-live="polite">
+   <div class="planet-copy">
+    <p class="planet-kicker">FLYTHE BG · PRIVACY-FIRST MEDIA TOOLS</p>
+    <h1 id="planet-title">MARS</h1>
+   </div>
+   <dl id="facts"></dl>
   </section>
-  <div class="space-preloader" id="space-preloader" aria-hidden="true"><span>FLYTHE BG</span><strong id="space-preloader-value">0</strong><small>%</small></div>
-  <div class="space-cursor" id="space-cursor" aria-hidden="true"><i></i><b></b><span>Enter</span></div>
- </main>`,`FlyThe BG — Create. Clean. Fly.`);
+  <div class="transition-layer" aria-hidden="true"><video id="transition-video" muted playsinline preload="auto"></video></div>
+  <div class="loading" aria-hidden="true">Preparing next orbit…</div>
+ </main>\`,\`FlyThe BG — Create. Clean. Fly.\`);
 }
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose your weapon.<br>metaphorically. 😭</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>pookie tip:</b> close giant tabs before compressing a giant video. Your RAM will send a thank-you note.</div></main>`,"Get Started — FlyThe BG");}
 
@@ -83,32 +98,167 @@ function terms():string{return shell(`<main class="page prose legal reveal"><p c
 function contact():string{return shell(`<main class="page prose reveal"><p class="eyebrow">CONTACT</p><h1>Talk to the project.</h1><p>For privacy requests, security reports, feedback or project communication:</p><a class="contact-card" href="mailto:stackpilotfe@outlook.com"><span>Email</span><strong>stackpilotfe@outlook.com</strong></a></main>`,"Contact — FlyThe BG");}
 
 function wireSpaceExperience():void{
- const rootElement=document.querySelector<HTMLElement>(".space-experience");if(!rootElement)return;const root=rootElement;
- const states=[
-  {id:"remove-bg",name:"Remove Background",number:"[01]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/3c83091e-4046-4fd6-adbb-2edb728be79a.mp4",href:"/remove-bg",facts:[["PROCESSING:","AI background removal through the FlyThe BG Cloudflare Worker."],["MODEL:","rembg running inside Hugging Face Spaces."],["STARTUP:","Cold starts can take around 20–25 seconds."],["UPLOAD:","Only after you choose the file, accept the notice and start processing."]]},
-  {id:"image-compressor",name:"Image Compressor",number:"[02]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/fc3ded42-e845-41f3-a830-5cab512d79cd.mp4",href:"/image-compressor",facts:[["PROCESSING:","Image compression runs locally in your browser."],["UPLOAD:","Your original image does not need to leave your device."],["OUTPUT:","JPEG output with visible compression progress."],["ACCOUNT:","No FlyThe BG account required."]]},
-  {id:"video-compressor",name:"Video Compressor",number:"[03]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/b30f64d9-1637-477a-83df-d0fc6461a422.mp4",href:"/video-compressor",facts:[["PROCESSING:","Video compression runs locally in your browser."],["UPLOAD:","Your original video stays on your device."],["OUTPUT:","WebM output with live progress."],["ACCOUNT:","No FlyThe BG account required."]]}
+ const root=document.querySelector<HTMLElement>(".experience");
+ if(!root)return;
+ type SpaceState={key:"mars"|"earth"|"venus";name:string;next:string;number:string;href:string;portal:string;background:string;facts:[string,string][];image?:string};
+ const BASE="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P";
+ const TO_EARTH=BASE+"/fc3ded42-e845-41f3-a830-5cab512d79cd.mp4";
+ const TO_VENUS=BASE+"/b30f64d9-1637-477a-83df-d0fc6461a422.mp4";
+ const TO_MARS=BASE+"/5fc5651c-3b5d-4171-b507-87f7e635d1b4.mp4";
+ const MERCURY=BASE+"/d6fb8b6b-c15e-4aaa-9cf7-45bbb5e33372.jpg";
+ const states:SpaceState[]=[
+  {key:"mars",name:"Mars",next:"Earth",number:"[02]",href:"/remove-bg",portal:TO_EARTH,background:"mars-background",facts:[
+   ["TOOL:","Remove Background"],["PROCESSING:","AI background removal through the protected FlyThe BG Worker."],["MODEL:","rembg running inside private Hugging Face Spaces."],["STARTUP:","Cold starts can take around 20–25 seconds."]]},
+  {key:"earth",name:"Earth",next:"Venus",number:"[03]",href:"/image-compressor",portal:TO_VENUS,background:"earth-background",facts:[
+   ["TOOL:","Image Compressor"],["PROCESSING:","Compression runs locally in your browser."],["PRIVACY:","Your original image does not need to leave your device."],["OUTPUT:","JPEG output with visible compression progress."]]},
+  {key:"venus",name:"Venus",next:"Mercury",number:"[04]",href:"/video-compressor",portal:MERCURY,background:"venus-background",image:MERCURY,facts:[
+   ["TOOL:","Video Compressor"],["PROCESSING:","Compression runs locally in your browser."],["PRIVACY:","Your original video stays on your device."],["NEXT:","Mercury closes the cinematic route; the tool is still one click away."]]}
  ];
- let current=0,busy=false,progress=0;
- const videos=states.map(s=>document.getElementById("space-"+s.id) as HTMLVideoElement|null);
- const title=document.getElementById("space-title")!,facts=document.getElementById("space-facts")!,nextName=document.getElementById("space-next-name")!,nextNumber=document.getElementById("space-next-number")!,open=document.getElementById("space-open") as HTMLAnchorElement,portal=document.getElementById("space-portal") as HTMLElement;
+ const planets=["Mercury","Venus","Earth","Mars","Jupiter","Saturn","Uranus","Neptune"];
+ let current:SpaceState["key"]="mars",busy=false,maskScale=0,expansion=0,rotX=0,rotY=0,targetX=0,targetY=0,last=performance.now(),transitionActive=false,preloaderFinished=false;
+ const bgIds=["mars-background","earth-background","venus-background"];
+ const canvas=document.getElementById("portal-canvas") as HTMLCanvasElement;
+ const scene=document.getElementById("scene-canvas") as HTMLCanvasElement;
+ const portal=document.getElementById("portal") as HTMLButtonElement;
+ const portalVideo=document.getElementById("portal-video") as HTMLVideoElement;
+ const portalImage=document.getElementById("portal-image") as HTMLImageElement;
+ const transitionVideo=document.getElementById("transition-video") as HTMLVideoElement;
+ const title=document.getElementById("planet-title")!;
+ const facts=document.getElementById("facts")!;
+ const nextName=document.getElementById("next-name")!;
+ const nextNumber=document.getElementById("next-number")!;
+ const list=document.querySelector<HTMLElement>(".planet-list")!;
+ const experience=root;
+ const ctx=canvas.getContext("2d");
+ const sceneCtx=scene.getContext("2d");
+ if(!ctx||!sceneCtx)return;
+
  const ease=(t:number)=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
- function renderState(){const s=states[current],n=states[(current+1)%states.length];root.dataset.tool=s.id;title.innerHTML=s.name==="Remove Background"?"REMOVE<br>BACKGROUND":s.name.toUpperCase();nextName.textContent=n.name;nextNumber.textContent=n.number;open.href=s.href;open.textContent="Open tool →";facts.innerHTML=s.facts.map(x=>`<div><dt>${x[0]}</dt><dd>${x[1]}</dd></div>`).join("");document.querySelectorAll<HTMLElement>("[data-space-tool]").forEach((el,i)=>el.classList.toggle("active",i===current));videos.forEach((v,i)=>{if(v)v.classList.toggle("is-visible",i===current);});}
- async function travel(){if(busy)return;busy=true;root.classList.add("is-transitioning");const next=(current+1)%states.length;const v=videos[next];if(v){v.currentTime=0;try{await v.play()}catch{}}
- const start=performance.now();await new Promise<void>(resolve=>{const tick=(now:number)=>{const t=Math.min(1,(now-start)/1050);root.style.setProperty("--portal-progress",String(ease(t)));if(t<1)requestAnimationFrame(tick);else resolve()};requestAnimationFrame(tick)});
- current=next;renderState();root.style.setProperty("--portal-progress","0");root.classList.remove("is-transitioning");setTimeout(()=>{busy=false},450);}
- portal.addEventListener("click",travel);
- document.querySelectorAll<HTMLElement>("[data-space-tool]").forEach((el,i)=>el.addEventListener("click",()=>{if(busy||i===current)return;current=i;renderState();}));
- let tx=0,ty=0,cx=0,cy=0,last=performance.now();
- root.addEventListener("pointermove",e=>{tx=(e.clientX/innerWidth-.5)*28;ty=(e.clientY/innerHeight-.5)*-24;root.style.setProperty("--mx",e.clientX+"px");root.style.setProperty("--my",e.clientY+"px");});
- root.addEventListener("pointerleave",()=>{tx=ty=0;});
- const cursor=document.getElementById("space-cursor")!;
- root.addEventListener("pointermove",e=>{cursor.classList.add("is-visible");cx+=(e.clientX-cx)*.2;cy+=(e.clientY-cy)*.2;cursor.style.transform=`translate3d(${cx}px,${cy}px,0)`;});
- portal.addEventListener("pointerenter",()=>cursor.classList.add("is-enter"));portal.addEventListener("pointerleave",()=>cursor.classList.remove("is-enter"));
- function loop(now:number){const dt=Math.min(40,now-last);last=now;root.style.setProperty("--rx",String((Number(root.style.getPropertyValue("--rx"))||0)+(tx-(Number(root.style.getPropertyValue("--rx"))||0))*Math.min(1,dt*.009)));root.style.setProperty("--ry",String((Number(root.style.getPropertyValue("--ry"))||0)+(ty-(Number(root.style.getPropertyValue("--ry"))||0))*Math.min(1,dt*.009)));requestAnimationFrame(loop)}requestAnimationFrame(loop);
- videos.forEach(v=>{if(v){v.muted=true;v.playsInline=true;v.pause();v.currentTime=0;}});
- renderState();
- const pre=document.getElementById("space-preloader"),value=document.getElementById("space-preloader-value");const pstart=performance.now();function preload(now:number){progress=Math.min(100,Math.round((now-pstart)/30));value!.textContent=String(progress);if(progress<100)requestAnimationFrame(preload);else{pre?.classList.add("is-done");root.classList.add("intro-ready");}}requestAnimationFrame(preload);
+ const currentState=()=>states.find(s=>s.key===current)!;
+ const nextState=()=>states.find(s=>s.key===currentState().next.toLowerCase())??currentState();
+
+ function resizeCanvas():void{
+  const d=Math.min(window.devicePixelRatio||1,2);
+  for(const c of [canvas,scene]){
+   c.width=Math.max(1,Math.round(innerWidth*d));c.height=Math.max(1,Math.round(innerHeight*d));
+   c.style.width=innerWidth+"px";c.style.height=innerHeight+"px";
+   const cctx=c===canvas?ctx:sceneCtx;cctx.setTransform(d,0,0,d,0,0);
+  }
+ }
+
+ function drawCover(cctx:CanvasRenderingContext2D,media:HTMLVideoElement|HTMLImageElement):void{
+  const mw=media instanceof HTMLVideoElement?(media.videoWidth||media.clientWidth):media.naturalWidth;
+  const mh=media instanceof HTMLVideoElement?(media.videoHeight||media.clientHeight):media.naturalHeight;
+  if(!mw||!mh)return;
+  const scale=Math.max(innerWidth/mw,innerHeight/mh),w=mw*scale,h=mh*scale;
+  cctx.drawImage(media,(innerWidth-w)/2,(innerHeight-h)/2,w,h);
+ }
+
+ function roundedPoints(w:number,h:number,r:number):Array<[number,number]>{
+  const points:Array<[number,number]>=[],steps=10;
+  const corners:[[number,number,number,number],[number,number,number,number],[number,number,number,number],[number,number,number,number]]=[
+   [w/2-r,-h/2+r,-Math.PI/2,0],[w/2-r,h/2-r,0,Math.PI/2],[-w/2+r,h/2-r,Math.PI/2,Math.PI],[-w/2+r,-h/2+r,Math.PI,Math.PI*1.5]
+  ];
+  for(const [cx,cy,a0,a1] of corners)for(let i=0;i<=steps;i++){const a=a0+(a1-a0)*i/steps;points.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}
+  return points;
+ }
+
+ function project(x:number,y:number,cx:number,cy:number,rx:number,ry:number):[number,number]{
+  const ax=rx*Math.PI/180,ay=ry*Math.PI/180,xx=x*Math.cos(ay),yy=y*Math.cos(ax),z=x*Math.sin(ay)-y*Math.sin(ax),p=850/(850+z);
+  return [cx+xx*p,cy+yy*p];
+ }
+
+ function drawShade(cctx:CanvasRenderingContext2D):void{
+  const g=cctx.createLinearGradient(0,innerHeight*.52,0,innerHeight);
+  g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(1,"rgba(0,0,0,.88)");
+  cctx.fillStyle=g;cctx.fillRect(0,innerHeight*.52,innerWidth,innerHeight*.48);
+ }
+
+ function render():void{
+  const s=currentState(),n=nextState();
+  experience.dataset.planet=s.key;
+  title.textContent=s.name.toUpperCase();
+  nextName.textContent=s.next==="Mercury"?"Mercury":"FlyThe BG · "+n.name;
+  nextNumber.textContent=s.number;
+  portal.setAttribute("aria-label",s.key==="venus"?"Open Video Compressor":"Travel to "+s.next);
+  list.innerHTML=planets.map(p=>\`<span class="planet-item \${p.toLowerCase()===s.key?"active":""}"><i class="planet-dot planet-\${p.toLowerCase()}"></i><span>\${p}</span></span>\`).join("");
+  if(list.dataset.rendered==="1"){list.classList.remove("is-switching");void list.offsetWidth;list.classList.add("is-switching");}
+  list.dataset.rendered="1";
+  facts.innerHTML=s.facts.map(([k,v])=>\`<div class="fact"><dt>\${k}</dt><dd>\${v}</dd></div>\`).join("");
+  document.querySelectorAll<HTMLVideoElement>(".background").forEach(v=>v.classList.toggle("is-visible",v.id===s.background));
+  if(s.image){portalImage.style.display="block";portalVideo.style.display="none";}else{portalImage.style.display="none";portalVideo.style.display="block";if(portalVideo.src!==s.portal)portalVideo.src=s.portal;portalVideo.load();portalVideo.muted=true;portalVideo.playsInline=true;}
+ }
+
+ function revealMask():Promise<void>{
+  experience.classList.remove("mask-revealing");void experience.offsetWidth;experience.classList.add("mask-revealing");maskScale=0;
+  const start=performance.now();
+  return new Promise(resolve=>{const tick=(now:number)=>{const t=Math.min(1,(now-start)/1050);maskScale=ease(t);if(t<1)requestAnimationFrame(tick);else resolve()};requestAnimationFrame(tick);});
+ }
+
+ function revealPlanetContent():void{
+  experience.classList.remove("content-revealing");void experience.offsetWidth;experience.classList.add("content-revealing");
+ }
+
+ async function waitForMedia(media:HTMLVideoElement|HTMLImageElement,timeout=1600):Promise<void>{
+  if(media instanceof HTMLImageElement){if(media.complete&&media.naturalWidth)return;await new Promise<void>(resolve=>{const done=()=>{media.removeEventListener("load",done);media.removeEventListener("error",done);resolve()};media.addEventListener("load",done,{once:true});media.addEventListener("error",done,{once:true});setTimeout(done,timeout);});return;}
+  if(media.readyState>=2)return;
+  await new Promise<void>(resolve=>{const done=()=>{media.removeEventListener("canplay",done);media.removeEventListener("loadeddata",done);resolve()};media.addEventListener("canplay",done,{once:true});media.addEventListener("loadeddata",done,{once:true});setTimeout(done,timeout);});
+ }
+
+ async function travel():Promise<void>{
+  if(busy||current==="venus")return;
+  busy=true;targetX=0;targetY=0;experience.classList.add("is-loading");
+  const s=currentState(),n=nextState();
+  transitionVideo.src=s.portal;transitionVideo.load();
+  await waitForMedia(transitionVideo,1600);
+  experience.classList.remove("is-loading","content-revealing","mask-revealing");experience.classList.add("is-transitioning");
+  transitionVideo.currentTime=0;transitionVideo.playbackRate=1.3;transitionActive=true;
+  try{await transitionVideo.play();}catch{}
+  const start=performance.now();
+  await new Promise<void>(resolve=>{const tick=(now:number)=>{const t=Math.min(1,(now-start)/1100);expansion=ease(t);if(t<1)requestAnimationFrame(tick);else resolve()};requestAnimationFrame(tick);});
+  if(transitionVideo.readyState>=2){sceneCtx.clearRect(0,0,innerWidth,innerHeight);drawCover(sceneCtx,transitionVideo);}
+  current=n.key;experience.classList.add("is-committing");render();await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
+  transitionActive=false;expansion=0;maskScale=0;
+  experience.classList.remove("is-transitioning","is-committing");await revealMask();setTimeout(revealPlanetContent,100);
+  setTimeout(()=>{transitionVideo.pause();transitionVideo.removeAttribute("src");transitionVideo.load();busy=false;},450);
+ }
+
+ function draw(now:number):void{
+  const dt=Math.min(40,now-last);last=now;
+  rotX+=(targetX-rotX)*Math.min(1,dt*.009);rotY+=(targetY-rotY)*Math.min(1,dt*.009);
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  const rect=portal.getBoundingClientRect(),e=expansion,cx=rect.left+rect.width/2+(innerWidth/2-(rect.left+rect.width/2))*e,cy=rect.top+rect.height/2+(innerHeight/2-(rect.top+rect.height/2))*e;
+  const baseW=rect.width+(innerWidth-rect.width)*e,baseH=rect.height+(innerHeight-rect.height)*e,scale=e?1:maskScale,w=baseW*scale,h=baseH*scale,r=Math.min(90*(1-e)*scale,w/2,h/2),rx=rotX*(1-e),ry=rotY*(1-e);
+  if(w>1&&h>1){const points=roundedPoints(w,h,r);ctx.save();ctx.beginPath();points.forEach(([x,y],i)=>{const [sx,sy]=project(x,y,cx,cy,rx,ry);if(i===0)ctx.moveTo(sx,sy);else ctx.lineTo(sx,sy)});ctx.closePath();ctx.clip();ctx.fillStyle="#030303";ctx.fillRect(0,0,innerWidth,innerHeight);const media=transitionActive?transitionVideo:(currentState().image?portalImage:portalVideo);drawCover(ctx,media);if(transitionActive)drawShade(ctx);ctx.restore();}
+  requestAnimationFrame(draw);
+ }
+
+ async function runPreloader():Promise<void>{
+  if(preloaderFinished)return;preloaderFinished=true;
+  const pre=document.getElementById("preloader"),video=document.getElementById("preloader-video") as HTMLVideoElement|null,count=document.getElementById("preloader-count"),value=document.getElementById("preloader-value"),logo=document.getElementById("floating-logo");
+  if(!pre||!video||!count||!value||!logo){experience.classList.add("preload-complete");await startExperience();return;}
+  let finished=false;
+  const finish=async()=>{if(finished)return;finished=true;value.textContent="100";count.classList.add("is-leaving");logo.classList.add("is-docked");pre.classList.add("is-background");document.body.classList.add("preload-complete");await startExperience();setTimeout(()=>count.remove(),750);setTimeout(()=>logo.classList.add("is-settled"),2000);};
+  const update=()=>{if(video.duration>0)value.textContent=String(Math.min(100,Math.round(video.currentTime/video.duration*100)));if(!finished)requestAnimationFrame(update);};
+  const start=()=>{if(video.duration>0)video.playbackRate=Math.max(.25,video.duration/3);video.play().catch(()=>void finish());requestAnimationFrame(update);};
+  if(video.readyState>=1)start();else video.addEventListener("loadedmetadata",start,{once:true});
+  video.addEventListener("ended",()=>void finish(),{once:true});
+  setTimeout(()=>void finish(),4500);
+ }
+
+ async function startExperience():Promise<void>{
+  await waitForMedia(currentState().image?portalImage:portalVideo,1600);
+  await revealMask();document.body.classList.add("intro-ready");setTimeout(revealPlanetContent,850);
+ }
+
+ resizeCanvas();render();requestAnimationFrame(draw);runPreloader();
+ window.addEventListener("resize",resizeCanvas);
+ const pointerSupported=matchMedia("(pointer:fine)").matches;
+ if(pointerSupported){
+  experience.addEventListener("pointermove",e=>{targetY=(e.clientX/innerWidth-.5)*37.4;targetX=(e.clientY/innerHeight-.5)*-33;});
+  experience.addEventListener("pointerleave",()=>{targetX=0;targetY=0;});
+ }
+ portal.addEventListener("click",()=>void travel());
 }
 function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
