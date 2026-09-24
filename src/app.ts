@@ -82,6 +82,34 @@ function terms():string{return shell(`<main class="page prose legal reveal"><p c
 
 function contact():string{return shell(`<main class="page prose reveal"><p class="eyebrow">CONTACT</p><h1>Talk to the project.</h1><p>For privacy requests, security reports, feedback or project communication:</p><a class="contact-card" href="mailto:stackpilotfe@outlook.com"><span>Email</span><strong>stackpilotfe@outlook.com</strong></a></main>`,"Contact — FlyThe BG");}
 
+function wireSpaceExperience():void{
+ const root=document.querySelector<HTMLElement>(".space-experience");if(!root)return;
+ const states=[
+  {id:"remove-bg",name:"Remove Background",number:"[01]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/3c83091e-4046-4fd6-adbb-2edb728be79a.mp4",href:"/remove-bg",facts:[["PROCESSING:","AI background removal through the FlyThe BG Cloudflare Worker."],["MODEL:","rembg running inside Hugging Face Spaces."],["STARTUP:","Cold starts can take around 20–25 seconds."],["UPLOAD:","Only after you choose the file, accept the notice and start processing."]]},
+  {id:"image-compressor",name:"Image Compressor",number:"[02]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/fc3ded42-e845-41f3-a830-5cab512d79cd.mp4",href:"/image-compressor",facts:[["PROCESSING:","Image compression runs locally in your browser."],["UPLOAD:","Your original image does not need to leave your device."],["OUTPUT:","JPEG output with visible compression progress."],["ACCOUNT:","No FlyThe BG account required."]]},
+  {id:"video-compressor",name:"Video Compressor",number:"[03]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/b30f64d9-1637-477a-83df-d0fc6461a422.mp4",href:"/video-compressor",facts:[["PROCESSING:","Video compression runs locally in your browser."],["UPLOAD:","Your original video stays on your device."],["OUTPUT:","WebM output with live progress."],["ACCOUNT:","No FlyThe BG account required."]]}
+ ];
+ let current=0,busy=false,progress=0;
+ const videos=states.map(s=>document.getElementById("space-"+s.id) as HTMLVideoElement|null);
+ const title=document.getElementById("space-title")!,facts=document.getElementById("space-facts")!,nextName=document.getElementById("space-next-name")!,nextNumber=document.getElementById("space-next-number")!,open=document.getElementById("space-open") as HTMLAnchorElement,portal=document.getElementById("space-portal") as HTMLElement;
+ const ease=(t:number)=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+ function renderState(){const s=states[current],n=states[(current+1)%states.length];root.dataset.tool=s.id;title.innerHTML=s.name==="Remove Background"?"REMOVE<br>BACKGROUND":s.name.toUpperCase();nextName.textContent=n.name;nextNumber.textContent=n.number;open.href=s.href;open.textContent="Open tool →";facts.innerHTML=s.facts.map(x=>`<div><dt>${x[0]}</dt><dd>${x[1]}</dd></div>`).join("");document.querySelectorAll<HTMLElement>("[data-space-tool]").forEach((el,i)=>el.classList.toggle("active",i===current));videos.forEach((v,i)=>{if(v)v.classList.toggle("is-visible",i===current);});}
+ async function travel(){if(busy)return;busy=true;root.classList.add("is-transitioning");const next=(current+1)%states.length;const v=videos[next];if(v){v.currentTime=0;try{await v.play()}catch{}}
+ const start=performance.now();await new Promise<void>(resolve=>{const tick=(now:number)=>{const t=Math.min(1,(now-start)/1050);root.style.setProperty("--portal-progress",String(ease(t)));if(t<1)requestAnimationFrame(tick);else resolve()};requestAnimationFrame(tick)});
+ current=next;renderState();root.style.setProperty("--portal-progress","0");root.classList.remove("is-transitioning");setTimeout(()=>{busy=false},450);}
+ portal.addEventListener("click",travel);
+ document.querySelectorAll<HTMLElement>("[data-space-tool]").forEach((el,i)=>el.addEventListener("click",()=>{if(busy||i===current)return;current=i;renderState();}));
+ let tx=0,ty=0,cx=0,cy=0,last=performance.now();
+ root.addEventListener("pointermove",e=>{tx=(e.clientX/innerWidth-.5)*28;ty=(e.clientY/innerHeight-.5)*-24;root.style.setProperty("--mx",e.clientX+"px");root.style.setProperty("--my",e.clientY+"px");});
+ root.addEventListener("pointerleave",()=>{tx=ty=0;});
+ const cursor=document.getElementById("space-cursor")!;
+ root.addEventListener("pointermove",e=>{cursor.classList.add("is-visible");cx+=(e.clientX-cx)*.2;cy+=(e.clientY-cy)*.2;cursor.style.transform=`translate3d(${cx}px,${cy}px,0)`;});
+ portal.addEventListener("pointerenter",()=>cursor.classList.add("is-enter"));portal.addEventListener("pointerleave",()=>cursor.classList.remove("is-enter"));
+ function loop(now:number){const dt=Math.min(40,now-last);last=now;root.style.setProperty("--rx",String((Number(root.style.getPropertyValue("--rx"))||0)+(tx-(Number(root.style.getPropertyValue("--rx"))||0))*Math.min(1,dt*.009)));root.style.setProperty("--ry",String((Number(root.style.getPropertyValue("--ry"))||0)+(ty-(Number(root.style.getPropertyValue("--ry"))||0))*Math.min(1,dt*.009)));requestAnimationFrame(loop)}requestAnimationFrame(loop);
+ videos.forEach(v=>{if(v){v.muted=true;v.playsInline=true;v.pause();v.currentTime=0;}});
+ renderState();
+ const pre=document.getElementById("space-preloader"),value=document.getElementById("space-preloader-value");const pstart=performance.now();function preload(now:number){progress=Math.min(100,Math.round((now-pstart)/30));value!.textContent=String(progress);if(progress<100)requestAnimationFrame(preload);else{pre?.classList.add("is-done");root.classList.add("intro-ready");}}requestAnimationFrame(preload);
+}
 function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function setProgress(tool:ToolId,value:number,label?:string):void{const n=Math.max(0,Math.min(100,value));const bar=document.querySelector<HTMLElement>(`[data-progress="${tool}"]`);if(bar)bar.style.width=`${n}%`;const text=document.querySelector<HTMLElement>(`[data-progress-label="${tool}"]`);if(text)text.textContent=label??`${Math.round(n)}%`;}
@@ -183,6 +211,7 @@ function render():void{
  }
  app.innerHTML=page;
  wireTools();
+ wireSpaceExperience();
  loadStars();
  revealElements();
 }
