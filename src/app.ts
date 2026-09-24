@@ -129,9 +129,11 @@ function wireSpaceExperience():void{
  const nextNumber=document.getElementById("next-number")!;
  const list=document.querySelector<HTMLElement>(".planet-list")!;
  const experience=root;
- const ctx=canvas.getContext("2d");
- const sceneCtx=scene.getContext("2d");
- if(!ctx||!sceneCtx)return;
+ const ctxValue=canvas.getContext("2d");
+ const sceneCtxValue=scene.getContext("2d");
+ if(!ctxValue||!sceneCtxValue)return;
+ const ctx:CanvasRenderingContext2D=ctxValue;
+ const sceneCtx:CanvasRenderingContext2D=sceneCtxValue;
 
  const ease=(t:number)=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
  const currentState=()=>states.find(s=>s.key===current)!;
