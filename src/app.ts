@@ -83,7 +83,7 @@ function terms():string{return shell(`<main class="page prose legal reveal"><p c
 function contact():string{return shell(`<main class="page prose reveal"><p class="eyebrow">CONTACT</p><h1>Talk to the project.</h1><p>For privacy requests, security reports, feedback or project communication:</p><a class="contact-card" href="mailto:stackpilotfe@outlook.com"><span>Email</span><strong>stackpilotfe@outlook.com</strong></a></main>`,"Contact — FlyThe BG");}
 
 function wireSpaceExperience():void{
- const root=document.querySelector<HTMLElement>(".space-experience");if(!root)return;
+ const rootElement=document.querySelector<HTMLElement>(".space-experience");if(!rootElement)return;const root=rootElement;
  const states=[
   {id:"remove-bg",name:"Remove Background",number:"[01]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/3c83091e-4046-4fd6-adbb-2edb728be79a.mp4",href:"/remove-bg",facts:[["PROCESSING:","AI background removal through the FlyThe BG Cloudflare Worker."],["MODEL:","rembg running inside Hugging Face Spaces."],["STARTUP:","Cold starts can take around 20–25 seconds."],["UPLOAD:","Only after you choose the file, accept the notice and start processing."]]},
   {id:"image-compressor",name:"Image Compressor",number:"[02]",video:"https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/fc3ded42-e845-41f3-a830-5cab512d79cd.mp4",href:"/image-compressor",facts:[["PROCESSING:","Image compression runs locally in your browser."],["UPLOAD:","Your original image does not need to leave your device."],["OUTPUT:","JPEG output with visible compression progress."],["ACCOUNT:","No FlyThe BG account required."]]},
