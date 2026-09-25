@@ -8,8 +8,8 @@ Keep this file as the project's persistent record of deployment failure modes. E
 
 1. Check GitHub Actions > TypeScript check on main. If green, the repository builds on GitHub independently of Cloudflare's builder.
 2. Check Cloudflare's official status page and the Workers & Pages deployment/build logs. If Cloudflare reports an incident, wait or use the GitHub deployment fallback below.
-3. In the Cloudflare dashboard verify the project is connected to the correct GitHub repository (StackPilotMAX/flythebg) and production branch (main). Check the GitHub App's repository access and reconnect the Git integration if its authorization expired. Avoid deleting the live project or domain as a first troubleshooting step.
-4. For Workers Builds, use build command `npm run build` and deploy command `npx wrangler deploy` if using the ordinary Cloudflare Workers build flow. The required HF_ACCESS_TOKEN runtime secret must be set on the production Worker in the Cloudflare dashboard. Do not publish it as a repository variable or commit it.
+3. In the Cloudflare dashboard verify the project is connected to the correct GitHub repository (StackPilotMAX/flythebg) and production branch (main). **The repository was made private: ensure the Cloudflare GitHub app has access to this private repository.** In GitHub Settings > Applications > Installed GitHub Apps > Cloudflare, configure repository access or re-authorize the installation as appropriate, then reconnect the Cloudflare project if needed. Avoid deleting the live project or domain as a first troubleshooting step.
+4. For Workers Builds, use build command `npm run build` and deploy command `npm run deploy` (which now calls Wrangler without injecting runtime credentials) if using the ordinary Cloudflare Workers build flow. The required HF_ACCESS_TOKEN runtime secret must be set on the production Worker in the Cloudflare dashboard. Do not publish it as a repository variable or commit it.
 5. If the integration remains stuck, use the independent **Deploy Cloudflare (GitHub fallback)** workflow instead. It runs the same build in GitHub Actions and publishes through the Cloudflare API; it does not depend on Cloudflare cloning the repository.
 
 ## Set up the fallback (one-time)
@@ -38,3 +38,7 @@ The fallback is manual-only so it does not race with Cloudflare's automatic depl
 GitHub CI success verifies the repository build, not Cloudflare queue health, custom-domain DNS, a live deployment, or the private Hugging Face Space. A Cloudflare build stuck before clone requires dashboard/status/integration investigation or an independent deployment path. Do not claim production is fixed solely because CI is green.
 
 After any failure, inspect the exact failing step and logs before changing unrelated UI code. Add a regression check where possible, then document the cause here.
+
+## Publishing the repository later
+
+CI and the manual deploy now run `node scripts/check-secrets.mjs` before building. This scans the current source for recognizable credential patterns, without printing matching secrets. It does not inspect prior commits. Before making the repo public, scan full Git history, enable GitHub secret scanning/push protection where available, inspect historical Actions logs and rotate any credential that may have been exposed. Keep Cloudflare API credentials in GitHub Actions secrets and the Hugging Face token in Cloudflare Worker runtime secrets. `.gitignore` excludes local `.dev.vars`, `.env`, private keys and generated output.
