@@ -35,7 +35,7 @@ function toolPage(id:ToolId,num:string,title:string,description:string,accept:st
 
 function home():string{
  document.title="FlyThe BG — Media Tools Designed To Fly";
- return \`<main class="fly-home">
+ return `<main class="fly-home">
   <div class="fly-bg" aria-hidden="true">
    <video class="fly-bg-video" autoplay muted loop playsinline preload="auto">
     <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4" type="video/mp4">
@@ -82,7 +82,7 @@ function home():string{
     <div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value" data-count="1" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Protected AI route</span></div>
    </footer>
   </div>
- </main>\`;
+ </main>`;
 }
 
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose a tool.<br>and get to work.</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>Tip:</b> For large video files, close unnecessary browser tabs to keep more memory available.</div></main>`,"Get Started — FlyThe BG");}
