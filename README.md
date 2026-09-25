@@ -1,5 +1,22 @@
 # FlyThe BG
 
+## Deployment status and private-repository access
+
+**GitHub repository:** `StackPilotMAX/flythebg` (currently private; production branch: `main`). **Hosting:** Cloudflare Workers with static Workers Assets; this is not a Netlify deployment. GitHub Actions typechecking/build success does **not** prove that Cloudflare's Git-connected builder can clone the repository or deploy the domain.
+
+If Cloudflare stays at **Initializing** and never reaches cloning, installing or building, the failure is upstream of this project's build scripts. In Cloudflare, check the Workers Builds GitHub connection and verify the Cloudflare GitHub app has access to this **private** repository. Re-authorize/reconnect the app if the repository was made private after the integration was established. Also check Cloudflare's status and build logs. A source-code commit cannot force Cloudflare's initialization queue to advance.
+
+**Independent fallback:** GitHub Actions > **Deploy Cloudflare (GitHub fallback)** > Run workflow on `main`. This route builds in GitHub and deploys via Cloudflare's API, avoiding Cloudflare's Git clone/build pipeline. Configure `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as GitHub Actions secrets; the token needs the account's Workers Scripts Edit permission. Set `HF_ACCESS_TOKEN` **only** as a Cloudflare production Worker runtime secret, not a GitHub build secret. This fallback is manual so it does not race Cloudflare auto-deployments. See [deployment recovery runbook](docs/DEPLOYMENT_RUNBOOK.md).
+
+### Public repository and secret-safety policy
+
+The repository may be made public only after reviewing **the entire Git history**, not just current files. Never commit or paste actual Hugging Face, GitHub, Cloudflare or other API tokens, private keys, `.dev.vars`, `.env` files or credentials into source, docs, screenshots, workflow YAML or build logs. `.env.example` must contain placeholders only. Production credentials belong in Cloudflare Worker runtime secrets; GitHub deployment credentials belong in GitHub Actions encrypted secrets.
+
+Both CI and manual deployment run `node scripts/check-secrets.mjs`, which checks the **current working tree** for several recognizable token/key patterns without printing detected values. This is a preventive check, **not proof that no credentials have ever been leaked**. It cannot detect every token format, previous commits, deleted files, forks, external logs or screenshots. Enable GitHub secret scanning and push protection where available. Before switching visibility to public, inspect full history with a dedicated scanner such as Gitleaks, review Actions logs and rotate/revoke any credential ever committed or exposed. Removing a token from the latest commit or making the repository private does not revoke it.
+
+The deploy script never embeds `HF_ACCESS_TOKEN` into build artifacts or writes it to a temporary file. It uses Wrangler; configure runtime secrets separately. Do not print environment variables in CI. If any secret may have been exposed, **revoke and rotate it before publishing**.
+
+
 FlyThe BG is an independent, non-registered media-tools project.
 
 ## Major architecture
@@ -9,7 +26,7 @@ The public website is intentionally HTML-light:
 - index.html is only the secure document shell and mount point.
 - src/app.ts owns routing, UI rendering, tool state and browser behavior.
 - assets/site.css owns presentation.
-- Cloudflare Pages Functions provide the small server-side boundary.
+- A Cloudflare Worker provides the server-side boundary; its background-removal handler lives in `functions/api/remove-bg.js`.
 - tools/*.py provides real local Python utilities for rembg, image compression and FFmpeg video compression.
 - The hosted background-removal processor is the only workflow that requires a server request.
 - Background removal runs through the FlyThe BG Cloudflare Worker and a Hugging Face Spaces-hosted rembg processor; FlyThe BG does not provide persistent image storage, a storage bucket or an image gallery.
@@ -59,7 +76,7 @@ Build:
 Required Cloudflare secret:
 - `HF_ACCESS_TOKEN` — Secret only.
 
-The Hugging Face Space and API endpoint are fixed in the server-side Worker. The rembg model can take around 20–25 seconds to start after a cold start; the Worker therefore gives the processor a 25-second startup window before reporting that the processor did not become ready. Never put the Hugging Face token in GitHub, HTML, TypeScript, public build output, localStorage, sessionStorage or `wrangler.toml`.
+The Hugging Face Space and API endpoint are fixed in the server-side Worker. The rembg model can take around 20–25 seconds to start after a cold start; the Worker provides a 35-second startup grace period before reporting that the processor did not become ready. Never put the Hugging Face token in GitHub, HTML, TypeScript, public build output, localStorage, sessionStorage or `wrangler.toml`.
 
 The browser may read the public GitHub repository API only to show the current star count. It does not use a GitHub token.
 
@@ -102,7 +119,7 @@ These local workflows do not need the hosted Hugging Face token.
 - /terms
 - /contact
 
-The old multi-page HTML files were removed so the application has one UI shell. Cloudflare Pages _redirects provides clean SPA routes.
+The application uses one UI shell. Workers Assets SPA fallback handles clean routes.
 
 ## Licensing
 
