@@ -34,25 +34,57 @@ function toolPage(id:ToolId,num:string,title:string,description:string,accept:st
 }
 
 function home():string{
- const names=["REMOVE BACKGROUND","IMAGE COMPRESSOR","VIDEO COMPRESSOR","GET STARTED"];
- const descriptions=["Protected AI processing through your private Hugging Face Space.","Compress images directly in your browser.","Create smaller WebM files with local progress.","Pick a workspace. No account required."];
- const links=["/remove-bg","/image-compressor","/video-compressor","/features"];
- const ladder=names.map((name,i)=>'<a class="ed-ladder-row" data-step="'+i+'" href="'+links[i]+'"><span class="ed-mono">0'+(i+1)+' / 04</span><div><h3>'+name+'</h3><p>'+descriptions[i]+'</p></div><span>↗</span></a>').join("");
- const services=names.slice(0,3).map((name,i)=>'<a class="ed-service" href="'+links[i]+'" data-rev style="--d:'+(i*80)+'ms"><span class="ed-mono">0'+(i+1)+' / SERVICE</span><h3 data-words>'+name+'</h3><p>'+descriptions[i]+'</p><span class="ed-mono">EXPLORE ↗</span></a>').join("");
- const plates=["SELECT","PROCESS","DOWNLOAD","REPEAT"].map((name,i)=>'<div class="ed-plate" data-rev style="--d:'+(i*80)+'ms"><canvas width="320" height="360" data-plate="'+i+'" aria-label="Abstract '+name+' visual"></canvas><span class="ed-mono">0'+(i+1)+' / WORKFLOW</span><h3>'+name+'</h3><p>'+["Choose your media","Run the selected tool","Save your result","Create without an account"][i]+'</p></div>').join("");
- const folderSteps=[["01","SELECT","Choose an image or video from your device."],["02","PROCESS","Run AI background removal or compress locally."],["03","DOWNLOAD","Save the result and keep creating."]];
- const folders=folderSteps.map(([n,name,detail],i)=>'<article class="ft-folder-step" data-rev style="--d:'+(i*90)+'ms"><span class="ed-mono">'+n+' / HOW IT WORKS</span><button class="ft-folder" type="button" aria-expanded="false" aria-label="Open '+name+' folder"><span class="ft-folder-art" aria-hidden="true"><span class="ft-folder-tab"></span><span class="ft-folder-back"></span><span class="ft-folder-paper ft-folder-paper-a"><b>'+n+'</b><small>FLYTHE BG</small></span><span class="ft-folder-paper ft-folder-paper-b"><b>'+name+'</b><small>MEDIA TOOLS</small></span><span class="ft-folder-paper ft-folder-paper-c"><b>↗</b><small>READY</small></span><span class="ft-folder-front"><span>'+name+'</span></span></span></button><h3>'+name+'</h3><p>'+detail+'</p><a class="ed-mono" href="/features">EXPLORE TOOLS ↗</a></article>').join("");
- const tariffs=names.slice(0,3).map((name,i)=>'<a class="ed-tariff" href="'+links[i]+'" data-rev style="--d:'+(i*65)+'ms"><span class="ed-mono">0'+(i+1)+'</span><strong>'+name+'</strong><span>'+["Protected AI · PNG output","Browser-local · Image output","Browser-local · WebM output"][i]+'</span><em>OPEN ↗</em></a>').join("");
- const questions=[["DO I NEED AN ACCOUNT?","No. FlyThe BG requires no account."],["WHICH FILES LEAVE MY DEVICE?","Only images you explicitly submit for background removal. Compression runs locally."],["WHERE DOES THE AI RUN?","Through a Cloudflare Worker and a private Hugging Face Space. Temporary processing files may exist in the external runtime."],["CAN I SUPPORT THE PROJECT?","Yes. Star the GitHub repository or use the optional Buy Me a Coffee link."]].map((q,i)=>'<details class="ed-faq" data-rev style="--d:'+(i*60)+'ms"><summary><span class="ed-mono">0'+(i+1)+'</span><strong>'+q[0]+'</strong><i aria-hidden="true"></i></summary><p>'+q[1]+'</p></details>').join("");
- return shell('<main class="editorial">'+
- '<section class="ed-hero ed-pin" data-pin><div class="ed-sticky"><canvas class="ed-scan" aria-hidden="true"></canvas><div class="ed-hero-inner"><span class="ed-mono ed-hero-top" data-rev>INDEPENDENT MEDIA TOOLS / 2026</span><h1 class="ed-poster" aria-label="FLYTHE BG">FLYTHE BG</h1><div class="ed-hero-statement"><span class="ed-mono">LESS BACKGROUND. LESS WEIGHT. MORE FREEDOM.</span><h2 data-words>MAKE YOUR MEDIA MOVE.</h2><a class="ed-cta" href="/features">GET STARTED ↗</a></div></div><div class="ed-hero-bottom ed-mono"><span>01 / THE BEGINNING</span><span>SCROLL TO EXPLORE ↓</span><span>FLYTHEBG.COM</span></div></div></section>'+
- '<section class="ed-ladder ed-pin" data-pin><div class="ed-sticky ed-wrap"><div class="ed-corners ed-mono"><span>02 / THE TOOL LADDER</span><span data-current-tag>01 / 04</span></div><div class="ed-ladder-body"><div class="ed-ladder-left"><span class="ed-mono">FOUR WAYS FORWARD</span><div class="ed-number"><span>0</span><span data-number-last>1</span></div><p>ONE TOOL AT A TIME.<br>YOUR WORK. YOUR PACE.</p></div><div class="ed-ladder-right">'+ladder+'</div></div><div class="ed-meter"><span></span></div></div></section>'+
- '<section class="ed-whiteout ed-pin" data-pin><div class="ed-sticky ed-wrap"><div class="ed-corners ed-mono"><span>03 / NO EXTRA NOISE</span><span>03 / 04</span></div><div class="ed-whiteout-center"><h2 data-words>KEEP THE DETAIL.<br>LOSE THE EXTRA.<br>MAKE IT FLY.</h2><p class="ed-mono">REMOVE / COMPRESS / CREATE</p></div></div></section>'+
- '<section class="ed-band ed-dark"><div class="ed-wrap"><div class="ed-band-top ed-mono" data-rev><span>04 / THE SERVICES</span><span>01 — 03</span></div><h2 class="ed-band-title" data-words>TOOLS THAT GET<br>OUT OF YOUR WAY.</h2><div class="ed-services">'+services+'</div></div></section>'+
- '<section class="ed-band ed-light"><div class="ed-wrap"><div class="ed-band-top ed-mono" data-rev><span>05 / THE PROCESS</span><span>01 — 04</span></div><h2 class="ed-band-title" data-words>FROM UPLOAD<br>TO OUTPUT.</h2><p class="ed-mono ft-folder-instruction">CLICK A FOLDER TO REVEAL THE STEPS · MOVE YOUR POINTER TO DRIFT THE PAPERS</p><div class="ft-folder-grid">'+folders+'</div><div class="ed-plates">'+plates+'</div></div></section>'+
- '<section class="ed-band ed-dark"><div class="ed-wrap"><div class="ed-band-top ed-mono" data-rev><span>06 / CHOOSE A WORKSPACE</span><span>NO ACCOUNT REQUIRED</span></div><h2 class="ed-band-title" data-words>YOUR NEXT MOVE.</h2><div class="ed-tariffs">'+tariffs+'</div><p class="ed-mono">NO INVENTED PAID PLANS / CLEAR PROCESSING DISCLOSURES</p></div></section>'+
- '<section class="ed-band ed-light"><div class="ed-wrap"><div class="ed-band-top ed-mono" data-rev><span>07 / THE QUESTIONS</span><span>SUPPORT@FLYTHEBG.COM</span></div><h2 class="ed-band-title" data-words>GOOD TO KNOW.</h2><div class="ed-faqs">'+questions+'</div><div class="ed-end" data-rev><span class="ed-mono">READY WHEN YOU ARE</span><a class="ed-cta" href="/features">EXPLORE THE TOOLS ↗</a></div></div></section></main>',"FlyThe BG — Remove. Compress. Create.");
+ document.title="FlyThe BG — Media Tools Designed To Fly";
+ return \`<main class="fly-home">
+  <div class="fly-bg" aria-hidden="true">
+   <video class="fly-bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4" type="video/mp4">
+   </video>
+   <div class="fly-bg-shade"></div>
+  </div>
+  <div class="fly-page">
+   <header class="fly-header">
+    <a class="fly-logo" href="/" aria-label="FlyThe BG home"><span class="brand-mark">F</span></a>
+    <nav class="fly-nav" aria-label="Primary navigation">
+     <a class="is-active" href="/">Home</a>
+     <a href="/features">Tools</a>
+     <a href="/about">About</a>
+     <a href="/contact">Contact</a>
+    </nav>
+    <a class="fly-signin" href="/features">Get Started</a>
+    <button class="fly-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="fly-mobile-menu"><i></i><i></i><i></i></button>
+   </header>
+   <div class="fly-mobile-overlay" data-menu-close></div>
+   <nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation">
+    <a class="is-active" href="/">Home</a>
+    <a href="/features">Tools</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+    <a class="fly-mobile-cta" href="/features">Get Started</a>
+   </nav>
+   <section class="fly-hero">
+    <div class="fly-trust anim" style="--d:.05s">
+     <div class="fly-avatars" aria-hidden="true">
+      <span><span class="fly-avatar-inner">✦</span></span>
+      <span><span class="fly-avatar-inner">◌</span></span>
+      <span><span class="fly-avatar-inner">↗</span></span>
+     </div>
+     <div class="fly-trust-pill">Built for creators &amp; teams</div>
+    </div>
+    <h1 class="fly-headline" aria-label="Media tools designed to fly"><span>Media Tools</span><span>Designed To Fly</span></h1>
+    <p class="fly-subhead anim" style="--d:.28s">Remove backgrounds with protected AI, compress images and create smaller videos with tools designed for fast, focused work.</p>
+    <a class="fly-cta anim" style="--d:.4s" href="/features">Get Started</a>
+   </section>
+   <footer class="fly-stats" aria-label="FlyThe BG highlights">
+    <div class="fly-stat anim" style="--d:.5s"><span class="fly-stat-icon">&lt;</span><span class="fly-stat-value" data-count="15" data-decimals="0" data-suffix=" MB">0</span><span class="fly-stat-label">Background upload limit</span></div>
+    <div class="fly-stat anim" style="--d:.58s"><span class="fly-stat-icon">%</span><span class="fly-stat-value" data-count="2" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Browser-local tools</span></div>
+    <div class="fly-stat anim" style="--d:.66s"><span class="fly-stat-icon">*</span><span class="fly-stat-value" data-count="0" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Accounts required</span></div>
+    <div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value" data-count="1" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Protected AI route</span></div>
+   </footer>
+  </div>
+ </main>\`;
 }
+
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose a tool.<br>and get to work.</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>Tip:</b> For large video files, close unnecessary browser tabs to keep more memory available.</div></main>`,"Get Started — FlyThe BG");}
 
 function support():string{return shell(`<main class="page support-page reveal"><div class="support-hero"><p class="eyebrow">OPTIONAL SUPPORT</p><h1>Support independent development. ☕</h1><p>If FlyThe BG helped, support is optional. You leave FlyThe BG and complete payment on Buy Me a Coffee's own page.</p><a class="button primary huge" href="${COFFEE_URL}" target="_blank" rel="noopener noreferrer">☕ Buy Me a Coffee ↗</a><small class="payment-note">Payment happens on Buy Me a Coffee. FlyThe BG does not process your card, verify a payment, or mark a donation as completed.</small></div><div class="support-grid"><article><span>01</span><h2>Help for free</h2><p>Give the GitHub repo a star. One click. No wallet required.</p><a class="button ghost" href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">⭐ Star on GitHub</a></article><article><span>02</span><h2>Send coffee</h2><p>Pick an amount and complete payment on Buy Me a Coffee.</p><a class="button coffee" href="${COFFEE_URL}" target="_blank" rel="noopener noreferrer">☕ Open Buy Me a Coffee</a></article><article><span>03</span><h2>Not today?</h2><p>Totally valid. No guilt, no fake conversion tracking.</p><button class="button ghost" onclick="this.textContent='Maybe later'">Maybe later</button></article></div></main>`,"Support FlyThe BG — Buy Me a Coffee");}
@@ -289,6 +321,37 @@ function wireEditorial():void{
   if(!reduced)requestAnimationFrame(draw);
  }draw(0);
 }
+
+function wireFlyLanding():void{
+ const root=document.querySelector<HTMLElement>(".fly-home");if(!root)return;
+ const burger=root.querySelector<HTMLButtonElement>(".fly-burger");
+ const menu=root.querySelector<HTMLElement>(".fly-mobile-menu");
+ const overlay=root.querySelector<HTMLElement>(".fly-mobile-overlay");
+ const closeMenu=()=>{if(!menu||!burger)return;menu.hidden=true;burger.setAttribute("aria-expanded","false");burger.classList.remove("is-open");document.body.classList.remove("fly-menu-open");};
+ const openMenu=()=>{if(!menu||!burger)return;menu.hidden=false;burger.setAttribute("aria-expanded","true");burger.classList.add("is-open");document.body.classList.add("fly-menu-open");};
+ burger?.addEventListener("click",()=>burger.getAttribute("aria-expanded")==="true"?closeMenu():openMenu());
+ overlay?.addEventListener("click",closeMenu);
+ menu?.querySelectorAll("a").forEach(a=>a.addEventListener("click",closeMenu));
+ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenu();},{once:true});
+ const mq=matchMedia("(min-width:721px)");
+ mq.addEventListener?.("change",e=>{if(e.matches)closeMenu();});
+ const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const items=root.querySelectorAll<HTMLElement>(".anim");
+ items.forEach(el=>{if(!reduced)el.classList.add("fly-reveal");else el.classList.add("fly-reveal-ready");});
+ const stats=root.querySelectorAll<HTMLElement>("[data-count]");
+ const animate=(el:HTMLElement)=>{
+  if(el.dataset.done)return;el.dataset.done="1";
+  const target=Number(el.dataset.count||0),dec=Number(el.dataset.decimals||0),suffix=el.dataset.suffix||"";
+  if(reduced){el.textContent=target.toFixed(dec)+suffix;return;}
+  const start=performance.now(),duration=1500;
+  const tick=(now:number)=>{const p=Math.min(1,(now-start)/duration),e=1-Math.pow(1-p,3);el.textContent=(target*e).toFixed(dec)+suffix;if(p<1)requestAnimationFrame(tick);else el.textContent=target.toFixed(dec)+suffix;};
+  requestAnimationFrame(tick);
+ };
+ if("IntersectionObserver"in window){
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){animate(entry.target as HTMLElement);observer.unobserve(entry.target);}}),{threshold:.25});
+  stats.forEach(s=>observer.observe(s));
+ }else stats.forEach(s=>animate(s));
+}
 function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function setProgress(tool:ToolId,value:number,label?:string):void{const n=Math.max(0,Math.min(100,value));const bar=document.querySelector<HTMLElement>(`[data-progress="${tool}"]`);if(bar)bar.style.width=`${n}%`;const text=document.querySelector<HTMLElement>(`[data-progress-label="${tool}"]`);if(text)text.textContent=label??`${Math.round(n)}%`;}
@@ -391,6 +454,7 @@ function render():void{
  app.innerHTML=page;
  wireTools();
  wireSpaceExperience();
+ wireFlyLanding();
  wireEditorial();
  loadStars();
  revealElements();
