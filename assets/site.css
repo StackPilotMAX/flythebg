@@ -165,3 +165,226 @@ body:has(.editorial):after{content:"";position:fixed;inset:0;z-index:99;pointer-
 .ft-folder:focus-visible{outline:2px solid #FF4D00;outline-offset:4px}
 @media(max-width:760px){.ft-folder-grid{grid-template-columns:1fr}.ft-folder-step{padding:2rem}.ft-folder{height:220px}}
 @media(prefers-reduced-motion:reduce){.ft-folder *{transition:none!important}.ft-folder-paper{will-change:auto}}
+
+
+/* Shared landing UI system — applied across every routed page */
+:root{
+  --landing-ink:#0B0E14;
+  --landing-paper:#F2F4F1;
+  --landing-orange:#FF4D00;
+  --landing-line:#9BA0A0;
+  --landing-muted:#667078;
+}
+body{
+  background:var(--landing-ink);
+}
+.shared-page-frame{
+  position:relative;
+  overflow:hidden;
+  background:var(--landing-paper);
+  color:var(--landing-ink);
+  border-top:1px solid #353940;
+}
+.shared-page-frame:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.035;
+  background-image:linear-gradient(rgba(11,14,20,.55) 1px,transparent 1px),linear-gradient(90deg,rgba(11,14,20,.55) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.shared-page-frame .page,
+.shared-page-frame .tool-page{
+  position:relative;
+  z-index:1;
+  width:min(1180px,calc(100% - 40px));
+  margin:0 auto;
+  padding:clamp(4rem,9vw,8rem) 0;
+}
+.shared-page-frame .page-hero,
+.shared-page-frame .tool-intro{
+  max-width:1000px;
+  margin:0 auto clamp(3rem,7vw,6rem);
+  padding:0;
+  text-align:left;
+}
+.shared-page-frame .eyebrow{
+  font-family:"Space Mono",monospace;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--landing-orange);
+}
+.shared-page-frame h1,
+.shared-page-frame .page-hero h1,
+.shared-page-frame .tool-intro h1{
+  margin:.65rem 0 1.2rem;
+  font-family:"Archivo",Inter,Arial,sans-serif;
+  font-size:clamp(4rem,10vw,9.5rem);
+  line-height:.82;
+  letter-spacing:-.055em;
+  font-weight:900;
+  max-width:10ch;
+}
+.shared-page-frame .tool-intro>p:not(.eyebrow){
+  max-width:62ch;
+  font-size:clamp(1rem,1.5vw,1.2rem);
+  line-height:1.55;
+}
+.shared-page-frame .tool-workspace{
+  border:1px solid var(--landing-line);
+  background:rgba(242,244,241,.9);
+  box-shadow:0 24px 80px rgba(11,14,20,.08);
+}
+.shared-page-frame .workspace-head{
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  padding:1rem 1.25rem;
+  border-bottom:1px solid var(--landing-line);
+  font:11px "Space Mono",monospace;
+  letter-spacing:.08em;
+}
+.shared-page-frame .big-dropzone{
+  min-height:360px;
+  margin:0;
+  border:0;
+  border-bottom:1px solid var(--landing-line);
+  border-radius:0;
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:1rem;
+  text-align:center;
+  background:linear-gradient(135deg,#f7f8f6,#e8ebe7);
+}
+.shared-page-frame .big-dropzone strong{
+  font-family:"Archivo",Inter,Arial,sans-serif;
+  font-size:clamp(2rem,5vw,4.5rem);
+  line-height:.9;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+.shared-page-frame .big-dropzone small,
+.shared-page-frame .big-dropzone em{
+  font-family:"Space Mono",monospace;
+  font-size:11px;
+  letter-spacing:.05em;
+  font-style:normal;
+}
+.shared-page-frame .upload-arrow{
+  width:54px;
+  height:54px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:var(--landing-orange);
+  color:#fff;
+  font-size:1.5rem;
+}
+.shared-page-frame .process-button{
+  margin:1.25rem;
+  min-width:220px;
+  border-radius:0;
+  background:var(--landing-ink);
+  color:#fff;
+  font-family:"Space Mono",monospace;
+  letter-spacing:.06em;
+}
+.shared-page-frame .progress-track{
+  margin:0 1.25rem;
+  border-radius:0;
+  background:#d7dbd8;
+}
+.shared-page-frame .progress-bar{background:var(--landing-orange)}
+.shared-page-frame .status,
+.shared-page-frame .processing-note,
+.shared-page-frame .selected-file{
+  margin-left:1.25rem;
+  margin-right:1.25rem;
+}
+.shared-page-frame .tool-links,
+.shared-page-frame .support-grid{
+  position:relative;
+  z-index:1;
+  border-top:1px solid var(--landing-line);
+}
+.shared-page-frame .tool-links>a,
+.shared-page-frame .support-grid>article{
+  display:grid;
+  grid-template-columns:4rem 1fr auto;
+  align-items:center;
+  gap:1rem;
+  padding:1.7rem 0;
+  border-bottom:1px solid var(--landing-line);
+  border-radius:0;
+  background:transparent;
+}
+.shared-page-frame .tool-links>a:hover{
+  background:rgba(255,77,0,.07);
+  transform:none;
+}
+.shared-page-frame .tool-links b,
+.shared-page-frame .support-grid h2{
+  font-family:"Archivo",Inter,Arial,sans-serif;
+  font-size:clamp(1.5rem,3vw,3rem);
+  line-height:.95;
+  font-weight:900;
+  letter-spacing:-.03em;
+}
+.shared-page-frame .prose{
+  max-width:980px;
+}
+.shared-page-frame .prose h1{
+  max-width:12ch;
+}
+.shared-page-frame .prose h2{
+  margin-top:3.5rem;
+  font-family:"Archivo",Inter,Arial,sans-serif;
+  font-size:clamp(1.7rem,3vw,3rem);
+  line-height:1;
+  font-weight:900;
+}
+.shared-page-frame .prose p,
+.shared-page-frame .prose li{
+  max-width:72ch;
+  line-height:1.7;
+}
+.shared-page-frame details{
+  border-top:1px solid var(--landing-line);
+  border-bottom:0;
+  border-radius:0;
+  padding:1.4rem 0;
+}
+.shared-page-frame details:last-of-type{border-bottom:1px solid var(--landing-line)}
+.shared-page-frame summary{
+  font-family:"Archivo",Inter,Arial,sans-serif;
+  font-size:clamp(1.3rem,2.5vw,2.2rem);
+  font-weight:900;
+}
+.shared-page-frame .button{
+  border-radius:0;
+}
+.shared-page-frame .support-hero{
+  border-bottom:1px solid var(--landing-line);
+  padding-bottom:4rem;
+}
+.shared-page-frame .support-hero h1{
+  max-width:12ch;
+}
+@media(max-width:700px){
+  .shared-page-frame .page,
+  .shared-page-frame .tool-page{width:min(100% - 24px,1180px);padding:4rem 0}
+  .shared-page-frame h1,
+  .shared-page-frame .page-hero h1,
+  .shared-page-frame .tool-intro h1{font-size:clamp(3.2rem,17vw,6rem)}
+  .shared-page-frame .big-dropzone{min-height:280px}
+  .shared-page-frame .tool-links>a,
+  .shared-page-frame .support-grid>article{grid-template-columns:2.5rem 1fr}
+  .shared-page-frame .tool-links>a>strong,
+  .shared-page-frame .support-grid>article .button{grid-column:2;justify-self:start}
+}
+@media(prefers-reduced-motion:reduce){
+  .shared-page-frame *{scroll-behavior:auto!important}
+}
