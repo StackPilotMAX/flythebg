@@ -110,6 +110,6 @@ AGPL-3.0.
 
 ## Contact
 
-stackpilotfe@outlook.com
+support@flythebg.com
 
-This address is used because FlyThe BG is currently an independent, non-registered project.
+This is the official FlyThe BG support address for product questions, privacy requests, security reports and project communication.
