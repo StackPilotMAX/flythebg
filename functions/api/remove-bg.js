@@ -3,7 +3,8 @@ const ALLOWED_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 const ORIGIN = "https://flythebg.com";
 const SPACE_URL = "https://StackPilotMAX-bg-remover-api.hf.space";
 const API_NAME = "/remove_background";
-const STARTUP_GRACE_MS = 25_000;
+const STARTUP_GRACE_MS = 35_000;
+const MAX_JOB_MS = 120_000;
 
 function headers(extra = {}) {
   return {
@@ -43,22 +44,55 @@ async function wakeSpace(token) {
 }
 
 async function readSseResult(response) {
-  const text = await response.text();
-  for (const event of text.split(/\n\n+/)) {
-    const eventName = event.split(/\n/).find(value => value.startsWith("event:"))?.slice(6).trim();
-    const line = event.split(/\n/).find(value => value.startsWith("data:"));
-    if (!line) continue;
-    const payload = line.slice(5).trim();
-    if (!payload || payload === "[DONE]") continue;
-    try {
-      const parsed = JSON.parse(payload);
-      if (eventName === "complete") return parsed?.[0] ?? parsed;
-      if (parsed?.msg === "process_completed") return parsed.output?.data?.[0] ?? parsed.output?.data ?? parsed.data?.[0] ?? parsed.data;
-      if (eventName === "error" || parsed?.msg === "process_error") throw new Error("The background-removal processor failed.");
-    } catch (error) {
-      if (error instanceof Error && error.message === "The background-removal processor failed.") throw error;
+  // Gradio returns Server-Sent Events, sometimes with CRLF and multiple data lines.
+  // Read the stream incrementally so a queued job does not require buffering all events.
+  if (!response.body) throw new Error("AI processor returned an empty event stream.");
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let lastOutput;
+  const deadline = Date.now() + MAX_JOB_MS;
+
+  function parseEvent(block) {
+    let name = "";
+    const data = [];
+    for (const line of block.split(/\n/)) {
+      if (line.startsWith("event:")) name = line.slice(6).trim();
+      if (line.startsWith("data:")) data.push(line.slice(5).trimStart());
     }
+    if (!data.length) return;
+    const raw = data.join("\n");
+    if (!raw || raw === "[DONE]") return;
+    let payload;
+    try { payload = JSON.parse(raw); } catch { return; }
+    if (name === "error" || payload?.msg === "process_error")
+      throw new Error("The background-removal processor failed.");
+    if (name === "complete" || payload?.msg === "process_completed")
+      return { done: true, value: payload?.output?.data?.[0] ?? payload?.data?.[0] ?? (Array.isArray(payload) ? payload[0] : payload) };
+    if (name === "generating" && payload != null) lastOutput = Array.isArray(payload) ? payload[0] : payload;
   }
+
+  try {
+    while (Date.now() < deadline) {
+      const { value, done } = await reader.read();
+      buffer += decoder.decode(value || new Uint8Array(), { stream: !done }).replace(/\r\n/g, "\n");
+      let boundary;
+      while ((boundary = buffer.indexOf("\n\n")) !== -1) {
+        const block = buffer.slice(0, boundary);
+        buffer = buffer.slice(boundary + 2);
+        const result = parseEvent(block);
+        if (result?.done) return result.value;
+      }
+      if (done) {
+        const result = parseEvent(buffer);
+        if (result?.done) return result.value;
+        break;
+      }
+    }
+  } finally {
+    await reader.cancel().catch(() => {});
+  }
+  if (lastOutput != null) return lastOutput;
   throw new Error("The background-removal processor returned no result.");
 }
 
@@ -154,12 +188,16 @@ function dataUrl(bytes, type) {
   return "data:" + type + ";base64," + btoa(binary);
 }
 
-async function outputResponse(value) {
+async function outputResponse(value, token) {
   if (typeof value === "string" && /^https?:\/\//i.test(value)) {
-    const response = await fetch(value);
+    const url = new URL(value);
+    if (url.protocol !== "https:" || !url.hostname.endsWith(".hf.space")) throw new Error("AI result URL is not a Hugging Face Space.");
+    const response = await fetch(url, { headers: { Authorization: "Bearer " + token } });
     if (!response.ok) throw new Error("AI result could not be retrieved.");
     return response;
   }
+
+  if (typeof value === "string" && value.startsWith("/")) return outputResponse(SPACE_URL + "/gradio_api/file=" + encodeURIComponent(value), token);
 
   if (typeof value === "string" && value.startsWith("data:")) {
     const match = value.match(/^data:([^;]+);base64,(.*)$/s);
@@ -169,9 +207,10 @@ async function outputResponse(value) {
   }
 
   if (value && typeof value === "object") {
-    if (value.url) return outputResponse(value.url);
-    if (value.path && /^https?:\/\//i.test(value.path)) return outputResponse(value.path);
-    if (value.data) return outputResponse(value.data);
+    if (value.url) return outputResponse(value.url, token);
+    if (value.path && /^https?:\/\//i.test(value.path)) return outputResponse(value.path, token);
+    if (value.data) return outputResponse(value.data, token);
+    if (value.path && typeof value.path === "string" && value.path.startsWith("/")) return outputResponse(SPACE_URL + "/gradio_api/file=" + encodeURIComponent(value.path), token);
   }
 
   throw new Error("AI processor returned an unsupported result format.");
@@ -201,7 +240,7 @@ export async function onRequest(context) {
     };
 
     const result = await gradioCall(token, input);
-    const image = await outputResponse(result);
+    const image = await outputResponse(result, token);
 
     return new Response(image.body, {
       status: 200,
