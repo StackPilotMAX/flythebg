@@ -34,54 +34,22 @@ function toolPage(id:ToolId,num:string,title:string,description:string,accept:st
 }
 
 function home():string{
- const BASE="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P";
- const MARS_BG=BASE+"/3c83091e-4046-4fd6-adbb-2edb728be79a.mp4";
- const TO_EARTH=BASE+"/fc3ded42-e845-41f3-a830-5cab512d79cd.mp4";
- const TO_VENUS=BASE+"/b30f64d9-1637-477a-83df-d0fc6461a422.mp4";
- const TO_MARS=BASE+"/5fc5651c-3b5d-4171-b507-87f7e635d1b4.mp4";
- const MERCURY=BASE+"/d6fb8b6b-c15e-4aaa-9cf7-45bbb5e33372.jpg";
- const LOGO=BASE+"/eb7e0f53-50cd-4af5-abc4-8b9a52cdc01b.svg";
- return shell(`<main class="experience" data-planet="mars">
-  <div class="backgrounds" aria-hidden="true">
-   <video id="mars-background" class="background is-visible" muted playsinline preload="auto" src="${MARS_BG}"></video>
-   <video id="earth-background" class="background" muted playsinline preload="auto" src="${TO_EARTH}"></video>
-   <video id="venus-background" class="background" muted playsinline preload="auto" src="${TO_VENUS}"></video>
-  </div>
-  <div class="preloader" id="preloader" aria-label="Loading FlyThe BG">
-   <video id="preloader-video" muted playsinline preload="auto" src="${TO_MARS}"></video>
-   <div class="preloader-shade"></div>
-  </div>
-  <img class="floating-logo" id="floating-logo" src="${LOGO}" alt="FlyThe BG">
-  <div class="preloader-count" id="preloader-count" aria-live="polite"><span id="preloader-value">0</span><span class="percent">%</span></div>
-  <canvas id="scene-canvas" class="scene-canvas" aria-hidden="true"></canvas>
-  <div class="shade" aria-hidden="true"></div>
-  <header class="header chrome">
-   <div class="header-actions">
-    <nav class="nav" aria-label="Primary navigation">
-     <a class="active" href="/about">About</a><a href="/features">Explore</a><a href="/faq">FAQ</a>
-    </nav>
-    <a class="menu" href="/support">Support</a>
-   </div>
-  </header>
-  <aside class="planet-list chrome" aria-label="Solar system planets"></aside>
-  <canvas id="portal-canvas" class="portal-canvas" aria-hidden="true"></canvas>
-  <section class="portal-wrap chrome" aria-label="Next FlyThe BG destination">
-   <div class="portal-heading"><span>Next:</span><span><span id="next-number">[02]</span> <strong id="next-name">Image Compressor</strong></span></div>
-   <button class="portal" id="portal" type="button" aria-label="Open Image Compressor">
-    <video id="portal-video" muted playsinline preload="auto" src="${TO_EARTH}"></video>
-    <img id="portal-image" src="${MERCURY}" alt="Mercury">
-   </button>
-  </section>
-  <section class="planet-content chrome" aria-live="polite">
-   <div class="planet-copy">
-    <p class="planet-kicker">FLYTHE BG · PRIVACY-FIRST MEDIA TOOLS</p>
-    <h1 id="planet-title">MARS</h1>
-   </div>
-   <dl id="facts"></dl>
-  </section>
-  <div class="transition-layer" aria-hidden="true"><video id="transition-video" muted playsinline preload="auto"></video></div>
-  <div class="loading" aria-hidden="true">Preparing next orbit…</div>
- </main>`,`FlyThe BG — Create. Clean. Fly.`);
+ const names=["REMOVE BACKGROUND","IMAGE COMPRESSOR","VIDEO COMPRESSOR","GET STARTED"];
+ const descriptions=["Protected AI processing through your private Hugging Face Space.","Compress images directly in your browser.","Create smaller WebM files with local progress.","Pick a workspace. No account required."];
+ const links=["/remove-bg","/image-compressor","/video-compressor","/features"];
+ const ladder=names.map((name,i)=>'<a class="ed-ladder-row" data-step="'+i+'" href="'+links[i]+'"><span class="ed-mono">0'+(i+1)+' / 04</span><div><h3>'+name+'</h3><p>'+descriptions[i]+'</p></div><span>↗</span></a>').join("");
+ const services=names.slice(0,3).map((name,i)=>'<a class="ed-service" href="'+links[i]+'" data-rev style="--d:'+(i*80)+'ms"><span class="ed-mono">0'+(i+1)+' / SERVICE</span><h3 data-words>'+name+'</h3><p>'+descriptions[i]+'</p><span class="ed-mono">EXPLORE ↗</span></a>').join("");
+ const plates=["SELECT","PROCESS","DOWNLOAD","REPEAT"].map((name,i)=>'<div class="ed-plate" data-rev style="--d:'+(i*80)+'ms"><canvas width="320" height="360" data-plate="'+i+'" aria-label="Abstract '+name+' visual"></canvas><span class="ed-mono">0'+(i+1)+' / WORKFLOW</span><h3>'+name+'</h3><p>'+["Choose your media","Run the selected tool","Save your result","Create without an account"][i]+'</p></div>').join("");
+ const tariffs=names.slice(0,3).map((name,i)=>'<a class="ed-tariff" href="'+links[i]+'" data-rev style="--d:'+(i*65)+'ms"><span class="ed-mono">0'+(i+1)+'</span><strong>'+name+'</strong><span>'+["Protected AI · PNG output","Browser-local · Image output","Browser-local · WebM output"][i]+'</span><em>OPEN ↗</em></a>').join("");
+ const questions=[["DO I NEED AN ACCOUNT?","No. FlyThe BG requires no account."],["WHICH FILES LEAVE MY DEVICE?","Only images you explicitly submit for background removal. Compression runs locally."],["WHERE DOES THE AI RUN?","Through a Cloudflare Worker and a private Hugging Face Space. Temporary processing files may exist in the external runtime."],["CAN I SUPPORT THE PROJECT?","Yes. Star the GitHub repository or use the optional Buy Me a Coffee link."]].map((q,i)=>'<details class="ed-faq" data-rev style="--d:'+(i*60)+'ms"><summary><span class="ed-mono">0'+(i+1)+'</span><strong>'+q[0]+'</strong><i aria-hidden="true"></i></summary><p>'+q[1]+'</p></details>').join("");
+ return shell('<main class="editorial">'+
+ '<section class="ed-hero ed-pin" data-pin><div class="ed-sticky"><canvas class="ed-scan" aria-hidden="true"></canvas><div class="ed-hero-inner"><span class="ed-mono ed-hero-top" data-rev>INDEPENDENT MEDIA TOOLS / 2026</span><h1 class="ed-poster" aria-label="FLYTHE BG">FLYTHE BG</h1><div class="ed-hero-statement"><span class="ed-mono">LESS BACKGROUND. LESS WEIGHT. MORE FREEDOM.</span><h2 data-words>MAKE YOUR MEDIA MOVE.</h2><a class="ed-cta" href="/features">GET STARTED ↗</a></div></div><div class="ed-hero-bottom ed-mono"><span>01 / THE BEGINNING</span><span>SCROLL TO EXPLORE ↓</span><span>FLYTHEBG.COM</span></div></div></section>'+
+ '<section class="ed-ladder ed-pin" data-pin><div class="ed-sticky ed-wrap"><div class="ed-corners ed-mono"><span>02 / THE TOOL LADDER</span><span data-current-tag>01 / 04</span></div><div class="ed-ladder-body"><div class="ed-ladder-left"><span class="ed-mono">FOUR WAYS FORWARD</span><div class="ed-number"><span>0</span><span data-number-last>1</span></div><p>ONE TOOL AT A TIME.<br>YOUR WORK. YOUR PACE.</p></div><div class="ed-ladder-right">'+ladder+'</div></div><div class="ed-meter"><span></span></div></div></section>'+
+ '<section class="ed-whiteout ed-pin" data-pin><div class="ed-sticky ed-wrap"><div class="ed-corners ed-mono"><span>03 / NO EXTRA NOISE</span><span>03 / 04</span></div><div class="ed-whiteout-center"><h2 data-words>KEEP THE DETAIL.<br>LOSE THE EXTRA.<br>MAKE IT FLY.</h2><p class="ed-mono">REMOVE / COMPRESS / CREATE</p></div></div></section>'+
+ '<section class="ed-band ed-dark"><div class="ed-wrap"><div class="ed-band-top ed-mono" data-rev><span>04 / THE SERVICES</span><span>01 — 03</span></div><h2 class="ed-band-title" data-words>TOOLS THAT GET<br>OUT OF YOUR WAY.</h2><div class="ed-services">'+services+'</div></div></section>'+
+ '<section class="ed-band ed-light"><div class="ed-wrap"><div class="ed-band-top ed-mono" data-rev><span>05 / THE PROCESS</span><span>01 — 04</span></div><h2 class="ed-band-title" data-words>FROM UPLOAD<br>TO OUTPUT.</h2><div class="ed-plates">'+plates+'</div></div></section>'+
+ '<section class="ed-band ed-dark"><div class="ed-wrap"><div class="ed-band-top ed-mono" data-rev><span>06 / CHOOSE A WORKSPACE</span><span>NO ACCOUNT REQUIRED</span></div><h2 class="ed-band-title" data-words>YOUR NEXT MOVE.</h2><div class="ed-tariffs">'+tariffs+'</div><p class="ed-mono">NO INVENTED PAID PLANS / CLEAR PROCESSING DISCLOSURES</p></div></section>'+
+ '<section class="ed-band ed-light"><div class="ed-wrap"><div class="ed-band-top ed-mono" data-rev><span>07 / THE QUESTIONS</span><span>SUPPORT@FLYTHEBG.COM</span></div><h2 class="ed-band-title" data-words>GOOD TO KNOW.</h2><div class="ed-faqs">'+questions+'</div><div class="ed-end" data-rev><span class="ed-mono">READY WHEN YOU ARE</span><a class="ed-cta" href="/features">EXPLORE THE TOOLS ↗</a></div></div></section></main>',"FlyThe BG — Remove. Compress. Create.");
 }
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose your weapon.<br>metaphorically. 😭</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>pookie tip:</b> close giant tabs before compressing a giant video. Your RAM will send a thank-you note.</div></main>`,"Get Started — FlyThe BG");}
 
@@ -176,7 +144,57 @@ function wireSpaceExperience():void{
   cctx.fillStyle=g;cctx.fillRect(0,innerHeight*.52,innerWidth,innerHeight*.48);
  }
 
- function render():void{
+ function wireEditorial():void{
+ const root=document.querySelector<HTMLElement>(".editorial");if(!root)return;
+ const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ root.querySelectorAll<HTMLElement>("[data-words]").forEach(el=>{
+  Array.from(el.childNodes).forEach(node=>{
+   if(node.nodeType!==Node.TEXT_NODE)return;
+   const fragment=document.createDocumentFragment();let i=0;
+   (node.textContent||"").split(/(\s+)/).forEach(word=>{
+    if(!word.trim()){fragment.appendChild(document.createTextNode(word));return;}
+    const span=document.createElement("span");span.className="ed-word";span.textContent=word;span.style.setProperty("--d",i++*40+"ms");fragment.appendChild(span);
+   });node.replaceWith(fragment);
+  });
+ });
+ const reveal=root.querySelectorAll<HTMLElement>("[data-rev],.ed-word");
+ if(reduced||!("IntersectionObserver" in window))reveal.forEach(el=>el.classList.add("ed-visible"));
+ else{const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("ed-visible");observer.unobserve(entry.target);}}),{threshold:.14,rootMargin:"0px 0px -6% 0px"});reveal.forEach(el=>observer.observe(el));}
+ const pins=Array.from(root.querySelectorAll<HTMLElement>("[data-pin]"));
+ const rows=Array.from(root.querySelectorAll<HTMLElement>(".ed-ladder-row"));
+ const number=root.querySelector<HTMLElement>("[data-number-last]");
+ const tag=root.querySelector<HTMLElement>("[data-current-tag]");
+ const scan=root.querySelector<HTMLCanvasElement>(".ed-scan");
+ const ctx=scan?.getContext("2d");
+ const plates=Array.from(root.querySelectorAll<HTMLCanvasElement>("[data-plate]"));
+ const plateContexts=plates.map(el=>el.getContext("2d"));
+ let active=-1,queued=false;
+ function update(){
+  queued=false;pins.forEach((section,i)=>{
+   const rect=section.getBoundingClientRect();
+   const p=Math.max(0,Math.min(1,-rect.top/Math.max(1,rect.height-innerHeight)));
+   section.style.setProperty("--p",String(p));
+   if(i===1){const step=Math.min(3,Math.floor(p*4));if(step!==active){active=step;if(number)number.textContent=String(step+1);if(tag)tag.textContent="0"+(step+1)+" / 04";rows.forEach((row,j)=>row.classList.toggle("ed-active",j<=step));}}
+  });
+ }
+ function onScroll(){if(!queued){queued=true;requestAnimationFrame(update);}}
+ addEventListener("scroll",onScroll,{passive:true});addEventListener("resize",onScroll);update();
+ function draw(t:number){
+  if(!root.isConnected)return;
+  if(scan&&ctx){
+   const w=scan.clientWidth,h=scan.clientHeight,dpr=Math.min(devicePixelRatio||1,2);
+   if(scan.width!==Math.round(w*dpr)||scan.height!==Math.round(h*dpr)){scan.width=Math.round(w*dpr);scan.height=Math.round(h*dpr);}
+   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+   for(let y=0;y<h;y+=5){ctx.fillStyle="rgba(233,237,242,.055)";ctx.fillRect(Math.sin(y*.041+t*.0003)*13,y,w,1);}
+   const center=(reduced?.48:Math.sin(t*.00015)*.32+.5)*w;
+   const bloom=ctx.createRadialGradient(center,h*.5,0,center,h*.5,w*.48);
+   bloom.addColorStop(0,"rgba(255,77,0,.16)");bloom.addColorStop(1,"rgba(255,77,0,0)");ctx.fillStyle=bloom;ctx.fillRect(0,0,w,h);
+  }
+  plates.forEach((canvas,i)=>{const c=plateContexts[i];if(!c)return;const w=canvas.width,h=canvas.height;c.fillStyle="#0B0E14";c.fillRect(0,0,w,h);for(let j=0;j<36;j++){const shift=reduced?0:Math.sin(t*.00035+j*.57+i)*17;const length=50+((j*79+i*113)%225);c.fillStyle=j%7===0?"#FF4D00":"rgba(242,244,241,.18)";c.fillRect((w-length)/2+shift,j*11+5,length,j%7===0?3:1);}});
+  if(!reduced)requestAnimationFrame(draw);
+ }draw(0);
+}
+function render():void{
   const s=currentState(),n=nextState();
   experience.dataset.planet=s.key;
   title.textContent=s.name.toUpperCase();
@@ -364,6 +382,7 @@ function render():void{
  app.innerHTML=page;
  wireTools();
  wireSpaceExperience();
+ wireEditorial();
  loadStars();
  revealElements();
 }
