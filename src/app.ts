@@ -144,57 +144,7 @@ function wireSpaceExperience():void{
   cctx.fillStyle=g;cctx.fillRect(0,innerHeight*.52,innerWidth,innerHeight*.48);
  }
 
- function wireEditorial():void{
- const root=document.querySelector<HTMLElement>(".editorial");if(!root)return;
- const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
- root.querySelectorAll<HTMLElement>("[data-words]").forEach(el=>{
-  Array.from(el.childNodes).forEach(node=>{
-   if(node.nodeType!==Node.TEXT_NODE)return;
-   const fragment=document.createDocumentFragment();let i=0;
-   (node.textContent||"").split(/(\s+)/).forEach(word=>{
-    if(!word.trim()){fragment.appendChild(document.createTextNode(word));return;}
-    const span=document.createElement("span");span.className="ed-word";span.textContent=word;span.style.setProperty("--d",i++*40+"ms");fragment.appendChild(span);
-   });node.parentNode?.replaceChild(fragment,node);
-  });
- });
- const reveal=root.querySelectorAll<HTMLElement>("[data-rev],.ed-word");
- if(reduced||!("IntersectionObserver" in window))reveal.forEach(el=>el.classList.add("ed-visible"));
- else{const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("ed-visible");observer.unobserve(entry.target);}}),{threshold:.14,rootMargin:"0px 0px -6% 0px"});reveal.forEach(el=>observer.observe(el));}
- const pins=Array.from(root.querySelectorAll<HTMLElement>("[data-pin]"));
- const rows=Array.from(root.querySelectorAll<HTMLElement>(".ed-ladder-row"));
- const number=root.querySelector<HTMLElement>("[data-number-last]");
- const tag=root.querySelector<HTMLElement>("[data-current-tag]");
- const scan=root.querySelector<HTMLCanvasElement>(".ed-scan");
- const ctx=scan?.getContext("2d");
- const plates=Array.from(root.querySelectorAll<HTMLCanvasElement>("[data-plate]"));
- const plateContexts=plates.map(el=>el.getContext("2d"));
- let active=-1,queued=false;
- function update(){
-  queued=false;pins.forEach((section,i)=>{
-   const rect=section.getBoundingClientRect();
-   const p=Math.max(0,Math.min(1,-rect.top/Math.max(1,rect.height-innerHeight)));
-   section.style.setProperty("--p",String(p));
-   if(i===1){const step=Math.min(3,Math.floor(p*4));if(step!==active){active=step;if(number)number.textContent=String(step+1);if(tag)tag.textContent="0"+(step+1)+" / 04";rows.forEach((row,j)=>row.classList.toggle("ed-active",j<=step));}}
-  });
- }
- function onScroll(){if(!queued){queued=true;requestAnimationFrame(update);}}
- addEventListener("scroll",onScroll,{passive:true});addEventListener("resize",onScroll);update();
- function draw(t:number){
-  if(!root.isConnected)return;
-  if(scan&&ctx){
-   const w=scan.clientWidth,h=scan.clientHeight,dpr=Math.min(devicePixelRatio||1,2);
-   if(scan.width!==Math.round(w*dpr)||scan.height!==Math.round(h*dpr)){scan.width=Math.round(w*dpr);scan.height=Math.round(h*dpr);}
-   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-   for(let y=0;y<h;y+=5){ctx.fillStyle="rgba(233,237,242,.055)";ctx.fillRect(Math.sin(y*.041+t*.0003)*13,y,w,1);}
-   const center=(reduced?.48:Math.sin(t*.00015)*.32+.5)*w;
-   const bloom=ctx.createRadialGradient(center,h*.5,0,center,h*.5,w*.48);
-   bloom.addColorStop(0,"rgba(255,77,0,.16)");bloom.addColorStop(1,"rgba(255,77,0,0)");ctx.fillStyle=bloom;ctx.fillRect(0,0,w,h);
-  }
-  plates.forEach((canvas,i)=>{const c=plateContexts[i];if(!c)return;const w=canvas.width,h=canvas.height;c.fillStyle="#0B0E14";c.fillRect(0,0,w,h);for(let j=0;j<36;j++){const shift=reduced?0:Math.sin(t*.00035+j*.57+i)*17;const length=50+((j*79+i*113)%225);c.fillStyle=j%7===0?"#FF4D00":"rgba(242,244,241,.18)";c.fillRect((w-length)/2+shift,j*11+5,length,j%7===0?3:1);}});
-  if(!reduced)requestAnimationFrame(draw);
- }draw(0);
-}
-function render():void{
+ function render():void{
   const s=currentState(),n=nextState();
   experience.dataset.planet=s.key;
   title.textContent=s.name.toUpperCase();
@@ -279,6 +229,56 @@ function render():void{
   experience.addEventListener("pointerleave",()=>{targetX=0;targetY=0;});
  }
  portal.addEventListener("click",()=>void travel());
+}
+function wireEditorial():void{
+ const rootElement=document.querySelector<HTMLElement>(".editorial");if(!rootElement)return;const root=rootElement;
+ const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ root.querySelectorAll<HTMLElement>("[data-words]").forEach(el=>{
+  Array.from(el.childNodes).forEach(node=>{
+   if(node.nodeType!==Node.TEXT_NODE)return;
+   const fragment=document.createDocumentFragment();let i=0;
+   (node.textContent||"").split(/(\s+)/).forEach(word=>{
+    if(!word.trim()){fragment.appendChild(document.createTextNode(word));return;}
+    const span=document.createElement("span");span.className="ed-word";span.textContent=word;span.style.setProperty("--d",i++*40+"ms");fragment.appendChild(span);
+   });node.parentNode?.replaceChild(fragment,node);
+  });
+ });
+ const reveal=root.querySelectorAll<HTMLElement>("[data-rev],.ed-word");
+ if(reduced||!("IntersectionObserver" in window))reveal.forEach(el=>el.classList.add("ed-visible"));
+ else{const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("ed-visible");observer.unobserve(entry.target);}}),{threshold:.14,rootMargin:"0px 0px -6% 0px"});reveal.forEach(el=>observer.observe(el));}
+ const pins=Array.from(root.querySelectorAll<HTMLElement>("[data-pin]"));
+ const rows=Array.from(root.querySelectorAll<HTMLElement>(".ed-ladder-row"));
+ const number=root.querySelector<HTMLElement>("[data-number-last]");
+ const tag=root.querySelector<HTMLElement>("[data-current-tag]");
+ const scan=root.querySelector<HTMLCanvasElement>(".ed-scan");
+ const ctx=scan?.getContext("2d");
+ const plates=Array.from(root.querySelectorAll<HTMLCanvasElement>("[data-plate]"));
+ const plateContexts=plates.map(el=>el.getContext("2d"));
+ let active=-1,queued=false;
+ function update(){
+  queued=false;pins.forEach((section,i)=>{
+   const rect=section.getBoundingClientRect();
+   const p=Math.max(0,Math.min(1,-rect.top/Math.max(1,rect.height-innerHeight)));
+   section.style.setProperty("--p",String(p));
+   if(i===1){const step=Math.min(3,Math.floor(p*4));if(step!==active){active=step;if(number)number.textContent=String(step+1);if(tag)tag.textContent="0"+(step+1)+" / 04";rows.forEach((row,j)=>row.classList.toggle("ed-active",j<=step));}}
+  });
+ }
+ function onScroll(){if(!queued){queued=true;requestAnimationFrame(update);}}
+ addEventListener("scroll",onScroll,{passive:true});addEventListener("resize",onScroll);update();
+ function draw(t:number){
+  if(!root.isConnected)return;
+  if(scan&&ctx){
+   const w=scan.clientWidth,h=scan.clientHeight,dpr=Math.min(devicePixelRatio||1,2);
+   if(scan.width!==Math.round(w*dpr)||scan.height!==Math.round(h*dpr)){scan.width=Math.round(w*dpr);scan.height=Math.round(h*dpr);}
+   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+   for(let y=0;y<h;y+=5){ctx.fillStyle="rgba(233,237,242,.055)";ctx.fillRect(Math.sin(y*.041+t*.0003)*13,y,w,1);}
+   const center=(reduced?.48:Math.sin(t*.00015)*.32+.5)*w;
+   const bloom=ctx.createRadialGradient(center,h*.5,0,center,h*.5,w*.48);
+   bloom.addColorStop(0,"rgba(255,77,0,.16)");bloom.addColorStop(1,"rgba(255,77,0,0)");ctx.fillStyle=bloom;ctx.fillRect(0,0,w,h);
+  }
+  plates.forEach((canvas,i)=>{const c=plateContexts[i];if(!c)return;const w=canvas.width,h=canvas.height;c.fillStyle="#0B0E14";c.fillRect(0,0,w,h);for(let j=0;j<36;j++){const shift=reduced?0:Math.sin(t*.00035+j*.57+i)*17;const length=50+((j*79+i*113)%225);c.fillStyle=j%7===0?"#FF4D00":"rgba(242,244,241,.18)";c.fillRect((w-length)/2+shift,j*11+5,length,j%7===0?3:1);}});
+  if(!reduced)requestAnimationFrame(draw);
+ }draw(0);
 }
 function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
