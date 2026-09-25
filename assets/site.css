@@ -388,3 +388,117 @@ body{
 @media(prefers-reduced-motion:reduce){
   .shared-page-frame *{scroll-behavior:auto!important}
 }
+
+
+/* Mobile compatibility pass — FlyThe BG
+   Keeps the visual system but prevents overflow, clipped controls, and oversized
+   immersive content on narrow touch screens. */
+@media (max-width:600px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  body{font-size:15px}
+  .notice{font-size:10px;line-height:1.35;padding:8px 12px}
+  .nav{width:100%;padding:11px 14px;gap:10px}
+  .brand{font-size:15px;min-width:0}
+  .brand-mark{width:28px;height:28px;flex:0 0 28px}
+  .nav nav{min-width:0;gap:5px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .nav nav::-webkit-scrollbar{display:none}
+  .nav nav a{white-space:nowrap;padding:7px 6px;font-size:10px}
+  .nav nav a:nth-child(n+4){display:none}
+
+  .hero{min-height:calc(100svh - 62px);min-height:calc(100dvh - 62px);padding:0}
+  .hero-copy{width:100%;padding:56px 18px 76px}
+  .calligraphy{font-size:clamp(56px,19vw,96px);line-height:.78;margin-bottom:28px}
+  .hero-sub{font-size:15px;line-height:1.55}
+  .actions{width:100%;gap:8px;margin-top:22px}
+  .actions .button{width:100%;max-width:340px}
+  .hero-micro{gap:6px;margin-top:17px}
+  .hero-micro span,.pills span{font-size:9px;padding:5px 8px}
+  .scroll-cue{bottom:12px;font-size:9px}
+
+  .section,.page,.tool-page{width:100%;padding:56px 16px}
+  .center-heading h2,.center-heading h1{font-size:clamp(36px,12vw,56px)}
+  .center-heading>p:last-child,.tool-intro>p:last-child{font-size:15px}
+  .tool-intro h1{font-size:clamp(44px,14vw,72px);overflow-wrap:anywhere}
+  .tool-page{padding-top:52px}
+  .tool-workspace{width:100%;margin-top:30px;padding:12px;border-radius:16px}
+  .workspace-head{padding:3px 2px 12px;font-size:9px}
+  .big-dropzone{min-height:250px;padding:24px 14px}
+  .big-dropzone strong{font-size:20px}
+  .big-dropzone small,.big-dropzone em{font-size:11px}
+  .upload-arrow{font-size:38px}
+  .consent{font-size:11px;align-items:flex-start}
+  .consent input{flex:0 0 auto}
+  .status{font-size:12px;line-height:1.45}
+  .processing-note{font-size:11px}
+
+  .tool-links{margin-top:34px}
+  .tool-links>a{grid-template-columns:28px minmax(0,1fr) 18px;gap:8px;padding:19px 2px}
+  .tool-links b{font-size:16px}
+  .tool-links small{font-size:11px;line-height:1.35}
+  .tool-links strong{font-size:16px}
+
+  .ai-grid,.support-grid{grid-template-columns:1fr}
+  .ai-card{padding:20px}
+  .support-grid article{min-height:0;padding:21px}
+  .footer{width:100%;padding:36px 16px}
+  .footer nav{gap:11px 15px}
+  .footer small{font-size:10px;line-height:1.5}
+
+  .modal-backdrop{padding:12px}
+  .celebrate{width:100%;max-width:520px;padding:28px 17px;border-radius:20px}
+  .celebrate h2{font-size:clamp(31px,10vw,48px)}
+  .modal-actions{gap:8px}
+  .modal-actions .button{min-height:44px}
+
+  /* Immersive landing experience */
+  .experience{height:100dvh;min-height:0}
+  .experience .header{left:12px;right:12px;top:12px;align-items:flex-start}
+  .experience .header .nav{height:38px;max-width:calc(100vw - 72px);overflow-x:auto;scrollbar-width:none}
+  .experience .header .nav::-webkit-scrollbar{display:none}
+  .experience .header .nav a{font-size:11px;padding:7px 11px;white-space:nowrap}
+  .experience .menu{height:38px;padding:0 13px;font-size:11px}
+  .planet-list{left:12px;top:50%;gap:5px;font-size:10px;transform:translateY(-50%)}
+  .planet-item{min-height:18px;gap:5px}
+  .planet-item.active{font-size:12px}
+  .planet-dot{width:6px;height:6px}
+  .planet-item.active .planet-dot{width:10px;height:10px}
+  .portal-wrap{width:min(58vw,230px);top:46%;transform:translate(-50%,-50%)}
+  .planet-content{left:14px;right:14px;bottom:14px;display:block}
+  .planet-kicker{font-size:8px;margin-bottom:5px}
+  .planet-content h1{font-size:clamp(70px,23vw,130px);line-height:.72;margin-bottom:14px;transform:none}
+  .planet-content dl{width:100%;max-width:100%;font-size:10px}
+  .fact{grid-template-columns:72px minmax(0,1fr);gap:8px;padding:5px 0}
+  .fact dd{min-width:0}
+  .preloader-count>span:first-child{font-size:48px}
+  .preloader-count .percent{font-size:18px}
+}
+
+@media (max-width:380px){
+  .brand{font-size:13px}
+  .nav nav a{font-size:9px}
+  .hero-copy{padding-left:14px;padding-right:14px}
+  .tool-page{padding-left:12px;padding-right:12px}
+  .portal-wrap{width:min(54vw,195px)}
+  .planet-list{left:8px}
+  .planet-content{left:10px;right:10px}
+  .planet-content h1{font-size:clamp(62px,22vw,92px)}
+  .fact{grid-template-columns:62px minmax(0,1fr);font-size:9px}
+}
+
+@media (max-height:650px) and (max-width:600px){
+  .portal-wrap{top:42%;width:min(43vw,180px)}
+  .planet-content{bottom:8px}
+  .planet-content h1{font-size:clamp(58px,18vw,88px);margin-bottom:8px}
+  .planet-content dl{font-size:9px}
+  .fact{padding:3px 0}
+  .planet-list{top:52%}
+}
+
+@media (orientation:landscape) and (max-width:900px) and (max-height:600px){
+  .experience .header{top:8px}
+  .planet-list{top:50%;transform:translateY(-50%)}
+  .portal-wrap{width:min(30vw,210px);top:48%}
+  .planet-content{bottom:8px;display:flex;align-items:flex-end}
+  .planet-content h1{font-size:clamp(54px,13vw,110px);margin:0}
+  .planet-content dl{width:min(45vw,330px);font-size:9px}
+}
