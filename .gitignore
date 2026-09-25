@@ -7,3 +7,17 @@ __pycache__/
 !.env.example
 .wrangler/
 .DS_Store
+
+# Cloudflare and local credentials
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.secrets
+.secrets/
+public/
+dist/
+coverage/
