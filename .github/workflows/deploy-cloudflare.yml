@@ -27,6 +27,8 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm install --no-audit --no-fund
+      - name: Scan current source for accidental credentials
+        run: node scripts/check-secrets.mjs
       - name: Typecheck
         run: npm run typecheck
       - name: Build
