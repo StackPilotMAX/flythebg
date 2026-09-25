@@ -853,3 +853,27 @@ body:has(.fly-home)>.notice,body:has(.fly-home)>.nav,body:has(.fly-home)>.footer
  .fly-headline span,.fly-reveal,.fly-stat.anim.fly-reveal,.fly-cta{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
  .fly-logo,.fly-nav a,.fly-signin,.fly-cta,.fly-burger i{transition:none!important}
 }
+
+/* Dedicated support studio — intentionally different from the professional product UI. */
+.support-studio{width:min(1180px,100%);margin:0 auto;padding:clamp(4rem,10vw,8rem) 0 0;overflow:hidden}
+.support-studio-hero{position:relative;padding:clamp(2rem,6vw,5rem);border:2px solid #171717;background:radial-gradient(circle at 12% 8%,rgba(255,77,0,.18),transparent 26%),radial-gradient(circle at 90% 18%,rgba(255,226,122,.14),transparent 28%),#f3efe6;color:#0b0b0b;transform:rotate(-.35deg);box-shadow:16px 16px 0 #ff4d00,0 30px 90px rgba(0,0,0,.3)}
+.support-spark{display:inline-flex;padding:.45rem .7rem;border:2px solid #0b0b0b;border-radius:999px;font:900 11px/1 Inter,sans-serif;letter-spacing:.12em;transform:rotate(2deg);background:#ffe27a}
+.support-studio-hero h1{margin:1.2rem 0;font:900 clamp(4rem,11vw,9rem)/.78 Inter,sans-serif;letter-spacing:-.08em}
+.support-studio-hero h1 span{display:inline-block;color:#ff4d00;transform:rotate(-2deg)}
+.support-studio-hero>p:not(.eyebrow){max-width:680px;font:700 clamp(1rem,2vw,1.25rem)/1.45 Inter,sans-serif}
+.support-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem}
+.support-btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 1.15rem;border:2px solid #0b0b0b;border-radius:14px;font:900 14px/1 Inter,sans-serif;box-shadow:5px 5px 0 #0b0b0b;transition:transform .18s,box-shadow .18s}
+.support-btn:hover{transform:translate(3px,3px) rotate(-1deg);box-shadow:2px 2px 0 #0b0b0b}
+.support-btn-coffee{background:#ffe27a}.support-btn-star{background:#fff}
+.support-disclaimer{margin-top:1.2rem;max-width:700px;font:600 11px/1.5 Inter,sans-serif;opacity:.72}
+.support-chaos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:5rem 0 2rem}
+.support-chaos-grid article{padding:1.6rem;border:2px solid #2b2b2b;background:#111;color:#fff;min-height:210px;transform:rotate(var(--r,0deg));transition:transform .25s}
+.support-chaos-grid article:nth-child(1){--r:-1deg}.support-chaos-grid article:nth-child(2){--r:.7deg}.support-chaos-grid article:nth-child(3){--r:-.5deg}
+.support-chaos-grid article:hover{transform:translateY(-8px) rotate(0deg)}
+.support-chaos-grid b{color:#ff4d00;font:900 10px/1 Inter,sans-serif;letter-spacing:.14em}.support-chaos-grid h2{margin:1.2rem 0 .5rem;font:900 clamp(2rem,4vw,3.4rem)/.9 Inter,sans-serif;letter-spacing:-.06em}.support-chaos-grid p{color:#b9b9b9;line-height:1.6;margin:0}
+.support-marquee{display:flex;width:max-content;gap:2rem;padding:1rem 0 4rem;color:#ffe27a;font:900 11px/1 Inter,sans-serif;letter-spacing:.14em;white-space:nowrap;animation:support-marquee 18s linear infinite}
+@keyframes support-marquee{to{transform:translateX(-50%)}}
+@media(max-width:700px){.support-studio{padding-top:2.5rem}.support-studio-hero{padding:1.5rem;box-shadow:9px 9px 0 #ff4d00}.support-studio-hero h1{font-size:clamp(3.4rem,16vw,6rem)}.support-actions{flex-direction:column}.support-btn{width:100%}.support-chaos-grid{grid-template-columns:1fr;margin-top:3rem}.support-chaos-grid article{min-height:0}.support-marquee{padding-bottom:2rem}}
+@media(prefers-reduced-motion:reduce){.support-btn,.support-chaos-grid article{transition:none}.support-marquee{animation:none}}
+
+.download-recovery{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:16px 2px 0;padding:14px 15px;border:1px solid rgba(104,216,255,.28);background:rgba(104,216,255,.05);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.45}.download-recovery strong{display:block;color:var(--white);margin-bottom:2px}.download-recovery .button{flex:0 0 auto;padding:10px 14px;font-size:12px}@media(max-width:600px){.download-recovery{align-items:stretch;flex-direction:column}.download-recovery .button{width:100%}}
