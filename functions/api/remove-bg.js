@@ -164,7 +164,7 @@ async function gradioCall(token, input) {
         return readSseResult(events);
       }
     } catch (error) {
-      if (error instanceof Error && !/\\b(404|502|503)\\b/.test(error.message)) throw error;
+      if (error instanceof Error && !/\b(404|502|503)\b/.test(error.message)) throw error;
     }
 
     if (lastStatus === 404 || lastStatus === 502 || lastStatus === 503 || lastStatus === 0) {
