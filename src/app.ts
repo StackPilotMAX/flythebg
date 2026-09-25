@@ -154,7 +154,7 @@ function wireSpaceExperience():void{
    (node.textContent||"").split(/(\s+)/).forEach(word=>{
     if(!word.trim()){fragment.appendChild(document.createTextNode(word));return;}
     const span=document.createElement("span");span.className="ed-word";span.textContent=word;span.style.setProperty("--d",i++*40+"ms");fragment.appendChild(span);
-   });node.replaceWith(fragment);
+   });node.parentNode?.replaceChild(fragment,node);
   });
  });
  const reveal=root.querySelectorAll<HTMLElement>("[data-rev],.ed-word");
