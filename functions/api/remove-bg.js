@@ -3,8 +3,9 @@ const ALLOWED_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 const ORIGIN = "https://flythebg.com";
 const SPACE_URL = "https://StackPilotMAX-bg-remover-api.hf.space";
 const API_NAME = "/remove_background";
-const STARTUP_GRACE_MS = 35_000;
-const MAX_JOB_MS = 120_000;
+const STARTUP_GRACE_MS = 90_000;
+const MAX_JOB_MS = 180_000;
+const RETRY_DELAY_MS = 4_000;
 
 function headers(extra = {}) {
   return {
@@ -33,14 +34,18 @@ function fail(message, status = 400) {
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function wakeSpace(token) {
-  // An authenticated request wakes a sleeping Space. The model itself may then
-  // need roughly 20–25 seconds to finish loading before the API is ready.
-  const response = await fetch(SPACE_URL, {
-    method: "GET",
-    headers: { "Authorization": "Bearer " + token }
-  });
-
-  return response.status;
+  // Keep wake-up entirely server-side. A browser tab must never be needed.
+  const auth = { "Authorization": "Bearer " + token, "Cache-Control": "no-cache" };
+  const checks = [SPACE_URL, SPACE_URL + "/gradio_api/info"];
+  let lastStatus = 0;
+  for (const url of checks) {
+    try {
+      const response = await fetch(url, { method: "GET", headers: auth, cache: "no-store" });
+      lastStatus = response.status;
+      if (response.ok || response.status === 401 || response.status === 403) return response.status;
+    } catch {}
+  }
+  return lastStatus;
 }
 
 async function readSseResult(response) {
@@ -121,22 +126,27 @@ async function uploadFile(token, bytes, type) {
 
 async function gradioCall(token, input) {
   const endpoint = SPACE_URL.replace(/\/$/, "") + "/gradio_api/call/" + API_NAME.slice(1);
-  let lastStatus = 0;
-
-  // A sleeping Space can take 20–25 seconds to boot its rembg runtime.
-  // Give it a full 25-second startup window instead of failing early.
   const startedAt = Date.now();
-  await wakeSpace(token).catch(() => {});
+  let lastStatus = 0;
+  let lastError = "";
 
-  for (let attempt = 1; attempt <= 6; attempt++) {
+  // A sleeping Space can take 20–25 seconds to boot and initialize rembg.
+  // Retry the complete upload/prediction sequence from the Worker so the
+  // browser never has to open or keep the Hugging Face Space alive.
+  while (Date.now() - startedAt < STARTUP_GRACE_MS) {
+    const wakeStatus = await wakeSpace(token);
+    if (wakeStatus === 401 || wakeStatus === 403) {
+      throw new Error("Hugging Face rejected the server-side access token (" + wakeStatus + ").");
+    }
+
     try {
       const filePath = await uploadFile(token, input.bytes, input.type);
-
-      const start = await fetch(endpoint, {
+      const startResponse = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + token
+          "Authorization": "Bearer " + token,
+          "Cache-Control": "no-cache"
         },
         body: JSON.stringify({
           data: [{
@@ -147,39 +157,54 @@ async function gradioCall(token, input) {
         })
       });
 
-      lastStatus = start.status;
-
-      if (start.ok) {
-        const payload = await start.json();
+      lastStatus = startResponse.status;
+      if (startResponse.ok) {
+        const payload = await startResponse.json();
         if (!payload?.event_id) return payload?.data?.[0] ?? payload?.data ?? payload;
 
-        const events = await fetch(endpoint + "/" + encodeURIComponent(payload.event_id), {
-          headers: {
-            "Accept": "text/event-stream",
-            "Authorization": "Bearer " + token
+        const events = await fetch(
+          endpoint + "/" + encodeURIComponent(payload.event_id),
+          {
+            headers: {
+              "Accept": "text/event-stream",
+              "Authorization": "Bearer " + token,
+              "Cache-Control": "no-cache"
+            }
           }
-        });
-
-        if (!events.ok) throw new Error("AI processor did not return a completed result.");
-        return readSseResult(events);
+        );
+        if (!events.ok) {
+          lastStatus = events.status;
+          lastError = "AI processor did not return the event stream (" + events.status + ").";
+        } else {
+          return readSseResult(events);
+        }
+      } else {
+        lastError = "Gradio request returned HTTP " + startResponse.status + ".";
       }
     } catch (error) {
-      if (error instanceof Error && !/\b(404|502|503)\b/.test(error.message)) throw error;
+      lastError = error instanceof Error ? error.message : String(error);
+      if (/server-side access token/i.test(lastError)) throw new Error(lastError);
     }
 
-    if (lastStatus === 404 || lastStatus === 502 || lastStatus === 503 || lastStatus === 0) {
-      await wakeSpace(token).catch(() => {});
-      const elapsed = Date.now() - startedAt;
-      if (elapsed >= STARTUP_GRACE_MS) break;
-      await sleep(Math.min(5000, STARTUP_GRACE_MS - elapsed));
+    if (lastStatus === 404 || lastStatus === 408 || lastStatus === 429 ||
+        lastStatus === 502 || lastStatus === 503 || lastStatus === 504 || lastStatus === 0 ||
+        (lastStatus >= 500 && lastStatus < 600)) {
+      const remaining = STARTUP_GRACE_MS - (Date.now() - startedAt);
+      if (remaining <= 0) break;
+      await sleep(Math.min(RETRY_DELAY_MS, remaining));
       continue;
     }
 
-    throw new Error("AI processor rejected the request (" + lastStatus + ").");
+    throw new Error(lastError || "AI processor rejected the request (" + lastStatus + ").");
   }
 
-  throw new Error("The AI processor did not become ready within the 25-second startup window (" + lastStatus + ").");
+  throw new Error(
+    "The Hugging Face background-removal Space is still starting after " +
+    Math.round(STARTUP_GRACE_MS / 1000) +
+    " seconds. Please try again in a moment."
+  );
 }
+
 function dataUrl(bytes, type) {
   let binary = "";
   for (let i = 0; i < bytes.length; i += 0x8000) {
