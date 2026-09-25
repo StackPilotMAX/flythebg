@@ -176,7 +176,14 @@ async function gradioCall(token, input) {
           lastStatus = events.status;
           lastError = "AI processor did not return the event stream (" + events.status + ").";
         } else {
-          return readSseResult(events);
+          try {
+            return await readSseResult(events);
+          } catch (streamError) {
+            lastError = streamError instanceof Error ? streamError.message : String(streamError);
+            // A cold-started Space can accept the job before the runtime is fully
+            // ready. Treat a transient stream failure as retryable during startup.
+            lastStatus = 503;
+          }
         }
       } else {
         lastError = "Gradio request returned HTTP " + startResponse.status + ".";
