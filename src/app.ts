@@ -675,11 +675,50 @@ function showResultPreview(tool:ToolId,blob:Blob,filename:string):void{
  result.querySelector("[data-result-close]")?.addEventListener("click",()=>{result.remove();URL.revokeObjectURL(url);});
  workspace.appendChild(result);
 }
-async function removeBackground(file:File):Promise<void>{setProgress("remove-bg",5,"uploading");updateStatus("remove-bg","Uploading securely… this is the one tool that needs the internet.");const response=await fetch("/api/remove-bg",{method:"POST",headers:{"Content-Type":file.type,"Accept":"text/event-stream"},body:file});if(!response.ok){let message="Background removal failed.";try{const data=await response.json() as {error?:string};if(data.error)message=data.error;}catch{}throw new Error(message);}setProgress("remove-bg",92,"preparing");const resultBlob=await response.blob();
- const resultName=file.name.replace(/\.[^.]+$/,"")+"-no-bg.png";
- showResultPreview("remove-bg",resultBlob,resultName);
- setProgress("remove-bg",100,"ready");updateStatus("remove-bg","Done — preview ready. Download it below.");postWork("background removal");}
-
+async function removeBackground(file:File):Promise<void>{
+  setProgress("remove-bg",5,"uploading");
+  updateStatus("remove-bg","Uploading securely… this is the one tool that needs the internet.");
+  const response=await fetch("/api/remove-bg",{method:"POST",headers:{"Content-Type":file.type,"Accept":"text/event-stream"},body:file});
+  if(!response.ok){
+    let message="Background removal failed.";
+    try{const data=await response.json() as {error?:string};if(data.error)message=data.error;}catch{}
+    throw new Error(message);
+  }
+  const reader=response.body?.getReader();
+  if(!reader)throw new Error("The processing stream is unavailable. Please try again.");
+  const decoder=new TextDecoder();
+  let buffer="";
+  let resultDataUrl="";
+  while(true){
+    const {value,done}=await reader.read();
+    buffer+=decoder.decode(value||new Uint8Array(),{stream:!done});
+    let boundary;
+    while((boundary=buffer.indexOf("\n\n"))!==-1){
+      const block=buffer.slice(0,boundary);
+      buffer=buffer.slice(boundary+2);
+      const line=block.split("\n").find(v=>v.startsWith("data:"));
+      if(!line)continue;
+      let event:{type:string;value?:number;label?:string;dataUrl?:string;message?:string};
+      try{event=JSON.parse(line.slice(5).trim());}catch{continue;}
+      if(event.type==="progress"&&typeof event.value==="number"){
+        setProgress("remove-bg",event.value,event.label);
+        updateStatus("remove-bg",event.label==="AI processing"?"AI is processing your image…":event.label||"Processing…");
+      }else if(event.type==="result"&&event.dataUrl){
+        resultDataUrl=event.dataUrl;
+      }else if(event.type==="error"){
+        throw new Error(event.message||"Background removal failed.");
+      }
+    }
+    if(done)break;
+  }
+  if(!resultDataUrl)throw new Error("The AI processor returned no result.");
+  const resultBlob=await (await fetch(resultDataUrl)).blob();
+  const resultName=file.name.replace(/\.[^.]+$/,"")+"-no-bg.png";
+  showResultPreview("remove-bg",resultBlob,resultName);
+  setProgress("remove-bg",100,"ready");
+  updateStatus("remove-bg","Done — preview ready. Download it below.");
+  postWork("background removal");
+}
 async function compressImage(file:File):Promise<void>{setProgress("image-compressor",10,"reading");updateStatus("image-compressor","Reading the image locally…");const bitmap=await createImageBitmap(file);setProgress("image-compressor",35,"resizing");const maxSide=2400;const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Canvas is unavailable.");ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();setProgress("image-compressor",68,"compressing");const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(v=>v?resolve(v):reject(new Error("Compression failed.")),"image/jpeg",.72));setProgress("image-compressor",92,"downloading");downloadBlob(blob,file.name.replace(/\.[^.]+$/,"")+"-compressed.jpg","image-compressor");setProgress("image-compressor",100,"done");updateStatus("image-compressor","Done — original stayed in your browser.");postWork("image compression");}
 
 async function compressVideo(file:File):Promise<void>{if(!("MediaRecorder"in window))throw new Error("MediaRecorder is unavailable in this browser.");setProgress("video-compressor",3,"loading");updateStatus("video-compressor","Loading video locally… no upload is happening.");const source=document.createElement("video");source.muted=true;source.playsInline=true;source.src=URL.createObjectURL(file);await new Promise<void>((resolve,reject)=>{source.onloadedmetadata=()=>resolve();source.onerror=()=>reject(new Error("Video could not be read."));});const canvas=document.createElement("canvas");const scale=Math.min(1,1280/Math.max(1,source.videoWidth));canvas.width=Math.max(2,Math.round(source.videoWidth*scale));canvas.height=Math.max(2,Math.round(source.videoHeight*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Video canvas is unavailable.");const stream=canvas.captureStream(30);const mime=MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":"video/webm";const recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:2000000});const chunks:Blob[]=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};const done=new Promise<void>((resolve,reject)=>{recorder.onstop=()=>resolve();recorder.onerror=()=>reject(new Error("Video compression failed."));});recorder.start(250);await source.play();const draw=()=>{if(source.ended){recorder.stop();return;}ctx.drawImage(source,0,0,canvas.width,canvas.height);const pct=source.duration?Math.min(99,Math.round(source.currentTime/source.duration*100)):0;setProgress("video-compressor",pct,`${pct}%`);updateStatus("video-compressor",`Processing locally… ${pct}%`);requestAnimationFrame(draw)};draw();await done;URL.revokeObjectURL(source.src);setProgress("video-compressor",98,"encoding");downloadBlob(new Blob(chunks,{type:"video/webm"}),file.name.replace(/\.[^.]+$/,"")+"-compressed.webm","video-compressor");setProgress("video-compressor",100,"done");updateStatus("video-compressor","Done — compressed WebM downloaded. Original stayed local.");postWork("video compression");}
