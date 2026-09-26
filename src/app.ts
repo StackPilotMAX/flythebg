@@ -24,10 +24,24 @@ function setSeo(title:string,description:string):void{
  let ogUrl=document.querySelector<HTMLMetaElement>('meta[property="og:url"]');if(!ogUrl){ogUrl=document.createElement("meta");ogUrl.setAttribute("property","og:url");document.head.appendChild(ogUrl);}ogUrl.content=canonical;
  const twitterTitle=document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]');if(twitterTitle)twitterTitle.content=title;
  const twitterDescription=document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]');if(twitterDescription)twitterDescription.content=description;
- document.querySelector('script[data-fly-schema]')?.remove();
  const path=window.location.pathname;const isArticle=path.startsWith("/blog/")&&path!=="/blog";
- const schema:Record<string,unknown>=isArticle?{"@context":"https://schema.org","@type":"BlogPosting","headline":title,"description":description,"url":canonical,"image":POSTER,"author":{"@type":"Organization","name":"FlyThe BG","url":"https://flythebg.com/"},"publisher":{"@type":"Organization","name":"FlyThe BG","url":"https://flythebg.com/"}}:path==="/"?{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"FlyThe BG","url":"https://flythebg.com/","description":description},{"@type":"WebApplication","name":"FlyThe BG","url":"https://flythebg.com/","applicationCategory":"MultimediaApplication","operatingSystem":"Web","description":description,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}]}:{"@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"isPartOf":{"@type":"WebSite","name":"FlyThe BG","url":"https://flythebg.com/"}};
- const schemaEl=document.createElement("script");schemaEl.type="application/ld+json";schemaEl.dataset.flySchema="1";schemaEl.textContent=JSON.stringify(schema);document.head.appendChild(schemaEl);
+ const siteUrl="https://flythebg.com/";const orgId=siteUrl+"#organization";const websiteId=siteUrl+"#website";
+ const toolRoutes=["/remove-bg","/image-compressor","/video-compressor"];
+ const graph:Record<string,unknown>[]=[
+  {"@type":"Organization","@id":orgId,name:"FlyThe BG",url:siteUrl,description:"Independent privacy-focused media tools and background-removal project.",email:"support@flythebg.com",sameAs:[GITHUB_URL,FLYTHEBG_INSTAGRAM]},
+  {"@type":"WebSite","@id":websiteId,name:"FlyThe BG",url:siteUrl,description:"Media tools for background removal, image compression and browser-based video compression.",inLanguage:"en",publisher":{"@id":orgId}}
+ ];
+ const crumbs:Record<string,unknown>[]=[{"@type":"ListItem",position:1,name:"Home",item:siteUrl}];
+ if(path.startsWith("/blog/")){crumbs.push({"@type":"ListItem",position:2,name:"Blog",item:siteUrl+"blog"});crumbs.push({"@type":"ListItem",position:3,name:title});}
+ else if(toolRoutes.includes(path)){crumbs.push({"@type":"ListItem",position:2,name:"Tools",item:siteUrl+"features"});crumbs.push({"@type":"ListItem",position:3,name:title});}
+ else if(path!=="/")crumbs.push({"@type":"ListItem",position:2,name:title,item:canonical});
+ if(path==="/")graph.push({"@type":["SoftwareApplication","WebApplication"],"@id":siteUrl+"#application",name:"FlyThe BG",url:canonical,description,applicationCategory:"MultimediaApplication",operatingSystem:"Web",browserRequirements:"Requires JavaScript and a modern web browser.",isAccessibleForFree:true,offers:{"@type":"Offer",price:"0",priceCurrency:"USD"},publisher:{"@id":orgId}});
+ else if(toolRoutes.includes(path))graph.push({"@type":["SoftwareApplication","WebApplication"],"@id":canonical,name:title.replace(" — FlyThe BG",""),url:canonical,description,applicationCategory:"MultimediaApplication",operatingSystem:"Web",browserRequirements:"Requires JavaScript and a modern web browser.",isAccessibleForFree:true,offers:{"@type":"Offer",price:"0",priceCurrency:"USD"},publisher:{"@id":orgId}});
+ if(isArticle)graph.push({"@type":"BlogPosting","@id":canonical+"#article",headline:title,description,url:canonical,inLanguage:"en",mainEntityOfPage":{"@id":canonical+"#webpage"},author":{"@id":orgId},publisher":{"@id":orgId},articleSection:"FlyThe BG Journal"});
+ else if(path!=="/")graph.push({"@type":"WebPage","@id":canonical+"#webpage",name:title,description,url:canonical,inLanguage:"en",isPartOf":{"@id":websiteId},publisher":{"@id":orgId}});
+ if(crumbs.length>=2&&path!=="/")graph.push({"@type":"BreadcrumbList","@id":canonical+"#breadcrumb",itemListElement:crumbs});
+ const schema={"@context":"https://schema.org","@graph":graph};
+ let schemaEl=document.querySelector<HTMLScriptElement>('script[type="application/ld+json"]');if(!schemaEl){schemaEl=document.createElement("script");schemaEl.type="application/ld+json";document.head.appendChild(schemaEl);}schemaEl.dataset.flySchema="1";const nonce=document.querySelector<HTMLMetaElement>('meta[name="csp-nonce"]')?.content;if(nonce)schemaEl.nonce=nonce;schemaEl.textContent=JSON.stringify(schema);
 }
 function shell(content:string,title:string):string{
  const path=window.location.pathname;
