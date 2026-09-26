@@ -996,3 +996,12 @@ body:has(.fly-home)>.notice,body:has(.fly-home)>.nav,body:has(.fly-home)>.footer
 .fly-social-links span,.contact-links span{font-size:15px;line-height:1}
 .fly-site-footer small{display:block;max-width:1000px;line-height:1.65}
 @media (max-width:720px){.result-preview{padding:14px}.result-preview-actions .button{width:100%;justify-content:center}.fly-social-links{align-items:flex-start;flex-direction:column}}
+
+/* Accessible touch confirmation: the native checkbox remains visible and tappable on phones. */
+.upload-confirm{position:relative;min-height:64px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.upload-confirm input[type="checkbox"]{position:relative;appearance:auto;-webkit-appearance:checkbox;opacity:1;width:26px;height:26px;min-width:26px;min-height:26px;flex:0 0 26px;margin:0;accent-color:#7ee2b4;cursor:pointer;z-index:1}
+.upload-confirm-check{display:none}
+.upload-confirm-copy{min-width:0;flex:1}
+.upload-confirm:focus-within{outline:2px solid #7ee2b4;outline-offset:3px}
+.upload-confirm input[type="checkbox"]:disabled{cursor:not-allowed;opacity:.45}
+@media(max-width:600px){.upload-confirm{align-items:flex-start;gap:14px;padding:18px 15px;min-height:72px}.upload-confirm input[type="checkbox"]{width:30px;height:30px;min-width:30px;min-height:30px;flex-basis:30px}.upload-confirm-copy strong{font-size:15px}.upload-confirm-copy small{font-size:13px;line-height:1.55}}
