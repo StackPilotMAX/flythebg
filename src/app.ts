@@ -27,7 +27,7 @@ function setSeo(title:string,description:string):void{
  if(ogUrl)ogUrl.content=canonical;
 }
 function shell(content:string,title:string):string{
- document.title=title;
+ setSeo(title,"FlyThe BG — practical media tools for background removal, image compression and video compression.");
  const path=window.location.pathname;
  const labels:Record<string,[string,string,string]>={
  "/features":["THE TOOLKIT","Media Tools","Designed To Fly"],
@@ -109,8 +109,15 @@ function home():string{
    <nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation">
     <a class="is-active" href="/">Home</a>
     <a href="/features">Tools</a>
+    <a href="/remove-bg">Remove BG</a>
+    <a href="/image-compressor">Image Compressor</a>
+    <a href="/video-compressor">Video Compressor</a>
     <a href="/about">About</a>
+    <a href="/faq">FAQ</a>
+    <a href="/blog">Blog</a>
     <a href="/contact">Contact</a>
+    <a href="/support">Support</a>
+    <a href="/privacy">Privacy</a>
     <a class="fly-mobile-cta" href="/features">Get Started</a>
    </nav>
    <section class="fly-hero">
@@ -124,7 +131,7 @@ function home():string{
     </div>
     <h1 class="fly-headline" aria-label="Media tools designed to fly"><span>Media Tools</span><span>Designed To Fly</span></h1>
     <p class="fly-subhead anim" style="--d:.28s">Remove backgrounds with protected AI, compress images and create smaller videos with tools designed for fast, focused work.</p>
-    <a class="fly-cta anim" style="--d:.4s" href="/features">Get Started</a>
+    <a class="fly-cta anim" style="--d:.4s" href="#home-tools">Get Started</a>
    </section>
    <footer class="fly-stats" aria-label="FlyThe BG highlights">
     <div class="fly-stat anim" style="--d:.5s"><span class="fly-stat-icon">&lt;</span><span class="fly-stat-value" data-count="15" data-decimals="0" data-suffix=" MB">0</span><span class="fly-stat-label">Background upload limit</span></div>
@@ -133,6 +140,46 @@ function home():string{
     <div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value" data-count="1" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Protected AI route</span></div>
    </footer>
   </div>
+  <section id="home-tools" class="home-scroll-section home-tools-section" aria-labelledby="home-tools-title">
+   <div class="home-section-heading"><p class="eyebrow">START HERE</p><h2 id="home-tools-title">Three tools. Clear boundaries.</h2><p>Use the AI route when you need background removal. Keep image and video compression on your device when you want local-first processing.</p></div>
+   <div class="home-tool-grid">
+    <a href="/remove-bg"><span>01</span><strong>Remove Background</strong><small>Protected AI · PNG, JPG, WEBP · up to 15 MB</small><b>Open tool ↗</b></a>
+    <a href="/image-compressor"><span>02</span><strong>Compress Image</strong><small>Browser-local JPEG compression with no upload required.</small><b>Open tool ↗</b></a>
+    <a href="/video-compressor"><span>03</span><strong>Compress Video</strong><small>Create a smaller WebM locally with visible progress.</small><b>Open tool ↗</b></a>
+   </div>
+  </section>
+  <section class="home-scroll-section home-privacy-section" aria-labelledby="home-privacy-title">
+   <div class="home-split">
+    <div><p class="eyebrow">PRIVACY BY DESIGN</p><h2 id="home-privacy-title">Nothing here needs an account.</h2></div>
+    <div><p>Image and video compression are designed to run in your browser. Background removal uses a protected same-origin route so the Hugging Face credential stays server-side. FlyThe BG does not provide an account gallery or persistent media library.</p><a class="text-link" href="/privacy">Read the full privacy policy ↗</a></div>
+   </div>
+  </section>
+  <section class="home-scroll-section home-faq-section" aria-labelledby="home-faq-title">
+   <div class="home-section-heading"><p class="eyebrow">REAL QUESTIONS</p><h2 id="home-faq-title">The things people usually want to know first.</h2><p>Answers are written around the actual decisions people make before uploading a file.</p></div>
+   <div class="home-faq-list">
+    <details open><summary>Will my image be stored after I remove the background?</summary><p>FlyThe BG does not provide persistent user file storage for the tool. The image is forwarded to the background-removal processor for the requested job and is not intentionally written to a FlyThe BG storage bucket or gallery. Independent infrastructure may have temporary runtime handling or logs; see the privacy policy for the boundary.</p></details>
+    <details><summary>Can I use FlyThe BG on my phone?</summary><p>Yes. The interface is designed for touch screens, mobile navigation, file selection and recovery downloads. Browser capabilities can still vary by device and file type.</p></details>
+    <details><summary>What happens if I accidentally cancel the download?</summary><p>The result stays available in the current browser tab for recovery. Use the visible download button again rather than re-uploading your source file.</p></details>
+    <details><summary>Do I have to create an account?</summary><p>No FlyThe BG account is required for the current tools.</p></details>
+    <details><summary>Which tools send a file to a server?</summary><p>Remove Background sends the selected image through the protected FlyThe BG processing route. Image and video compression are designed to stay local in the browser.</p></details>
+    <details><summary>Why can background removal sometimes take longer?</summary><p>The protected AI processor can need time to wake from a cold start. The website is built to tolerate that startup rather than treating a short delay as an immediate failure.</p></details>
+    <details><summary>Will compressing my image upload it?</summary><p>No. Image compression is performed with browser APIs on your device.</p></details>
+    <details><summary>Can I use the result commercially?</summary><p>FlyThe BG does not decide whether you have the rights to the source material or output. Make sure the files, logos, photographs and other content you use are yours or properly licensed for your intended use.</p></details>
+   </div>
+   <a class="text-link" href="/faq">See the complete FAQ ↗</a>
+  </section>
+  <section class="home-scroll-section home-blog-section" aria-labelledby="home-blog-title">
+   <div class="home-section-heading"><p class="eyebrow">FROM THE JOURNAL</p><h2 id="home-blog-title">Practical guides for real workflows.</h2><p>No filler. Short explanations about files, formats, privacy and browser-based media work.</p></div>
+   <div class="home-blog-grid">
+    <a href="/blog/remove-background-online-privacy"><span>GUIDE</span><strong>What actually happens when you remove a background online?</strong><small>Privacy, processing and what to check before uploading.</small></a>
+    <a href="/blog/compress-images-in-browser"><span>GUIDE</span><strong>How browser-based image compression works</strong><small>When local processing is enough and what it changes.</small></a>
+    <a href="/blog/webm-video-compression-guide"><span>GUIDE</span><strong>Why your compressed video may become WebM</strong><small>A practical guide to browser codecs and compatibility.</small></a>
+   </div>
+   <a class="text-link" href="/blog">Read the FlyThe BG journal ↗</a>
+  </section>
+  <section class="home-scroll-section home-final-cta">
+   <p class="eyebrow">READY WHEN YOU ARE</p><h2>Pick a tool and keep moving.</h2><div class="home-final-actions"><a class="fly-cta" href="/features">Open the toolkit</a><a class="text-link" href="/support">Support the project ↗</a></div>
+  </section>
  <footer class="fly-site-footer fly-home-footer"><a class="fly-footer-brand" href="/">FlyThe BG</a><nav aria-label="Footer navigation"><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/blog">Blog</a><a href="/support">Support</a><a href="/contact">Contact</a><a href="/code-of-conduct">Code of Conduct</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav><div class="fly-social-links"><a href="${FLYTHEBG_INSTAGRAM}" target="_blank" rel="noopener noreferrer" aria-label="FlyThe BG on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i> @flythebg</a><a href="${GITHUB_REPO}" target="_blank" rel="noopener noreferrer" aria-label="FlyThe BG GitHub repository"><i class="fa-brands fa-github" aria-hidden="true"></i> FlyThe BG repo</a><a href="${GITHUB_PROFILE}" target="_blank" rel="noopener noreferrer" aria-label="StackPilotMAX GitHub profile"><i class="fa-brands fa-github" aria-hidden="true"></i> StackPilotMAX</a><a href="${OWNER_INSTAGRAM}" target="_blank" rel="noopener noreferrer" aria-label="Project owner on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i> @aadarshf1</a></div><small>By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>. This website contains advertising. FlyThe BG is an independent, non-registered website/project and is not operated as a registered company or business entity. © 2026 FlyThe BG · support@flythebg.com</small></footer>
  </main>`;
 }
