@@ -675,7 +675,7 @@ function showResultPreview(tool:ToolId,blob:Blob,filename:string):void{
  result.querySelector("[data-result-close]")?.addEventListener("click",()=>{result.remove();URL.revokeObjectURL(url);});
  workspace.appendChild(result);
 }
-async function removeBackground(file:File):Promise<void>{setProgress("remove-bg",8,"uploading");updateStatus("remove-bg","Uploading securely… this is the one tool that needs the internet.");const response=await fetch("/api/remove-bg",{method:"POST",headers:{"Content-Type":file.type},body:file});setProgress("remove-bg",72,"AI processing");if(!response.ok){let message="Background removal failed.";try{const data=await response.json() as {error?:string};if(data.error)message=data.error;}catch{}throw new Error(message);}setProgress("remove-bg",92,"preparing");const resultBlob=await response.blob();
+async function removeBackground(file:File):Promise<void>{setProgress("remove-bg",5,"uploading");updateStatus("remove-bg","Uploading securely… this is the one tool that needs the internet.");const response=await fetch("/api/remove-bg",{method:"POST",headers:{"Content-Type":file.type,"Accept":"text/event-stream"},body:file});if(!response.ok){let message="Background removal failed.";try{const data=await response.json() as {error?:string};if(data.error)message=data.error;}catch{}throw new Error(message);}setProgress("remove-bg",92,"preparing");const resultBlob=await response.blob();
  const resultName=file.name.replace(/\.[^.]+$/,"")+"-no-bg.png";
  showResultPreview("remove-bg",resultBlob,resultName);
  setProgress("remove-bg",100,"ready");updateStatus("remove-bg","Done — preview ready. Download it below.");postWork("background removal");}
