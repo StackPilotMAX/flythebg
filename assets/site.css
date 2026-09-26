@@ -573,9 +573,9 @@ body:has(.fly-home)>.notice,body:has(.fly-home)>.nav,body:has(.fly-home)>.footer
  flex:0 0 clamp(56px,7vw,92px);
  width:clamp(56px,7vw,92px);
  height:clamp(40px,5vw,52px);
- border-radius:50%;
- background:#fff;
- box-shadow:var(--fly-nav-shadow);
+ border-radius:0;
+ background:transparent;
+ box-shadow:none;
  transition:transform .2s ease;
 }
 .fly-logo:hover{transform:scale(1.04)}
@@ -1156,6 +1156,6 @@ body:has(.experience){
 }
 
 /* Official FlyThe BG PNG logo */
-.fly-logo .site-logo{display:block;width:auto;height:72%;max-width:82%;object-fit:contain;border-radius:inherit}
-.fly-logo{overflow:hidden}
-@media(max-width:720px){.fly-logo .site-logo{height:74%;max-width:84%}}
+.fly-logo .site-logo{display:block;width:auto;height:100%;max-width:100%;object-fit:contain;border-radius:0}
+.fly-logo{overflow:visible}
+@media(max-width:720px){.fly-logo .site-logo{height:100%;max-width:100%}}
