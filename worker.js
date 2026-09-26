@@ -97,7 +97,7 @@ function buildStructuredData(route, canonical, meta) {
       description: meta.description,
       url: canonical,
       inLanguage: "en",
-      mainEntityOfPage: { "@id": canonical + "#webpage" },
+      mainEntityOfPage: canonical,
       author: { "@id": SITE_URL + "/#organization" },
       publisher: { "@id": SITE_URL + "/#organization" },
       articleSection: "FlyThe BG Journal"
