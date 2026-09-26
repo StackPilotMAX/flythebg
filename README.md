@@ -16,7 +16,6 @@ Both CI and manual deployment run `node scripts/check-secrets.mjs`, which checks
 
 The deploy script never embeds `HF_ACCESS_TOKEN` into build artifacts or writes it to a temporary file. It uses Wrangler; configure runtime secrets separately. Do not print environment variables in CI. If any secret may have been exposed, **revoke and rotate it before publishing**.
 
-
 FlyThe BG is an independent, non-registered media-tools project.
 
 ## Major architecture
@@ -32,6 +31,47 @@ The public website is intentionally HTML-light:
 - Background removal runs through the FlyThe BG Cloudflare Worker and a Hugging Face Spaces-hosted rembg processor; FlyThe BG does not provide persistent image storage, a storage bucket or an image gallery.
 - Image/video compression is browser-local and does not upload the source file.
 
+## Offline mode / local fallback
+
+FlyThe BG is designed to keep the compression tools usable without an internet connection. **Image Compressor** and **Video Compressor** can run locally in the browser when their browser APIs are available, and the repository also includes Python command-line fallbacks for desktop/offline use.
+
+If hosted background removal is unavailable, users who need fully offline background removal can run the bundled local `rembg` utility. This requires installing Python dependencies once on the offline machine; the model is then downloaded/available locally and inference happens on that machine without the Hugging Face token or Cloudflare Worker.
+
+### Install the offline rembg fallback
+
+From the repository root:
+
+    python -m venv .venv
+    # Windows
+    .venv\\Scripts\\activate
+    # macOS/Linux
+    source .venv/bin/activate
+    pip install -r tools/requirements.txt
+
+Run local background removal:
+
+    python tools/rembg_local.py photo.jpg
+
+For a completely offline machine, prepare the Python environment and required rembg model files **before disconnecting from the internet**. The first model download normally requires internet access; after the model is present locally, rembg can process supported images without contacting Hugging Face or FlyThe BG.
+
+### Offline image and video compression
+
+Image compression:
+
+    python tools/compress_image.py photo.jpg --quality 72
+
+Video compression requires FFmpeg:
+
+    python tools/compress_video.py video.mp4
+
+Install FFmpeg on the machine before going offline if video compression will be used. These local workflows do not need the hosted Hugging Face token.
+
+## Background-removal recovery rule
+
+If hosted background removal stops working, the first recovery path is to inspect and repair the GitHub repository implementation and Cloudflare Worker integration before changing the browser architecture. The Hugging Face fine-grained token remains server-side and is never exposed to the browser. The browser should **not** reconnect directly to Gradio or require a Hugging Face token for background removal.
+
+If the hosted service remains unavailable after the server-side integration is repaired, use the local `rembg` fallback described above for offline processing.
+
 ## DPDP Act 2023 / Rules 2025 design review
 
 The site has been redesigned around the main operational principles relevant to a small service processing digital personal data in India:
@@ -44,25 +84,21 @@ The site has been redesigned around the main operational principles relevant to 
 6. Children: the privacy notice acknowledges the Act's under-18 definition and avoids intentionally designing the service to solicit children's data.
 7. Security: same-origin API routing, HTTPS deployment, CSP, HSTS, nosniff, restrictive permissions, no client-side AI credential, no-store API responses, type/size validation and robots exclusion for /api/.
 8. Processor boundary: the Hugging Face credential is read only by the Cloudflare Function. The rembg model runs on Hugging Face Spaces. FlyThe BG does not intentionally retain uploaded background-removal images after the processing flow, but the external Gradio runtime can create transient processing files while a request is running. Space-level cleanup/retention must be configured and verified separately.
+9. No advertising tracker in the application: the source does not bundle analytics/advertising tracking code. Any future advertising integration must be separately reviewed for privacy, notice and consent implications.
 10. Request isolation: each background-removal request is expected to receive only its own result. The Space application must not use shared global image state or shared filenames that could cross requests.
 11. Retention transparency: FlyThe BG does not claim that an external processor has zero transient storage unless that behavior has been technically verified. The privacy notice describes this boundary explicitly.
-9. No advertising tracker in the application: the source does not bundle analytics/advertising tracking code. Any future advertising integration must be separately reviewed for privacy, notice and consent implications.
 
 ### Important legal status
 
 The DPDP Act 2023 and Digital Personal Data Protection Rules 2025 are the governing sources, and the Rules have staged commencement. This repository therefore uses a future-ready implementation rather than claiming that the website is legally certified compliant. Legal applicability and obligations depend on the actual operation, users, processing, exemptions and applicable commencement dates.
 
-Official sources:
-- https://www.meity.gov.in/static/uploads/2024/02/Digital-Personal-Data-Protection-Act-2023-1.pdf
-- https://www.meity.gov.in/static/uploads/2025/11/53450e6e5dc0bfa85ebd78686cadad39.pdf
-
 ## Hugging Face Spaces / rembg processing
 
 FlyThe BG uses Hugging Face Spaces as the hosted AI processing boundary for background removal. The source image is sent only after the user explicitly selects it, accepts the processing notice and starts the operation. The website does not expose the Hugging Face credential to the browser.
 
-A public Space is not automatically the same thing as a storage service: Hugging Face documents that Spaces can be public, protected or private, and Gradio may create temporary files for uploaded inputs and outputs while processing. Public visibility also makes the Space source visible and the running app directly accessible. For a privacy-first deployment, keep the Space private when the account/plan and integration permit it; use protected visibility if available and you need the app reachable without publishing source code. citeturn0search0turn0search5
+A public Space is not automatically the same thing as a storage service: Hugging Face documents that Spaces can be public, protected or private, and Gradio may create temporary files for uploaded inputs and outputs while processing. For a privacy-first deployment, keep the Space private when the account/plan and integration permit it; use protected visibility if available and you need the app reachable without publishing source code.
 
-User 1 and User 2 should receive results associated with their own request/event. This isolation must be enforced by the Space application itself: do not use shared global variables, fixed shared filenames, persistent image queues, or a shared output file for concurrent requests. Temporary uploaded/processed files should be cleaned up after the request where the Space implementation permits it. Gradio documents that uploaded files can be temporary runtime files and can be exposed through its file-serving mechanisms, so the Space should use the latest secure configuration and minimal allowed paths. citeturn0search4turn0search6
+User 1 and User 2 should receive results associated with their own request/event. This isolation must be enforced by the Space application itself: do not use shared global variables, fixed shared filenames, persistent image queues, or a shared output file for concurrent requests. Temporary uploaded/processed files should be cleaned up after the request where the Space implementation permits it.
 
 The FlyThe BG privacy notice therefore says **no intentional persistent FlyThe BG image storage**, rather than making the stronger and unverifiable claim that no transient bytes can ever exist inside the external processor.
 
@@ -76,15 +112,15 @@ Build:
 Required Cloudflare secret:
 - `HF_ACCESS_TOKEN` — Secret only.
 
-The Hugging Face Space and API endpoint are fixed in the server-side Worker. The rembg model can take around 20–25 seconds to start after a cold start; the Worker provides a 35-second startup grace period before reporting that the processor did not become ready. Never put the Hugging Face token in GitHub, HTML, TypeScript, public build output, localStorage, sessionStorage or `wrangler.toml`.
+The Hugging Face Space and API endpoint are fixed in the server-side Worker. The rembg model can take around 20–25 seconds to start after a cold start; the Worker provides startup grace time before reporting that the processor did not become ready. Never put the Hugging Face token in GitHub, HTML, TypeScript, public build output, localStorage, sessionStorage or `wrangler.toml`.
 
 The browser may read the public GitHub repository API only to show the current star count. It does not use a GitHub token.
 
-### Support payments
+## Support payments
 
-The `/support` page links to `https://www.buymeacoffee.com/flythebg`. Payment is completed on Buy Me a Coffee's own page. FlyThe BG does not process cards, verify payment status, or mark a user as having paid after a redirect.
+The `/support` page links to Buy Me a Coffee. Payment is completed on Buy Me a Coffee's own page. FlyThe BG does not process cards, verify payment status, or mark a user as having paid after a redirect.
 
-### Brand / trademark notice
+## Brand / trademark notice
 
 FlyThe BG is independent. OpenAI, GPT, ChatGPT, Anthropic, Claude, Google, Gemini, xAI, Grok, Hugging Face, GitHub, Buy Me a Coffee and other names or marks referenced in the site belong to their respective owners. References are descriptive and do not imply sponsorship, endorsement, partnership or ownership by FlyThe BG.
 
