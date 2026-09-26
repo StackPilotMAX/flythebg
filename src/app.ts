@@ -1,5 +1,5 @@
 type ToolId = "remove-bg" | "image-compressor" | "video-compressor";
-type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blog" | "/blog/remove-background-online-privacy" | "/blog/compress-images-in-browser" | "/blog/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog";
+type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blog" | "/blog/remove-background-online-privacy" | "/blog/compress-images-in-browser" | "/blog/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog" | "/404";
 
 const VIDEO="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260912_104303_0c6d60b2-9353-408e-9449-585108a22fb5.mp4";
 const POSTER="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg";
@@ -27,8 +27,31 @@ function setSeo(title:string,description:string):void{
  if(ogUrl)ogUrl.content=canonical;
 }
 function shell(content:string,title:string):string{
- setSeo(title,"FlyThe BG — practical media tools for background removal, image compression and video compression.");
  const path=window.location.pathname;
+ const descriptions:Record<string,string>={
+  "/":"Remove backgrounds with protected AI, compress images locally and create smaller videos with FlyThe BG.",
+  "/features":"Explore FlyThe BG media tools for background removal, image compression and browser-based video compression.",
+  "/remove-bg":"Remove an image background with FlyThe BG's protected AI processing route. No account required.",
+  "/image-compressor":"Compress images locally in your browser without uploading the original file to FlyThe BG.",
+  "/video-compressor":"Create a smaller WebM video locally in your browser with visible processing progress.",
+  "/about":"Learn how FlyThe BG works, why local processing matters and how its protected AI route is structured.",
+  "/faq":"Answers to common FlyThe BG questions about uploads, privacy, downloads, mobile use and processing.",
+  "/privacy":"FlyThe BG privacy policy covering local compression, background removal, providers, retention and rights.",
+  "/terms":"FlyThe BG terms covering tool use, downloads, third-party services, availability and user responsibilities.",
+  "/contact":"Contact FlyThe BG for support, privacy requests, corrections and security reports.",
+  "/support":"Optional ways to support the FlyThe BG project through GitHub and Buy Me a Coffee.",
+  "/blog":"FlyThe BG Journal with practical guides about media files, privacy, compression and browser workflows.",
+  "/blog/remove-background-online-privacy":"A practical guide to what happens when you remove a background online and how to assess privacy boundaries.",
+  "/blog/compress-images-in-browser":"A practical guide to browser-based image compression and what changes when processing stays on your device.",
+  "/blog/webm-video-compression-guide":"A practical guide to WebM video compression in browsers, codecs and compatibility.",
+  "/code-of-conduct":"FlyThe BG community standards for respectful, constructive and privacy-conscious participation.",
+  "/accessibility":"FlyThe BG accessibility statement covering touch controls, keyboard use, reduced motion and reporting problems.",
+  "/security":"FlyThe BG security guidance and private vulnerability reporting process.",
+  "/cookies":"FlyThe BG notice about cookies and similar browser or advertising technologies.",
+  "/changelog":"Recent FlyThe BG product, privacy, navigation and reliability changes.",
+  "/404":"The FlyThe BG page you requested could not be found."
+ };
+ setSeo(title,descriptions[path]||descriptions["/404"]);
  const labels:Record<string,[string,string,string]>={
  "/features":["THE TOOLKIT","Media Tools","Designed To Fly"],
  "/remove-bg":["PROTECTED AI","Remove Background","Designed To Fly"],
@@ -183,6 +206,8 @@ function home():string{
  <footer class="fly-site-footer fly-home-footer"><a class="fly-footer-brand" href="/">FlyThe BG</a><nav aria-label="Footer navigation"><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/blog">Blog</a><a href="/support">Support</a><a href="/contact">Contact</a><a href="/code-of-conduct">Code of Conduct</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav><div class="fly-social-links"><a href="${FLYTHEBG_INSTAGRAM}" target="_blank" rel="noopener noreferrer" aria-label="FlyThe BG on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i> @flythebg</a><a href="${GITHUB_REPO}" target="_blank" rel="noopener noreferrer" aria-label="FlyThe BG GitHub repository"><i class="fa-brands fa-github" aria-hidden="true"></i> FlyThe BG repo</a><a href="${GITHUB_PROFILE}" target="_blank" rel="noopener noreferrer" aria-label="StackPilotMAX GitHub profile"><i class="fa-brands fa-github" aria-hidden="true"></i> StackPilotMAX</a><a href="${OWNER_INSTAGRAM}" target="_blank" rel="noopener noreferrer" aria-label="Project owner on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i> @aadarshf1</a></div><small>By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>. This website contains advertising. FlyThe BG is an independent, non-registered website/project and is not operated as a registered company or business entity. © 2026 FlyThe BG · support@flythebg.com</small></footer>
  </main>`;
 }
+
+function notFound():string{return shell(`<main class="page prose reveal"><p class="eyebrow">404 · PAGE NOT FOUND</p><h1>That page has flown away.</h1><p>The address may be outdated or mistyped. The tools and guides are still here.</p><div class="home-final-actions"><a class="fly-cta" href="/">Back home</a><a class="text-link" href="/features">Open the toolkit ↗</a><a class="text-link" href="/faq">Read the FAQ ↗</a></div></main>`,"404 — FlyThe BG");}
 
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose a tool.<br>and get to work.</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>Tip:</b> For large video files, close unnecessary browser tabs to keep more memory available.</div></main>`,"Get Started — FlyThe BG");}
 
@@ -460,7 +485,7 @@ function wireFlyLanding():void{
   stats.forEach(s=>observer.observe(s));
  }else stats.forEach(s=>animate(s));
 }
-function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/blog":"/blog","/blog/remove-background-online-privacy":"/blog/remove-background-online-privacy","/blog/compress-images-in-browser":"/blog/compress-images-in-browser","/blog/webm-video-compression-guide":"/blog/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/";}
+function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/blog":"/blog","/blog/remove-background-online-privacy":"/blog/remove-background-online-privacy","/blog/compress-images-in-browser":"/blog/compress-images-in-browser","/blog/webm-video-compression-guide":"/blog/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/404";}
 function downloadBlob(blob:Blob,filename:string,tool?:ToolId):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();if(tool){const workspace=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`)?.closest(".tool-workspace");if(workspace){workspace.querySelector(".download-recovery")?.remove();const recovery=document.createElement("div");recovery.className="download-recovery";recovery.innerHTML=`<span><strong>Your file is ready.</strong> If the browser download was cancelled or missed, use Download again.</span><button type="button" class="button primary">Download again</button>`;recovery.querySelector("button")?.addEventListener("click",()=>{const retry=document.createElement("a");retry.href=url;retry.download=filename;retry.rel="noopener";document.body.appendChild(retry);retry.click();retry.remove();});workspace.appendChild(recovery);}}setTimeout(()=>URL.revokeObjectURL(url),300000);}
 function setProgress(tool:ToolId,value:number,label?:string):void{const n=Math.max(0,Math.min(100,value));const bar=document.querySelector<HTMLElement>(`[data-progress="${tool}"]`);if(bar)bar.style.width=`${n}%`;const text=document.querySelector<HTMLElement>(`[data-progress-label="${tool}"]`);if(text)text.textContent=label??`${Math.round(n)}%`;}
 function updateStatus(tool:ToolId,message:string):void{const el=document.querySelector<HTMLElement>(`[data-status="${tool}"]`);if(el)el.textContent=message;}
