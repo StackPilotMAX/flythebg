@@ -10,3 +10,6 @@ not_found_handling = "single-page-application"
 
 [secrets]
 required = ["HF_ACCESS_TOKEN"]
+
+[build]
+command = "npm run build"
