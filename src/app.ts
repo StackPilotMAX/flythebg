@@ -1,4 +1,3 @@
-import { Client, handle_file } from "@gradio/client";
 type ToolId = "remove-bg" | "image-compressor" | "video-compressor";
 type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blog" | "/blog/remove-background-online-privacy" | "/blog/compress-images-in-browser" | "/blog/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog" | "/404";
 
@@ -677,48 +676,22 @@ function showResultPreview(tool:ToolId,blob:Blob,filename:string):void{
  workspace.appendChild(result);
 }
 async function removeBackground(file:File):Promise<void>{
-  setProgress("remove-bg",5,"connecting");
-  updateStatus("remove-bg","Connecting directly to the AI processor…");
-  const app=await Client.connect("StackPilotMAX/bg-remover-api",{events:["status","data"]});
-  setProgress("remove-bg",20,"uploading");
-  updateStatus("remove-bg","Uploading securely to the AI processor…");
-  const job=app.submit("/remove_background",[handle_file(file)]);
-  let resultData:any=null;
-  for await(const message of job as any){
-    if(message.type==="status"){
-      const status=message as any;
-      if(status.stage==="pending"){
-        const position=typeof status.position==="number"?status.position:null;
-        setProgress("remove-bg",30,"queued");
-        updateStatus("remove-bg",position!==null?"AI queue position: "+(position+1):"AI job queued…");
-      }else if(status.stage==="generating"){
-        const progressData=Array.isArray(status.progress_data)?status.progress_data:[];
-        const raw=progressData.find((item:any)=>typeof item?.progress==="number")?.progress;
-        const pct=typeof raw==="number"?Math.max(0,Math.min(1,raw)):null;
-        setProgress("remove-bg",pct===null?65:Math.round(55+pct*35),"AI processing");
-        updateStatus("remove-bg","AI is processing your image…");
-      }else if(status.stage==="error"){throw new Error(status.message||"The AI processor failed while removing the background.");}
-    }else if(message.type==="data"){
-      resultData=message.data?.[0]??message.data;
-      setProgress("remove-bg",92,"preparing result");
-      updateStatus("remove-bg","Preparing your result…");
-    }
+  updateStatus("remove-bg","Uploading securely…");
+  const response=await fetch("/api/remove-bg",{
+    method:"POST",
+    headers:{"Content-Type":file.type,"Accept":"image/png"},
+    body:file
+  });
+  if(!response.ok){
+    let message="Background removal failed.";
+    try{const data=await response.json() as {error?:string};if(data.error)message=data.error;}catch{}
+    throw new Error(message);
   }
-  if(!resultData)throw new Error("The AI processor returned no result.");
-  let resultBlob:Blob;
-  if(resultData instanceof Blob)resultBlob=resultData;
-  else if(typeof resultData==="string"&&resultData.startsWith("data:"))resultBlob=await (await fetch(resultData)).blob();
-  else if(typeof resultData==="string"&&/^https?:\/\//i.test(resultData))resultBlob=await (await fetch(resultData)).blob();
-  else if(resultData&&typeof resultData==="object"&&typeof resultData.url==="string")resultBlob=await (await fetch(resultData.url)).blob();
-  else if(resultData&&typeof resultData==="object"&&typeof resultData.path==="string"){
-    const path=resultData.path;
-    const url=path.startsWith("http")?path:"https://StackPilotMAX-bg-remover-api.hf.space/gradio_api/file="+encodeURIComponent(path);
-    resultBlob=await (await fetch(url)).blob();
-  }else throw new Error("The AI processor returned an unsupported image result.");
+  updateStatus("remove-bg","AI is processing your image…");
+  const resultBlob=await response.blob();
   if(!resultBlob.size)throw new Error("The AI processor returned an empty image.");
   const resultName=file.name.replace(/\.[^.]+$/,"")+"-no-bg.png";
   showResultPreview("remove-bg",resultBlob,resultName);
-  setProgress("remove-bg",100,"ready");
   updateStatus("remove-bg","Done — preview ready. Download it below.");
   postWork("background removal");
 }
