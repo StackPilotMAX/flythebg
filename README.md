@@ -111,15 +111,33 @@ These local workflows do not need the hosted Hugging Face token.
 
 ## Routes
 
+Core:
 - /
 - /features
+- /remove-bg
+- /image-compressor
+- /video-compressor
 - /about
 - /faq
+- /contact
+- /support
+
+Guides:
+- /blog
+- /blog/remove-background-online-privacy
+- /blog/compress-images-in-browser
+- /blog/webm-video-compression-guide
+
+Trust and project:
 - /privacy
 - /terms
-- /contact
+- /cookies
+- /security
+- /accessibility
+- /code-of-conduct
+- /changelog
 
-The application uses one UI shell. Workers Assets SPA fallback handles clean routes.
+The application uses one UI shell with responsive navigation. Clean routes are routed through the app shell and listed in sitemap.xml. Unknown client routes show a dedicated 404 page.
 
 ## Licensing
 
