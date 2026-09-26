@@ -1095,3 +1095,8 @@ body:has(.fly-home){overflow-x:hidden;overflow-y:auto;background:#080808}
  html{scroll-behavior:auto}
  .home-tool-grid>a,.home-blog-grid>a,.blog-index-grid>a{transition:none}
 }
+
+
+.fly-bg-static{background-image:url("https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg");background-size:cover;background-position:center;background-repeat:no-repeat;}
+@media (prefers-reduced-motion: reduce){.fly-bg-video{display:none!important;}.fly-bg{background-image:url("https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg");background-size:cover;background-position:center;}
+}

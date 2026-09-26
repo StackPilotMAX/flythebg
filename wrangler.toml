@@ -5,6 +5,7 @@ compatibility_date = "2026-09-21"
 [assets]
 directory = "./public"
 binding = "ASSETS"
+run_worker_first = true
 not_found_handling = "single-page-application"
 
 [secrets]

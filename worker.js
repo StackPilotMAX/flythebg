@@ -1,5 +1,50 @@
 import { onRequest } from "../functions/api/remove-bg.js";
 
+const ROUTE_META = {
+  "/": { title: "FlyThe BG — Free Background Remover & Media Tools", description: "Remove backgrounds online with protected AI, compress images locally and reduce video size with FlyThe BG." },
+  "/features": { title: "Image & Video Tools — FlyThe BG", description: "Explore FlyThe BG tools for background removal, image compression and browser-based video compression." },
+  "/remove-bg": { title: "Remove Background Online Free — FlyThe BG", description: "Remove an image background online with FlyThe BG's protected AI route. PNG, JPG and WEBP up to 15 MB." },
+  "/image-compressor": { title: "Compress Images Online — JPG & PNG — FlyThe BG", description: "Compress JPG, PNG and WEBP images in your browser without uploading the original file to FlyThe BG." },
+  "/video-compressor": { title: "Compress Video Online — WebM — FlyThe BG", description: "Create a smaller WebM video locally in your browser with visible progress. Your original stays on your device." },
+  "/about": { title: "About FlyThe BG — Privacy-First Media Tools", description: "Learn how FlyThe BG combines protected AI background removal with local-first image and video tools." },
+  "/faq": { title: "FlyThe BG FAQ — Background Removal & Compression", description: "Find clear answers about FlyThe BG uploads, privacy, processing, downloads, mobile use and limits." },
+  "/privacy": { title: "Privacy Policy — FlyThe BG", description: "Read how FlyThe BG handles local compression, background-removal requests, providers and result retention." },
+  "/terms": { title: "Terms of Use — FlyThe BG", description: "Read the FlyThe BG terms covering tools, downloads, third-party services, availability and user responsibilities." },
+  "/contact": { title: "Contact FlyThe BG", description: "Contact FlyThe BG for support, privacy requests, corrections and security reports." },
+  "/support": { title: "Support FlyThe BG", description: "Support the FlyThe BG project through GitHub or Buy Me a Coffee. Support is optional." },
+  "/blog": { title: "FlyThe BG Journal — Image, Video & Privacy Guides", description: "Practical FlyThe BG guides about background removal, image compression, video compression and privacy." },
+  "/blog/remove-background-online-privacy": { title: "Remove Background Online: Privacy Questions to Ask", description: "A practical guide to what happens when you remove an image background online and how to evaluate privacy boundaries." },
+  "/blog/compress-images-in-browser": { title: "How to Compress Images in Your Browser", description: "Learn how browser-based image compression works and what changes when the original file stays on your device." },
+  "/blog/webm-video-compression-guide": { title: "WebM Video Compression Guide — FlyThe BG", description: "Learn how WebM video compression works in browsers, including codecs, sizing and compatibility." },
+  "/code-of-conduct": { title: "Code of Conduct — FlyThe BG", description: "FlyThe BG community standards for respectful, constructive and privacy-conscious participation." },
+  "/accessibility": { title: "Accessibility — FlyThe BG", description: "FlyThe BG accessibility information for keyboard, touch, reduced motion and reporting barriers." },
+  "/security": { title: "Security — FlyThe BG", description: "FlyThe BG security guidance and private vulnerability reporting information." },
+  "/cookies": { title: "Cookies & Similar Technologies — FlyThe BG", description: "Learn about cookies and similar browser or advertising technologies used by FlyThe BG." },
+  "/changelog": { title: "Changelog — FlyThe BG", description: "Recent FlyThe BG product, privacy, navigation, accessibility and reliability changes." },
+  "/404": { title: "Page Not Found — FlyThe BG", description: "The FlyThe BG page you requested could not be found." }
+};
+const ROUTES = new Set(Object.keys(ROUTE_META));
+function normalizeRoute(pathname) {
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+  return ROUTES.has(normalized) ? normalized : "/404";
+}
+function applyRouteMeta(html, canonical, meta, isMissing) {
+  const escapeHtml = value => String(value).replace(/[&<>"]/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", """:"&quot;" }[char]));
+  let output = html;
+  output = output.replace(/<title>[^<]*<\/title>/i, "<title>" + escapeHtml(meta.title) + "</title>");
+  output = output.replace(/<meta name="description"[^>]*>/i, '<meta name="description" content="' + escapeHtml(meta.description) + '">');
+  output = output.replace(/<meta property="og:title"[^>]*>/i, '<meta property="og:title" content="' + escapeHtml(meta.title) + '">');
+  output = output.replace(/<meta property="og:description"[^>]*>/i, '<meta property="og:description" content="' + escapeHtml(meta.description) + '">');
+  output = output.replace(/<meta name="twitter:title"[^>]*>/i, '<meta name="twitter:title" content="' + escapeHtml(meta.title) + '">');
+  output = output.replace(/<meta name="twitter:description"[^>]*>/i, '<meta name="twitter:description" content="' + escapeHtml(meta.description) + '">');
+  output = output.replace(/\s*<link rel="canonical"[^>]*>/i, "");
+  output = output.replace("</head>", '<link rel="canonical" href="' + escapeHtml(canonical) + '"></head>');
+  output = output.replace(/<meta name="robots"[^>]*>/i, isMissing ? '<meta name="robots" content="noindex,follow,noarchive">' : '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">');
+  return { body: output, status: isMissing ? 404 : 200 };
+}
+
+
+
 const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "no-referrer",
@@ -34,6 +79,16 @@ export default {
       });
     }
 
-    return withSecurityHeaders(await env.ASSETS.fetch(request));
+    const assetResponse = await env.ASSETS.fetch(request);
+    const contentType = assetResponse.headers.get("Content-Type") || "";
+    if (!contentType.includes("text/html")) return withSecurityHeaders(assetResponse);
+    const route = normalizeRoute(url.pathname);
+    const meta = ROUTE_META[route] || ROUTE_META["/404"];
+    const html = await assetResponse.text();
+    const transformed = applyRouteMeta(html, url.origin + route, meta, route === "/404" && !ROUTE_META[url.pathname]);
+    const response = new Response(transformed.body, { status: transformed.status, headers: new Headers(assetResponse.headers) });
+    response.headers.set("Content-Type","text/html; charset=utf-8");
+    response.headers.set("Cache-Control","public, max-age=0, must-revalidate");
+    return withSecurityHeaders(response);
   }
 };
