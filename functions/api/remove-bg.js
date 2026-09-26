@@ -96,16 +96,23 @@ async function readSseResult(response, onProgress) {
   function parseEvent(block) {
     let name = "";
     const data = [];
-    for (const line of block.split(/\n/)) {
+    for (const line of block.split(/
+/)) {
       if (line.startsWith("event:")) name = line.slice(6).trim();
       if (line.startsWith("data:")) data.push(line.slice(5).trimStart());
     }
     if (!data.length) return;
-    const raw = data.join("\n");
+    const raw = data.join("
+");
     if (!raw || raw === "[DONE]") return;
     let payload;
     try { payload = JSON.parse(raw); } catch { return; }
-    const providerProgress = Number(payload?.progress ?? payload?.output?.progress ?? NaN);\n    if (Number.isFinite(providerProgress) && providerProgress >= 0 && providerProgress <= 1) {\n      onProgress?.(Math.round(55 + providerProgress * 35), "AI processing");\n    }\n    if (name === "generating") onProgress?.(60, "AI processing");\n    if (name === "error" || payload?.msg === "process_error")
+    const providerProgress = Number(payload?.progress ?? payload?.output?.progress ?? NaN);
+    if (Number.isFinite(providerProgress) && providerProgress >= 0 && providerProgress <= 1) {
+      onProgress?.(Math.round(55 + providerProgress * 35), "AI processing");
+    }
+    if (name === "generating") onProgress?.(60, "AI processing");
+    if (name === "error" || payload?.msg === "process_error")
       throw new Error("The background-removal processor failed.");
     if (name === "complete" || payload?.msg === "process_completed")
       return { done: true, value: payload?.output?.data?.[0] ?? payload?.data?.[0] ?? (Array.isArray(payload) ? payload[0] : payload) };
@@ -115,9 +122,13 @@ async function readSseResult(response, onProgress) {
   try {
     while (Date.now() < deadline) {
       const { value, done } = await reader.read();
-      buffer += decoder.decode(value || new Uint8Array(), { stream: !done }).replace(/\r\n/g, "\n");
+      buffer += decoder.decode(value || new Uint8Array(), { stream: !done }).replace(/\r
+/g, "
+");
       let boundary;
-      while ((boundary = buffer.indexOf("\n\n")) !== -1) {
+      while ((boundary = buffer.indexOf("
+
+")) !== -1) {
         const block = buffer.slice(0, boundary);
         buffer = buffer.slice(boundary + 2);
         const result = parseEvent(block);
@@ -169,13 +180,16 @@ async function gradioCall(token, input, onProgress) {
   // Retry the complete upload/prediction sequence from the Worker so the
   // browser never has to open or keep the Hugging Face Space alive.
   while (Date.now() - startedAt < STARTUP_GRACE_MS) {
-    onProgress?.(14, "Waking AI processor");\n    const wakeStatus = await wakeSpace(token);
+    onProgress?.(14, "Waking AI processor");
+    const wakeStatus = await wakeSpace(token);
     if (wakeStatus === 401 || wakeStatus === 403) {
       throw new Error("Hugging Face rejected the server-side access token (" + wakeStatus + ").");
     }
 
     try {
-      onProgress?.(24, "Uploading image");\n      const filePath = await uploadFile(token, input.bytes, input.type);\n      onProgress?.(38, "Image uploaded");
+      onProgress?.(24, "Uploading image");
+      const filePath = await uploadFile(token, input.bytes, input.type);
+      onProgress?.(38, "Image uploaded");
       const startResponse = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -193,7 +207,8 @@ async function gradioCall(token, input, onProgress) {
       });
 
       lastStatus = startResponse.status;
-      if (startResponse.ok) {\n        onProgress?.(48, "AI job queued");
+      if (startResponse.ok) {
+        onProgress?.(48, "AI job queued");
         const payload = await startResponse.json();
         if (!payload?.event_id) return payload?.data?.[0] ?? payload?.data ?? payload;
 
@@ -212,7 +227,8 @@ async function gradioCall(token, input, onProgress) {
           lastError = "AI processor did not return the event stream (" + events.status + ").";
         } else {
           try {
-            onProgress?.(55, "AI processing");\n            return await readSseResult(events, onProgress);
+            onProgress?.(55, "AI processing");
+            return await readSseResult(events, onProgress);
           } catch (streamError) {
             lastError = streamError instanceof Error ? streamError.message : String(streamError);
             // A cold-started Space can accept the job before the runtime is fully
@@ -252,7 +268,9 @@ function createProgressEmitter() {
   const encoder = new TextEncoder();
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
-  const send = payload => writer.write(encoder.encode("data: " + JSON.stringify(payload) + "\n\n"));
+  const send = payload => writer.write(encoder.encode("data: " + JSON.stringify(payload) + "
+
+"));
   const close = () => writer.close().catch(() => {});
   return {
     send,
@@ -332,9 +350,7 @@ export async function onRequest(context) {
   if (activeRequests >= MAX_CONCURRENT_REQUESTS) return fail("Background-removal service is busy. Please try again shortly.", 429, context.request);
 
   const rate = checkRateLimit(context.request);
-  if (!rate.allowed) {
-    return fail("Too many background-removal requests. Please try again later.", 429, context.request);
-  }
+  if (!rate.allowed) return fail("Too many background-removal requests. Please try again later.", 429, context.request);
 
   activeRequests += 1;
   const contentType = (context.request.headers.get("content-type") || "").split(";")[0].toLowerCase();
@@ -348,14 +364,27 @@ export async function onRequest(context) {
   if (body.byteLength > MAX_BYTES) { activeRequests -= 1; return fail("Image exceeds the 15 MB limit.", 413, context.request); }
   if (!hasValidImageSignature(new Uint8Array(body), contentType)) { activeRequests -= 1; return fail("The uploaded file does not match the declared image type.", 415, context.request); }
 
+  let emit = null;
   try {
-    const input = {
-      bytes: new Uint8Array(body),
-      type: contentType
-    };
+    const input = { bytes: new Uint8Array(body), type: contentType };
+    const wantsProgress = (context.request.headers.get("Accept") || "").includes("text/event-stream");
+    if (wantsProgress) {
+      emit = createProgressEmitter(context.request);
+      emit.send({ type: "progress", value: 5, label: "Upload received" });
+    }
+    const progress = (value, label) => emit?.send({ type: "progress", value, label });
 
-    const result = await gradioCall(token, input);
+    const result = await gradioCall(token, input, progress);
+    progress(92, "Preparing result");
     const image = await outputResponse(result, token);
+
+    if (wantsProgress) {
+      const dataUrl = await responseToDataUrl(image);
+      progress(100, "Complete");
+      emit.send({ type: "result", dataUrl });
+      await emit.close();
+      return emit.response;
+    }
 
     return new Response(image.body, {
       status: 200,
@@ -365,6 +394,14 @@ export async function onRequest(context) {
       })
     });
   } catch (error) {
-    return fail(error instanceof Error ? error.message : "Background removal failed.", 502, context.request);
+    const message = error instanceof Error ? error.message : "Background removal failed.";
+    if (emit) {
+      emit.send({ type: "error", message });
+      await emit.close();
+      return emit.response;
+    }
+    return fail(message, 502, context.request);
+  } finally {
+    activeRequests -= 1;
   }
 }
