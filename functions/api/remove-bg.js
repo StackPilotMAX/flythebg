@@ -48,7 +48,8 @@ function headers(request, extra = {}) {
     "Referrer-Policy": "no-referrer",
     "Access-Control-Allow-Origin": corsOrigin(request),
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",\n    "Vary": "Origin",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Vary": "Origin",
     "Access-Control-Max-Age": "86400",
     ...extra
   };
