@@ -96,14 +96,12 @@ async function readSseResult(response, onProgress) {
   function parseEvent(block) {
     let name = "";
     const data = [];
-    for (const line of block.split(/
-/)) {
+    for (const line of block.split(/\n/)) {
       if (line.startsWith("event:")) name = line.slice(6).trim();
       if (line.startsWith("data:")) data.push(line.slice(5).trimStart());
     }
     if (!data.length) return;
-    const raw = data.join("
-");
+    const raw = data.join("\n");
     if (!raw || raw === "[DONE]") return;
     let payload;
     try { payload = JSON.parse(raw); } catch { return; }
@@ -126,9 +124,7 @@ async function readSseResult(response, onProgress) {
 /g, "
 ");
       let boundary;
-      while ((boundary = buffer.indexOf("
-
-")) !== -1) {
+      while ((boundary = buffer.indexOf("\n\n")) !== -1) {
         const block = buffer.slice(0, boundary);
         buffer = buffer.slice(boundary + 2);
         const result = parseEvent(block);
@@ -268,9 +264,7 @@ function createProgressEmitter() {
   const encoder = new TextEncoder();
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
-  const send = payload => writer.write(encoder.encode("data: " + JSON.stringify(payload) + "
-
-"));
+  const send = payload => writer.write(encoder.encode("data: " + JSON.stringify(payload) + "\n\n"));
   const close = () => writer.close().catch(() => {});
   return {
     send,
