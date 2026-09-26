@@ -1,0 +1,28 @@
+# FlyThe BG
+
+FlyThe BG is an independent web project providing free media tools focused on background removal, image compression, video compression, and clear privacy boundaries.
+
+## Primary pages
+
+- https://flythebg.com/ — FlyThe BG homepage and media toolkit
+- https://flythebg.com/remove-bg — Background removal with protected AI processing
+- https://flythebg.com/image-compressor — Browser-local image compression
+- https://flythebg.com/video-compressor — Browser-local WebM video compression
+- https://flythebg.com/features — Tool overview
+- https://flythebg/faq — Frequently asked questions
+- https://flythebg.com/privacy — Privacy policy
+- https://flythebg.com/terms — Terms of use
+- https://flythebg.com/blog — Media and privacy guides
+
+## Entity
+
+FlyThe BG is the site and project name. The project is maintained through the StackPilotMAX/flythebg GitHub repository.
+
+## Processing boundaries
+
+Image compression and video compression are designed to run locally in the browser. Background removal uses a protected server-side AI processing route when the user starts that tool. Refer to the Privacy Policy for the current processing and retention details.
+
+## Official references
+
+- https://github.com/StackPilotMAX/flythebg
+- https://www.instagram.com/flythebg/
