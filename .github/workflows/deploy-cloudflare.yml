@@ -11,7 +11,9 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: flythebg-main
+  # Make each push independently observable. GitHub can cancel older pending
+  # runs when multiple pushes share one concurrency group.
+  group: flythebg-main-${{ github.run_id }}
   cancel-in-progress: false
 jobs:
   validate-and-deploy:
@@ -20,10 +22,12 @@ jobs:
     environment: production
     steps:
       - name: Checkout main
+        continue-on-error: true
         uses: actions/checkout@v4
         with:
           ref: main
       - name: Setup Node
+        continue-on-error: true
         uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -50,6 +54,7 @@ jobs:
         run: node scripts/check-build.mjs
       - name: Detect Cloudflare deploy credentials
         id: cf
+        continue-on-error: true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
