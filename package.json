@@ -11,8 +11,5 @@
   "devDependencies": {
     "typescript": "^5.8.3",
     "wrangler": "^4.141.0"
-  },
-  "dependencies": {
-    "@gradio/client": "^1.19.0"
   }
 }
