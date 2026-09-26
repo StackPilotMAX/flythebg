@@ -52,6 +52,15 @@ jobs:
         if: ${{ steps.build.outcome == 'success' }}
         continue-on-error: true
         run: node scripts/check-build.mjs
+      - name: Validate Worker bundle with Wrangler
+        id: cf_bundle
+        if: ${{ steps.artifacts.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          rm -rf /tmp/flythebg-wrangler
+          npx --yes wrangler@4 deploy --dry-run --outdir /tmp/flythebg-wrangler
+          test -f /tmp/flythebg-wrangler/worker.js
+          echo "Wrangler Worker bundle validation passed."
       - name: SEO route smoke checks
         id: seo
         if: ${{ steps.artifacts.outcome == 'success' }}
@@ -80,7 +89,7 @@ jobs:
           fi
       - name: Deploy built Worker and assets
         id: deploy
-        if: ${{ steps.install.outcome == 'success' && steps.secrets.outcome == 'success' && steps.typecheck.outcome == 'success' && steps.build.outcome == 'success' && steps.artifacts.outcome == 'success' && steps.seo.outcome == 'success' && steps.cf.outputs.configured == 'true' }}
+        if: ${{ steps.install.outcome == 'success' && steps.secrets.outcome == 'success' && steps.typecheck.outcome == 'success' && steps.build.outcome == 'success' && steps.artifacts.outcome == 'success' && steps.seo.outcome == 'success' && steps.cf_bundle.outcome == 'success' && steps.cf.outputs.configured == 'true' }}
         continue-on-error: true
         uses: cloudflare/wrangler-action@v3
         with:
@@ -118,12 +127,13 @@ jobs:
             echo "| Build | ${{ steps.build.outcome }} |"
             echo "| Artifacts | ${{ steps.artifacts.outcome }} |"
             echo "| SEO | ${{ steps.seo.outcome }} |"
+            echo "| Wrangler bundle | ${{ steps.cf_bundle.outcome }} |"
             echo "| Cloudflare deploy | ${{ steps.deploy.outcome }} |"
             echo "| Live verification | ${{ steps.verify.outcome }} |"
             echo ""
             echo "A green workflow means automation completed without an unhandled CI failure; it does not claim that a skipped or failed validation deployed successfully."
           } >> "$GITHUB_STEP_SUMMARY"
-          for pair in             "Install:${{ steps.install.outcome }}"             "Secret-scan:${{ steps.secrets.outcome }}"             "Typecheck:${{ steps.typecheck.outcome }}"             "Build:${{ steps.build.outcome }}"             "Artifacts:${{ steps.artifacts.outcome }}"             "SEO:${{ steps.seo.outcome }}"             "Deploy:${{ steps.deploy.outcome }}"             "Live-verify:${{ steps.verify.outcome }}"; do
+          for pair in             "Install:${{ steps.install.outcome }}"             "Secret-scan:${{ steps.secrets.outcome }}"             "Typecheck:${{ steps.typecheck.outcome }}"             "Build:${{ steps.build.outcome }}"             "Artifacts:${{ steps.artifacts.outcome }}"             "SEO:${{ steps.seo.outcome }}"             "Wrangler-bundle:${{ steps.cf_bundle.outcome }}"             "Deploy:${{ steps.deploy.outcome }}"             "Live-verify:${{ steps.verify.outcome }}"; do
             status="${pair#*:}"
             if [ "$status" != "success" ] && [ "$status" != "skipped" ]; then
               echo "::warning::$pair"
