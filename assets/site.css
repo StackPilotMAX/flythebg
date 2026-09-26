@@ -1151,3 +1151,8 @@ body:has(.experience){
     scrollbar-color:rgba(255,255,255,.32) transparent;
   }
 }
+
+/* Official FlyThe BG PNG logo */
+.fly-logo .site-logo{display:block;width:auto;height:72%;max-width:82%;object-fit:contain;border-radius:inherit}
+.fly-logo{overflow:hidden}
+@media(max-width:720px){.fly-logo .site-logo{height:74%;max-width:84%}}
