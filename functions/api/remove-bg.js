@@ -7,6 +7,43 @@ const STARTUP_GRACE_MS = 90_000;
 const MAX_JOB_MS = 180_000;
 const RETRY_DELAY_MS = 4_000;
 
+// Application-level abuse guard. This is intentionally kept server-side so no
+// secret or limiter state is exposed to the browser. Cloudflare may execute
+// requests in different isolates, so this is a burst/abuse layer rather than
+// a replacement for a global Cloudflare WAF/Rate Limiting rule.
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX = 3;
+const MAX_CONCURRENT_REQUESTS = 4;
+const rateBuckets = new Map();
+let activeRequests = 0;
+
+function clientKey(request) {
+  return request.headers.get("CF-Connecting-IP") || request.headers.get("x-real-ip") || "unknown";
+}
+
+function checkRateLimit(request) {
+  const now = Date.now();
+  const key = clientKey(request);
+  const current = rateBuckets.get(key);
+  if (!current || now >= current.resetAt) {
+    rateBuckets.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, remaining: RATE_LIMIT_MAX - 1, resetAt: now + RATE_LIMIT_WINDOW_MS };
+  }
+  if (current.count >= RATE_LIMIT_MAX) {
+    return { allowed: false, remaining: 0, resetAt: current.resetAt };
+  }
+  current.count += 1;
+  return { allowed: true, remaining: Math.max(0, RATE_LIMIT_MAX - current.count), resetAt: current.resetAt };
+}
+
+function releaseRateLimit(request) {
+  // Failed validation should not consume a slot because it never reaches HF.
+  // Successful/accepted requests remain counted for the full abuse window.
+  const key = clientKey(request);
+  const current = rateBuckets.get(key);
+  if (current && current.count <= 0) rateBuckets.delete(key);
+}
+
 function corsOrigin(request) {
   const origin = request?.headers?.get("Origin") || "";
   return ALLOWED_ORIGINS.has(origin) ? origin : "https://flythebg.com";
@@ -19,7 +56,7 @@ function headers(request, extra = {}) {
     "Referrer-Policy": "no-referrer",
     "Access-Control-Allow-Origin": corsOrigin(request),
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type",\n    "Vary": "Origin",
     "Access-Control-Max-Age": "86400",
     ...extra
   };
@@ -267,16 +304,25 @@ export async function onRequest(context) {
   const token = context.env.HF_ACCESS_TOKEN;
   if (!token) return fail("Background removal is not configured.", 503, context.request);
 
+  if (activeRequests >= MAX_CONCURRENT_REQUESTS) return fail("Background-removal service is busy. Please try again shortly.", 429, context.request);
+
+  const rate = checkRateLimit(context.request);
+  if (!rate.allowed) {
+    const retryAfter = Math.max(1, Math.ceil((rate.resetAt - Date.now()) / 1000));
+    return fail("Too many background-removal requests. Please try again later.", 429, context.request);
+  }
+
+  activeRequests += 1;
   const contentType = (context.request.headers.get("content-type") || "").split(";")[0].toLowerCase();
-  if (!ALLOWED_TYPES.has(contentType)) return fail("Only PNG, JPG and WEBP images are accepted.", 415, context.request);
+  if (!ALLOWED_TYPES.has(contentType)) { activeRequests -= 1; return fail("Only PNG, JPG and WEBP images are accepted.", 415, context.request); }
 
   const length = Number(context.request.headers.get("content-length") || "0");
-  if (length > MAX_BYTES) return fail("Image exceeds the 15 MB limit.", 413, context.request);
+  if (length > MAX_BYTES) { activeRequests -= 1; return fail("Image exceeds the 15 MB limit.", 413, context.request); }
 
   const body = await context.request.arrayBuffer();
-  if (!body.byteLength) return fail("No image was received.", 400, context.request);
-  if (body.byteLength > MAX_BYTES) return fail("Image exceeds the 15 MB limit.", 413, context.request);
-  if (!hasValidImageSignature(new Uint8Array(body), contentType)) return fail("The uploaded file does not match the declared image type.", 415, context.request);
+  if (!body.byteLength) { activeRequests -= 1; return fail("No image was received.", 400, context.request); }
+  if (body.byteLength > MAX_BYTES) { activeRequests -= 1; return fail("Image exceeds the 15 MB limit.", 413, context.request); }
+  if (!hasValidImageSignature(new Uint8Array(body), contentType)) { activeRequests -= 1; return fail("The uploaded file does not match the declared image type.", 415, context.request); }
 
   try {
     const input = {
