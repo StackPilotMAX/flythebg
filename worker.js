@@ -28,8 +28,101 @@ function normalizeRoute(pathname) {
   const normalized = pathname.replace(/\/+$/, "") || "/";
   return ROUTES.has(normalized) ? normalized : "/404";
 }
+const SITE_URL = "https://flythebg.com";
+const GITHUB_URL = "https://github.com/StackPilotMAX/flythebg";
+const INSTAGRAM_URL = "https://www.instagram.com/flythebg/";
+const TOOL_ROUTES = new Set(["/remove-bg","/image-compressor","/video-compressor"]);
+
+function buildBreadcrumb(route, meta, canonical) {
+  if (route === "/") return null;
+  const items = [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL + "/" }];
+  if (route.startsWith("/blog/")) {
+    items.push({ "@type": "ListItem", position: 2, name: "Blog", item: SITE_URL + "/blog" });
+    items.push({ "@type": "ListItem", position: 3, name: meta.title });
+  } else if (TOOL_ROUTES.has(route)) {
+    items.push({ "@type": "ListItem", position: 2, name: "Tools", item: SITE_URL + "/features" });
+    items.push({ "@type": "ListItem", position: 3, name: meta.title });
+  } else {
+    items.push({ "@type": "ListItem", position: 2, name: meta.title, item: canonical });
+  }
+  return { "@type": "BreadcrumbList", "@id": canonical + "#breadcrumb", itemListElement: items };
+}
+
+function buildStructuredData(route, canonical, meta) {
+  const organization = {
+    "@type": "Organization",
+    "@id": SITE_URL + "/#organization",
+    name: "FlyThe BG",
+    url: SITE_URL + "/",
+    description: "Independent privacy-focused media tools and background-removal project.",
+    email: "support@flythebg.com",
+    sameAs: [GITHUB_URL, INSTAGRAM_URL]
+  };
+  const website = {
+    "@type": "WebSite",
+    "@id": SITE_URL + "/#website",
+    name: "FlyThe BG",
+    url: SITE_URL + "/",
+    description: "Media tools for background removal, image compression and browser-based video compression.",
+    inLanguage: "en",
+    publisher: { "@id": SITE_URL + "/#organization" }
+  };
+  const graph = [organization, website];
+  const application = {
+    "@type": ["SoftwareApplication", "WebApplication"],
+    "@id": TOOL_ROUTES.has(route) ? canonical : SITE_URL + "/#application",
+    name: TOOL_ROUTES.has(route) ? meta.title.replace(" — FlyThe BG", "") : "FlyThe BG",
+    url: canonical,
+    description: meta.description,
+    applicationCategory: "MultimediaApplication",
+    operatingSystem: "Web",
+    browserRequirements: "Requires JavaScript and a modern web browser.",
+    isAccessibleForFree: true,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    publisher: { "@id": SITE_URL + "/#organization" }
+  };
+
+  if (route === "/") {
+    graph.push(application);
+    return { "@context": "https://schema.org", "@graph": graph };
+  }
+  if (TOOL_ROUTES.has(route)) graph.push(application);
+
+  const breadcrumb = buildBreadcrumb(route, meta, canonical);
+  if (route.startsWith("/blog/")) {
+    graph.push({
+      "@type": "BlogPosting",
+      "@id": canonical + "#article",
+      headline: meta.title,
+      description: meta.description,
+      url: canonical,
+      inLanguage: "en",
+      mainEntityOfPage: { "@id": canonical + "#webpage" },
+      author: { "@id": SITE_URL + "/#organization" },
+      publisher: { "@id": SITE_URL + "/#organization" },
+      articleSection: "FlyThe BG Journal"
+    });
+  } else {
+    graph.push({
+      "@type": "WebPage",
+      "@id": canonical + "#webpage",
+      name: meta.title,
+      description: meta.description,
+      url: canonical,
+      inLanguage: "en",
+      isPartOf: { "@id": SITE_URL + "/#website" },
+      publisher: { "@id": SITE_URL + "/#organization" }
+    });
+  }
+  if (breadcrumb) graph.push(breadcrumb);
+  return { "@context": "https://schema.org", "@graph": graph };
+}
+
 function applyRouteMeta(html, canonical, meta, isMissing) {
-  const escapeHtml = value => String(value).replace(/[&<>"]/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", """:"&quot;" }[char]));
+  const escapeHtml = value => String(value).replace(/[&<>"]/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[char]));
+  const nonce = crypto.randomUUID().replace(/-/g, "");
+  const route = isMissing ? "/404" : normalizeRoute(new URL(canonical).pathname);
+  const schema = JSON.stringify(buildStructuredData(route, canonical, meta)).replace(/</g, "\\u003c");
   let output = html;
   output = output.replace(/<title>[^<]*<\/title>/i, "<title>" + escapeHtml(meta.title) + "</title>");
   output = output.replace(/<meta name="description"[^>]*>/i, '<meta name="description" content="' + escapeHtml(meta.description) + '">');
@@ -38,12 +131,12 @@ function applyRouteMeta(html, canonical, meta, isMissing) {
   output = output.replace(/<meta name="twitter:title"[^>]*>/i, '<meta name="twitter:title" content="' + escapeHtml(meta.title) + '">');
   output = output.replace(/<meta name="twitter:description"[^>]*>/i, '<meta name="twitter:description" content="' + escapeHtml(meta.description) + '">');
   output = output.replace(/\s*<link rel="canonical"[^>]*>/i, "");
-  output = output.replace("</head>", '<link rel="canonical" href="' + escapeHtml(canonical) + '"></head>');
+  output = output.replace(/\s*<meta name="csp-nonce"[^>]*>/i, "");
+  output = output.replace(/\s*<script type="application\/ld\+json"[^>]*>[^<]*<\/script>/gi, "");
+  output = output.replace("</head>", '<meta name="csp-nonce" content="' + nonce + '"><link rel="canonical" href="' + escapeHtml(canonical) + '"><script type="application/ld+json" data-fly-server-schema nonce="' + nonce + '">' + schema + '</script></head>');
   output = output.replace(/<meta name="robots"[^>]*>/i, isMissing ? '<meta name="robots" content="noindex,follow,noarchive">' : '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">');
-  return { body: output, status: isMissing ? 404 : 200 };
+  return { body: output, status: isMissing ? 404 : 200, nonce };
 }
-
-
 
 const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
@@ -89,6 +182,8 @@ export default {
     const response = new Response(transformed.body, { status: transformed.status, headers: new Headers(assetResponse.headers) });
     response.headers.set("Content-Type","text/html; charset=utf-8");
     response.headers.set("Cache-Control","public, max-age=0, must-revalidate");
-    return withSecurityHeaders(response);
+    const secured = withSecurityHeaders(response);
+    secured.headers.set("Content-Security-Policy", SECURITY_HEADERS["Content-Security-Policy"] + "; script-src 'self' 'nonce-" + transformed.nonce + "'");
+    return secured;
   }
 };
