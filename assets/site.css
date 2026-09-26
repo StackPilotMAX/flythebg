@@ -1100,3 +1100,54 @@ body:has(.fly-home){overflow-x:hidden;overflow-y:auto;background:#080808}
 .fly-bg-static{background-image:url("https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg");background-size:cover;background-position:center;background-repeat:no-repeat;}
 @media (prefers-reduced-motion: reduce){.fly-bg-video{display:none!important;}.fly-bg{background-image:url("https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg");background-size:cover;background-position:center;}
 }
+
+
+/* FlyThe BG custom scroll UI */
+html{
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.42) transparent;
+  scrollbar-gutter:stable;
+}
+html::-webkit-scrollbar{
+  width:9px;
+  height:9px;
+}
+html::-webkit-scrollbar-track{
+  background:transparent;
+}
+html::-webkit-scrollbar-thumb{
+  min-height:48px;
+  border:2px solid transparent;
+  border-radius:999px;
+  background-clip:padding-box;
+  background-color:rgba(255,255,255,.28);
+  transition:background-color .2s ease;
+}
+html::-webkit-scrollbar-thumb:hover{
+  background-color:rgba(255,255,255,.58);
+}
+html::-webkit-scrollbar-corner{
+  background:transparent;
+}
+/* Immersive landing experience: keep its full-screen scene scrollbar-free. */
+body:has(.experience) html::-webkit-scrollbar,
+body:has(.experience)::-webkit-scrollbar{
+  width:0;
+  height:0;
+}
+body:has(.experience){
+  scrollbar-width:none;
+}
+@media(max-width:720px){
+  html{
+    scrollbar-width:none;
+  }
+  html::-webkit-scrollbar{
+    display:none;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html{
+    scrollbar-color:rgba(255,255,255,.32) transparent;
+  }
+}
