@@ -1,18 +1,23 @@
 const MAX_BYTES = 15 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
-const ORIGIN = "https://flythebg.com";
+const ALLOWED_ORIGINS = new Set(["https://flythebg.com", "https://www.flythebg.com"]);
 const SPACE_URL = "https://StackPilotMAX-bg-remover-api.hf.space";
 const API_NAME = "/remove_background";
 const STARTUP_GRACE_MS = 90_000;
 const MAX_JOB_MS = 180_000;
 const RETRY_DELAY_MS = 4_000;
 
-function headers(extra = {}) {
+function corsOrigin(request) {
+  const origin = request?.headers?.get("Origin") || "";
+  return ALLOWED_ORIGINS.has(origin) ? origin : "https://flythebg.com";
+}
+
+function headers(request, extra = {}) {
   return {
     "Cache-Control": "no-store",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
-    "Access-Control-Allow-Origin": ORIGIN,
+    "Access-Control-Allow-Origin": corsOrigin(request),
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
@@ -20,15 +25,15 @@ function headers(extra = {}) {
   };
 }
 
-function json(data, status) {
+function json(data, status, request) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: headers({ "Content-Type": "application/json; charset=utf-8" })
+    headers: headers(request, { "Content-Type": "application/json; charset=utf-8" })
   });
 }
 
-function fail(message, status = 400) {
-  return json({ error: message }, status);
+function fail(message, status = 400, request) {
+  return json({ error: message }, status, request);
 }
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -212,6 +217,13 @@ async function gradioCall(token, input) {
   );
 }
 
+function hasValidImageSignature(bytes, type) {
+  if (type === "image/png") return bytes.length >= 8 && bytes.slice(0, 8).every((b, i) => b === [137,80,78,71,13,10,26,10][i]);
+  if (type === "image/jpeg") return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  if (type === "image/webp") return bytes.length >= 12 && String.fromCharCode(...bytes.slice(0,4)) === "RIFF" && String.fromCharCode(...bytes.slice(8,12)) === "WEBP";
+  return false;
+}
+
 function dataUrl(bytes, type) {
   let binary = "";
   for (let i = 0; i < bytes.length; i += 0x8000) {
@@ -249,21 +261,22 @@ async function outputResponse(value, token) {
 }
 
 export async function onRequest(context) {
-  if (context.request.method === "OPTIONS") return new Response(null, { status: 204, headers: headers() });
-  if (context.request.method !== "POST") return fail("POST one image to this endpoint.", 405);
+  if (context.request.method === "OPTIONS") return new Response(null, { status: 204, headers: headers(context.request) });
+  if (context.request.method !== "POST") return fail("POST one image to this endpoint.", 405, context.request);
 
   const token = context.env.HF_ACCESS_TOKEN;
-  if (!token) return fail("Background removal is not configured.", 503);
+  if (!token) return fail("Background removal is not configured.", 503, context.request);
 
   const contentType = (context.request.headers.get("content-type") || "").split(";")[0].toLowerCase();
-  if (!ALLOWED_TYPES.has(contentType)) return fail("Only PNG, JPG and WEBP images are accepted.", 415);
+  if (!ALLOWED_TYPES.has(contentType)) return fail("Only PNG, JPG and WEBP images are accepted.", 415, context.request);
 
   const length = Number(context.request.headers.get("content-length") || "0");
-  if (length > MAX_BYTES) return fail("Image exceeds the 15 MB limit.", 413);
+  if (length > MAX_BYTES) return fail("Image exceeds the 15 MB limit.", 413, context.request);
 
   const body = await context.request.arrayBuffer();
-  if (!body.byteLength) return fail("No image was received.");
-  if (body.byteLength > MAX_BYTES) return fail("Image exceeds the 15 MB limit.", 413);
+  if (!body.byteLength) return fail("No image was received.", 400, context.request);
+  if (body.byteLength > MAX_BYTES) return fail("Image exceeds the 15 MB limit.", 413, context.request);
+  if (!hasValidImageSignature(new Uint8Array(body), contentType)) return fail("The uploaded file does not match the declared image type.", 415, context.request);
 
   try {
     const input = {
@@ -276,12 +289,12 @@ export async function onRequest(context) {
 
     return new Response(image.body, {
       status: 200,
-      headers: headers({
+      headers: headers(context.request, {
         "Content-Type": image.headers.get("Content-Type") || "image/png",
         "Content-Disposition": 'attachment; filename="flythebg-no-bg.png"'
       })
     });
   } catch (error) {
-    return fail(error instanceof Error ? error.message : "Background removal failed.", 502);
+    return fail(error instanceof Error ? error.message : "Background removal failed.", 502, context.request);
   }
 }
