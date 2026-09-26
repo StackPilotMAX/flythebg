@@ -308,7 +308,6 @@ export async function onRequest(context) {
 
   const rate = checkRateLimit(context.request);
   if (!rate.allowed) {
-    const retryAfter = Math.max(1, Math.ceil((rate.resetAt - Date.now()) / 1000));
     return fail("Too many background-removal requests. Please try again later.", 429, context.request);
   }
 
