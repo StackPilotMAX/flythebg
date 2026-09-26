@@ -13,36 +13,187 @@ const state:Record<ToolId,boolean>={"remove-bg":false,"image-compressor":false,"
 const pendingFiles:Partial<Record<ToolId,File>>={};
 
 function setSeo(title:string,description:string):void{
- const canonical=window.location.origin+(window.location.pathname.replace(/\/+$/,"")||"/");
- const keywords:Record<string,string>={"/":"remove background online, image compressor, video compressor, free media tools","/remove-bg":"remove background online, remove image background, transparent PNG, background remover","/image-compressor":"compress image online, compress JPG, compress PNG, image compressor","/video-compressor":"compress video online, WebM compressor, reduce video size, video compression","/features":"image tools, background remover, image compressor, video compressor","/about":"FlyThe BG, privacy-first media tools, browser image tools","/faq":"FlyThe BG FAQ, background removal, image compression, video compression","/blog":"image processing guides, background removal guide, image compression guide","/blog/remove-background-online-privacy":"remove background online privacy, background remover privacy","/blog/compress-images-in-browser":"compress images in browser, local image compression","/blog/webm-video-compression-guide":"WebM video compression, browser video compression","/privacy":"FlyThe BG privacy policy, image processing privacy","/terms":"FlyThe BG terms, media tools terms","/contact":"FlyThe BG contact, support","/support":"support FlyThe BG, open source media tools","/security":"FlyThe BG security, vulnerability reporting","/accessibility":"FlyThe BG accessibility","/cookies":"FlyThe BG cookies","/code-of-conduct":"FlyThe BG code of conduct","/changelog":"FlyThe BG changelog"};
+ const path=window.location.pathname;
+ const canonical=window.location.origin+(path.replace(/\/+$/,"")||"/");
+ const keywords:Record<string,string>={
+  "/":"remove background online, image compressor, video compressor, free media tools",
+  "/remove-bg":"remove background online, remove image background, transparent PNG, background remover",
+  "/image-compressor":"compress image online, compress JPG, compress PNG, image compressor",
+  "/video-compressor":"compress video online, WebM compressor, reduce video size, video compression",
+  "/features":"image tools, background remover, image compressor, video compressor",
+  "/about":"FlyThe BG, privacy-first media tools, browser image tools",
+  "/faq":"FlyThe BG FAQ, background removal, image compression, video compression",
+  "/blog":"image processing guides, background removal guide, image compression guide",
+  "/blog/remove-background-online-privacy":"remove background online privacy, background remover privacy",
+  "/blog/compress-images-in-browser":"compress images in browser, local image compression",
+  "/blog/webm-video-compression-guide":"WebM video compression, browser video compression",
+  "/privacy":"FlyThe BG privacy policy, image processing privacy",
+  "/terms":"FlyThe BG terms, media tools terms",
+  "/contact":"FlyThe BG contact, support",
+  "/support":"FlyThe BG support, open source media tools",
+  "/security":"FlyThe BG security, vulnerability reporting",
+  "/accessibility":"FlyThe BG accessibility",
+  "/cookies":"FlyThe BG cookies",
+  "/code-of-conduct":"FlyThe BG code of conduct",
+  "/changelog":"FlyThe BG changelog"
+ };
  document.title=title;
- const desc=document.querySelector<HTMLMetaElement>('meta[name="description"]');if(desc)desc.content=description;
- let keywordsEl=document.querySelector<HTMLMetaElement>('meta[name="keywords"]');if(!keywordsEl){keywordsEl=document.createElement("meta");keywordsEl.name="keywords";document.head.appendChild(keywordsEl);}keywordsEl.content=keywords[window.location.pathname]||"FlyThe BG, media tools";
- let canonicalEl=document.querySelector<HTMLLinkElement>('link[rel="canonical"]');if(!canonicalEl){canonicalEl=document.createElement("link");canonicalEl.rel="canonical";document.head.appendChild(canonicalEl);}canonicalEl.href=canonical;
- const ogTitle=document.querySelector<HTMLMetaElement>('meta[property="og:title"]');if(ogTitle)ogTitle.content=title;
- const ogDescription=document.querySelector<HTMLMetaElement>('meta[property="og:description"]');if(ogDescription)ogDescription.content=description;
- let ogUrl=document.querySelector<HTMLMetaElement>('meta[property="og:url"]');if(!ogUrl){ogUrl=document.createElement("meta");ogUrl.setAttribute("property","og:url");document.head.appendChild(ogUrl);}ogUrl.content=canonical;
- const twitterTitle=document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]');if(twitterTitle)twitterTitle.content=title;
- const twitterDescription=document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]');if(twitterDescription)twitterDescription.content=description;
- const path=window.location.pathname;const isArticle=path.startsWith("/blog/")&&path!=="/blog";
- const siteUrl="https://flythebg.com/";const orgId=siteUrl+"#organization";const websiteId=siteUrl+"#website";
- const toolRoutes=["/remove-bg","/image-compressor","/video-compressor"];
- const graph:Record<string,unknown>[]=[
-  {"@type":"Organization","@id":orgId,name:"FlyThe BG",url:siteUrl,description:"Independent privacy-focused media tools and background-removal project.",email:"support@flythebg.com",sameAs:[GITHUB_URL,FLYTHEBG_INSTAGRAM]},
-  {"@type":"WebSite","@id":websiteId,name:"FlyThe BG",url:siteUrl,description:"Media tools for background removal, image compression and browser-based video compression.",inLanguage:"en",publisher":{"@id":orgId}}
- ];
- const crumbs:Record<string,unknown>[]=[{"@type":"ListItem",position:1,name:"Home",item:siteUrl}];
- if(path.startsWith("/blog/")){crumbs.push({"@type":"ListItem",position:2,name:"Blog",item:siteUrl+"blog"});crumbs.push({"@type":"ListItem",position:3,name:title});}
- else if(toolRoutes.includes(path)){crumbs.push({"@type":"ListItem",position:2,name:"Tools",item:siteUrl+"features"});crumbs.push({"@type":"ListItem",position:3,name:title});}
- else if(path!=="/")crumbs.push({"@type":"ListItem",position:2,name:title,item:canonical});
- if(path==="/")graph.push({"@type":["SoftwareApplication","WebApplication"],"@id":siteUrl+"#application",name:"FlyThe BG",url:canonical,description,applicationCategory:"MultimediaApplication",operatingSystem:"Web",browserRequirements:"Requires JavaScript and a modern web browser.",isAccessibleForFree:true,offers:{"@type":"Offer",price:"0",priceCurrency:"USD"},publisher:{"@id":orgId}});
- else if(toolRoutes.includes(path))graph.push({"@type":["SoftwareApplication","WebApplication"],"@id":canonical,name:title.replace(" — FlyThe BG",""),url:canonical,description,applicationCategory:"MultimediaApplication",operatingSystem:"Web",browserRequirements:"Requires JavaScript and a modern web browser.",isAccessibleForFree:true,offers:{"@type":"Offer",price:"0",priceCurrency:"USD"},publisher:{"@id":orgId}});
- if(isArticle)graph.push({"@type":"BlogPosting","@id":canonical+"#article",headline:title,description,url:canonical,inLanguage:"en",mainEntityOfPage:canonical,author":{"@id":orgId},publisher":{"@id":orgId},articleSection:"FlyThe BG Journal"});
- else if(path!=="/")graph.push({"@type":"WebPage","@id":canonical+"#webpage",name:title,description,url:canonical,inLanguage:"en",isPartOf":{"@id":websiteId},publisher":{"@id":orgId}});
- if(crumbs.length>=2&&path!=="/")graph.push({"@type":"BreadcrumbList","@id":canonical+"#breadcrumb",itemListElement:crumbs});
- const schema={"@context":"https://schema.org","@graph":graph};
- let schemaEl=document.querySelector<HTMLScriptElement>('script[type="application/ld+json"]');if(!schemaEl){schemaEl=document.createElement("script");schemaEl.type="application/ld+json";document.head.appendChild(schemaEl);}schemaEl.dataset.flySchema="1";const nonce=document.querySelector<HTMLMetaElement>('meta[name="csp-nonce"]')?.content;if(nonce)schemaEl.nonce=nonce;schemaEl.textContent=JSON.stringify(schema);
+
+ const desc=document.querySelector<HTMLMetaElement>('meta[name="description"]');
+ if(desc)desc.content=description;
+
+ let keywordsEl=document.querySelector<HTMLMetaElement>('meta[name="keywords"]');
+ if(!keywordsEl){
+  keywordsEl=document.createElement("meta");
+  keywordsEl.name="keywords";
+  document.head.appendChild(keywordsEl);
+ }
+ keywordsEl.content=keywords[path]||"FlyThe BG, media tools";
+
+ let canonicalEl=document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+ if(!canonicalEl){
+  canonicalEl=document.createElement("link");
+  canonicalEl.rel="canonical";
+  document.head.appendChild(canonicalEl);
+ }
+ canonicalEl.href=canonical;
+
+ const ogTitle=document.querySelector<HTMLMetaElement>('meta[property="og:title"]');
+ if(ogTitle)ogTitle.content=title;
+ const ogDescription=document.querySelector<HTMLMetaElement>('meta[property="og:description"]');
+ if(ogDescription)ogDescription.content=description;
+
+ let ogUrl=document.querySelector<HTMLMetaElement>('meta[property="og:url"]');
+ if(!ogUrl){
+  ogUrl=document.createElement("meta");
+  ogUrl.setAttribute("property","og:url");
+  document.head.appendChild(ogUrl);
+ }
+ ogUrl.content=canonical;
+
+ const twitterTitle=document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]');
+ if(twitterTitle)twitterTitle.content=title;
+ const twitterDescription=document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]');
+ if(twitterDescription)twitterDescription.content=description;
+
+ const siteUrl="https://flythebg.com/";
+ const organizationId=siteUrl+"#organization";
+ const websiteId=siteUrl+"#website";
+ const toolRoutes=new Set<string>(["/remove-bg","/image-compressor","/video-compressor"]);
+ const isArticle=path.startsWith("/blog/")&&path!=="/blog";
+
+ const organization={
+  "@type":"Organization",
+  "@id":organizationId,
+  "name":"FlyThe BG",
+  "url":siteUrl,
+  "description":"Independent privacy-focused media tools and background-removal project.",
+  "email":"support@flythebg.com",
+  "sameAs":[GITHUB_URL,FLYTHEBG_INSTAGRAM]
+ };
+ const website={
+  "@type":"WebSite",
+  "@id":websiteId,
+  "name":"FlyThe BG",
+  "url":siteUrl,
+  "description":"Media tools for background removal, image compression and browser-based video compression.",
+  "inLanguage":"en",
+  "publisher":{"@id":organizationId}
+ };
+
+ const graph:Array<Record<string,unknown>>=[organization,website];
+
+ if(path==="/"){
+  graph.push({
+   "@type":"SoftwareApplication",
+   "@id":siteUrl+"#application",
+   "name":"FlyThe BG",
+   "url":canonical,
+   "description":description,
+   "applicationCategory":"MultimediaApplication",
+   "operatingSystem":"Web",
+   "browserRequirements":"Requires JavaScript and a modern web browser.",
+   "isAccessibleForFree":true,
+   "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+   "publisher":{"@id":organizationId}
+  });
+ }else if(toolRoutes.has(path)){
+  graph.push({
+   "@type":"SoftwareApplication",
+   "@id":canonical,
+   "name":title.replace(" | FlyThe BG","").replace(" — FlyThe BG",""),
+   "url":canonical,
+   "description":description,
+   "applicationCategory":"MultimediaApplication",
+   "operatingSystem":"Web",
+   "browserRequirements":"Requires JavaScript and a modern web browser.",
+   "isAccessibleForFree":true,
+   "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+   "publisher":{"@id":organizationId}
+  });
+ }
+
+ if(isArticle){
+  graph.push({
+   "@type":"BlogPosting",
+   "@id":canonical+"#article",
+   "headline":title,
+   "description":description,
+   "url":canonical,
+   "inLanguage":"en",
+   "mainEntityOfPage":canonical,
+   "author":{"@id":organizationId},
+   "publisher":{"@id":organizationId},
+   "articleSection":"FlyThe BG Journal"
+  });
+ }else if(path!=="/"){
+  graph.push({
+   "@type":"WebPage",
+   "@id":canonical+"#webpage",
+   "name":title,
+   "description":description,
+   "url":canonical,
+   "inLanguage":"en",
+   "isPartOf":{"@id":websiteId},
+   "publisher":{"@id":organizationId}
+  });
+ }
+
+ if(path!=="/"){
+  const itemList:Array<Record<string,unknown>>=[
+   {"@type":"ListItem","position":1,"name":"Home","item":siteUrl}
+  ];
+  if(isArticle){
+   itemList.push({"@type":"ListItem","position":2,"name":"Blog","item":siteUrl+"blog"});
+  }else if(toolRoutes.has(path)){
+   itemList.push({"@type":"ListItem","position":2,"name":"Tools","item":siteUrl+"features"});
+  }
+  itemList.push({"@type":"ListItem","position":isArticle||toolRoutes.has(path)?3:2,"name":title,"item":canonical});
+
+  graph.push({
+   "@type":"BreadcrumbList",
+   "@id":canonical+"#breadcrumb",
+   "itemListElement":itemList
+  });
+ }
+
+ const schema={
+  "@context":"https://schema.org",
+  "@graph":graph
+ };
+
+ let schemaEl=document.querySelector<HTMLScriptElement>('script[type="application/ld+json"]');
+ if(!schemaEl){
+  schemaEl=document.createElement("script");
+  schemaEl.type="application/ld+json";
+  document.head.appendChild(schemaEl);
+ }
+ schemaEl.dataset.flySchema="1";
+ const nonce=document.querySelector<HTMLMetaElement>('meta[name="csp-nonce"]')?.content;
+ if(nonce)schemaEl.nonce=nonce;
+ schemaEl.textContent=JSON.stringify(schema);
 }
+
 function shell(content:string,title:string):string{
  const path=window.location.pathname;
  const descriptions:Record<string,string>={
