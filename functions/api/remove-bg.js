@@ -83,7 +83,7 @@ async function wakeSpace(token) {
   return lastStatus;
 }
 
-async function readSseResult(response) {
+async function readSseResult(response, onProgress) {
   // Gradio returns Server-Sent Events, sometimes with CRLF and multiple data lines.
   // Read the stream incrementally so a queued job does not require buffering all events.
   if (!response.body) throw new Error("AI processor returned an empty event stream.");
@@ -105,7 +105,7 @@ async function readSseResult(response) {
     if (!raw || raw === "[DONE]") return;
     let payload;
     try { payload = JSON.parse(raw); } catch { return; }
-    if (name === "error" || payload?.msg === "process_error")
+    const providerProgress = Number(payload?.progress ?? payload?.output?.progress ?? NaN);\n    if (Number.isFinite(providerProgress) && providerProgress >= 0 && providerProgress <= 1) {\n      onProgress?.(Math.round(55 + providerProgress * 35), "AI processing");\n    }\n    if (name === "generating") onProgress?.(60, "AI processing");\n    if (name === "error" || payload?.msg === "process_error")
       throw new Error("The background-removal processor failed.");
     if (name === "complete" || payload?.msg === "process_completed")
       return { done: true, value: payload?.output?.data?.[0] ?? payload?.data?.[0] ?? (Array.isArray(payload) ? payload[0] : payload) };
@@ -159,7 +159,7 @@ async function uploadFile(token, bytes, type) {
   return path;
 }
 
-async function gradioCall(token, input) {
+async function gradioCall(token, input, onProgress) {
   const endpoint = SPACE_URL.replace(/\/$/, "") + "/gradio_api/call/" + API_NAME.slice(1);
   const startedAt = Date.now();
   let lastStatus = 0;
@@ -169,13 +169,13 @@ async function gradioCall(token, input) {
   // Retry the complete upload/prediction sequence from the Worker so the
   // browser never has to open or keep the Hugging Face Space alive.
   while (Date.now() - startedAt < STARTUP_GRACE_MS) {
-    const wakeStatus = await wakeSpace(token);
+    onProgress?.(14, "Waking AI processor");\n    const wakeStatus = await wakeSpace(token);
     if (wakeStatus === 401 || wakeStatus === 403) {
       throw new Error("Hugging Face rejected the server-side access token (" + wakeStatus + ").");
     }
 
     try {
-      const filePath = await uploadFile(token, input.bytes, input.type);
+      onProgress?.(24, "Uploading image");\n      const filePath = await uploadFile(token, input.bytes, input.type);\n      onProgress?.(38, "Image uploaded");
       const startResponse = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -193,7 +193,7 @@ async function gradioCall(token, input) {
       });
 
       lastStatus = startResponse.status;
-      if (startResponse.ok) {
+      if (startResponse.ok) {\n        onProgress?.(48, "AI job queued");
         const payload = await startResponse.json();
         if (!payload?.event_id) return payload?.data?.[0] ?? payload?.data ?? payload;
 
@@ -212,7 +212,7 @@ async function gradioCall(token, input) {
           lastError = "AI processor did not return the event stream (" + events.status + ").";
         } else {
           try {
-            return await readSseResult(events);
+            onProgress?.(55, "AI processing");\n            return await readSseResult(events, onProgress);
           } catch (streamError) {
             lastError = streamError instanceof Error ? streamError.message : String(streamError);
             // A cold-started Space can accept the job before the runtime is fully
@@ -245,6 +245,38 @@ async function gradioCall(token, input) {
     Math.round(STARTUP_GRACE_MS / 1000) +
     " seconds. Please try again in a moment."
   );
+}
+
+
+function createProgressEmitter() {
+  const encoder = new TextEncoder();
+  const stream = new TransformStream();
+  const writer = stream.writable.getWriter();
+  const send = payload => writer.write(encoder.encode("data: " + JSON.stringify(payload) + "\n\n"));
+  const close = () => writer.close().catch(() => {});
+  return {
+    send,
+    close,
+    response: new Response(stream.readable, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/event-stream; charset=utf-8",
+        "Cache-Control": "no-store, no-transform",
+        "Connection": "keep-alive",
+        "X-Accel-Buffering": "no"
+      }
+    })
+  };
+}
+
+async function responseToDataUrl(response) {
+  const contentType = response.headers.get("Content-Type") || "image/png";
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  let binary = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + 0x8000, bytes.length)));
+  }
+  return "data:" + contentType + ";base64," + btoa(binary);
 }
 
 function hasValidImageSignature(bytes, type) {
