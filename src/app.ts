@@ -12,13 +12,33 @@ const pendingFiles:Partial<Record<ToolId,File>>={};
 function shell(content:string,title:string):string{
  document.title=title;
  const path=window.location.pathname;
+ const labels:Record<string,[string,string,string]>={
+ "/features":["THE TOOLKIT","Media Tools","Designed To Fly"],
+ "/remove-bg":["PROTECTED AI","Remove Background","Designed To Fly"],
+ "/image-compressor":["BROWSER-LOCAL","Compress Images","Designed To Fly"],
+ "/video-compressor":["BROWSER-LOCAL","Compress Videos","Designed To Fly"],
+ "/about":["OUR PROJECT","Built For Creators","Designed To Fly"],
+ "/faq":["HELP CENTER","Clear Answers","Designed To Fly"],
+ "/privacy":["YOUR PRIVACY","Privacy First","Designed To Fly"],
+ "/terms":["OUR TERMS","Simple Terms","Designed To Fly"],
+ "/contact":["GET IN TOUCH","Talk To Us","Designed To Fly"],
+ "/support":["KEEP IT GOING","Support The Project","Designed To Fly"]
+ };
+ const [eyebrow,line1,line2]=labels[path]||labels["/features"];
  const active=(route:string)=>path===route?' class="is-active" aria-current="page"':'';
- return `<div class="fly-interior ${path==="/support"?"fly-interior-support":""}">
- <div class="fly-interior-bg" aria-hidden="true"><video autoplay muted loop playsinline preload="none" poster="${POSTER}"><source src="${VIDEO}" type="video/mp4"></video></div><div class="fly-interior-shade" aria-hidden="true"></div>
- <header class="fly-interior-header"><a class="fly-logo" href="/" aria-label="FlyThe BG home"><span class="brand-mark">F</span></a><nav class="fly-interior-nav" aria-label="Primary navigation"><a href="/"${active("/")}>Home</a><a href="/features"${active("/features")}>Tools</a><a href="/about"${active("/about")}>About</a><a href="/contact"${active("/contact")}>Contact</a></nav><a class="fly-signin" href="/features">Get Started</a><button class="fly-interior-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="interior-mobile-menu"><span></span><span></span><span></span></button></header>
- <nav class="fly-interior-mobile-menu" id="interior-mobile-menu" aria-label="Mobile navigation" hidden><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove Background</a><a href="/image-compressor">Image Compressor</a><a href="/video-compressor">Video Compressor</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a></nav>
- <div class="fly-interior-content">${content}</div>
- <footer class="fly-interior-footer"><div><a class="fly-footer-brand" href="/">FlyThe BG</a><p>Practical media tools for images and video.</p><span class="star-count">★ <b data-stars>—</b> GitHub stars</span></div><nav aria-label="Footer navigation"><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/support">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Contact</a></nav><small>By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>. © 2026 FlyThe BG · Independent project · support@flythebg.com</small></footer></div>`;
+ return `<div class="fly-site ${path==="/support"?"fly-site-support":""}">
+ <section class="fly-site-hero">
+  <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" autoplay muted loop playsinline preload="metadata" poster="${POSTER}"><source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4" type="video/mp4"></video></div><div class="fly-bg-shade"></div>
+  <div class="fly-page">
+   <header class="fly-header"><a class="fly-logo" href="/" aria-label="FlyThe BG home"><span class="brand-mark">F</span></a><nav class="fly-nav" aria-label="Primary navigation"><a href="/"${active("/")}>Home</a><a href="/features"${active("/features")}>Tools</a><a href="/about"${active("/about")}>About</a><a href="/contact"${active("/contact")}>Contact</a></nav><a class="fly-signin" href="/features">Get Started</a><button class="fly-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="fly-mobile-menu"><i></i><i></i><i></i></button></header>
+   <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav>
+   <section class="fly-hero"><div class="fly-trust anim" style="--d:.05s"><div class="fly-avatars" aria-hidden="true"><span><span class="fly-avatar-inner">✦</span></span><span><span class="fly-avatar-inner">◌</span></span><span><span class="fly-avatar-inner">↗</span></span></div><div class="fly-trust-pill">${eyebrow}</div></div><h1 class="fly-headline"><span>${line1}</span><span>${line2}</span></h1><p class="fly-subhead anim" style="--d:.28s">FlyThe BG brings practical media tools together in one focused experience.</p><a class="fly-cta anim" style="--d:.4s" href="#page-content">Explore ${line1} ↓</a></section>
+   <div class="fly-stats"><div class="fly-stat anim" style="--d:.5s"><span class="fly-stat-icon">&lt;</span><span class="fly-stat-value">15 MB</span><span class="fly-stat-label">Background upload limit</span></div><div class="fly-stat anim" style="--d:.58s"><span class="fly-stat-icon">%</span><span class="fly-stat-value">2</span><span class="fly-stat-label">Browser-local tools</span></div><div class="fly-stat anim" style="--d:.66s"><span class="fly-stat-icon">*</span><span class="fly-stat-value">0</span><span class="fly-stat-label">Accounts required</span></div><div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value">1</span><span class="fly-stat-label">Protected AI route</span></div></div>
+  </div>
+ </section>
+ <div class="fly-site-content" id="page-content">${content}</div>
+ <footer class="fly-site-footer"><a class="fly-footer-brand" href="/">FlyThe BG</a><nav aria-label="Footer navigation"><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/support">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Contact</a></nav><small>By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>. © 2026 FlyThe BG · Independent project · support@flythebg.com</small></footer>
+ </div>`;
 }
 
 function aiPulse():string{return `<section class="section ai-section reveal"><div class="section-kicker"><span>AI INTERNET PULSE</span><span>21 SEP 2026</span></div><div class="ai-grid">
@@ -337,7 +357,7 @@ function wireEditorial():void{
 }
 
 function wireFlyLanding():void{
- const root=document.querySelector<HTMLElement>(".fly-home");if(!root)return;
+ const root=document.querySelector<HTMLElement>(".fly-home, .fly-site");if(!root)return;
  const burger=root.querySelector<HTMLButtonElement>(".fly-burger");
  const menu=root.querySelector<HTMLElement>(".fly-mobile-menu");
  const overlay=root.querySelector<HTMLElement>(".fly-mobile-overlay");
@@ -469,7 +489,6 @@ function render():void{
  wireTools();
  wireSpaceExperience();
  wireFlyLanding();
- wireInteriorNavigation();
  wireEditorial();
  loadStars();
  revealElements();
