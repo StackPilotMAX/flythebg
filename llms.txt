@@ -9,7 +9,7 @@ FlyThe BG is an independent web project providing free media tools focused on ba
 - https://flythebg.com/image-compressor — Browser-local image compression
 - https://flythebg.com/video-compressor — Browser-local WebM video compression
 - https://flythebg.com/features — Tool overview
-- https://flythebg/faq — Frequently asked questions
+- https://flythebg.com/faq — Frequently asked questions
 - https://flythebg.com/privacy — Privacy policy
 - https://flythebg.com/terms — Terms of use
 - https://flythebg.com/blog — Media and privacy guides
