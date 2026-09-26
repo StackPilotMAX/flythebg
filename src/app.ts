@@ -11,9 +11,14 @@ const pendingFiles:Partial<Record<ToolId,File>>={};
 
 function shell(content:string,title:string):string{
  document.title=title;
- return `<div class="notice">By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>.</div>
- <header class="nav"><a class="brand" href="/"><span class="brand-mark">F</span><span>FlyThe BG</span></a><nav><a href="/features">Tools</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/support">☕ Support</a></nav></header><div class="shared-page-frame">${content}</div>
- <footer class="footer"><div><strong>FlyThe BG</strong><span>Practical media tools for images and video.</span><span class="star-count">★ <b data-stars>—</b> GitHub stars</span></div><nav><a href="/features">Get started</a><a href="/support">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/faq">FAQ</a><a href="/contact">Contact</a></nav><small>© 2026 FlyThe BG · AGPL-3.0 · independent project · support@flythebg.com</small></footer>`;
+ const path=window.location.pathname;
+ const active=(route:string)=>path===route?' class="is-active" aria-current="page"':'';
+ return `<div class="fly-interior ${path==="/support"?"fly-interior-support":""}">
+ <div class="fly-interior-bg" aria-hidden="true"><video autoplay muted loop playsinline preload="none" poster="${POSTER}"><source src="${VIDEO}" type="video/mp4"></video></div><div class="fly-interior-shade" aria-hidden="true"></div>
+ <header class="fly-interior-header"><a class="fly-logo" href="/" aria-label="FlyThe BG home"><span class="brand-mark">F</span></a><nav class="fly-interior-nav" aria-label="Primary navigation"><a href="/"${active("/")}>Home</a><a href="/features"${active("/features")}>Tools</a><a href="/about"${active("/about")}>About</a><a href="/contact"${active("/contact")}>Contact</a></nav><a class="fly-signin" href="/features">Get Started</a><button class="fly-interior-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="interior-mobile-menu"><span></span><span></span><span></span></button></header>
+ <nav class="fly-interior-mobile-menu" id="interior-mobile-menu" aria-label="Mobile navigation" hidden><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove Background</a><a href="/image-compressor">Image Compressor</a><a href="/video-compressor">Video Compressor</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a></nav>
+ <div class="fly-interior-content">${content}</div>
+ <footer class="fly-interior-footer"><div><a class="fly-footer-brand" href="/">FlyThe BG</a><p>Practical media tools for images and video.</p><span class="star-count">★ <b data-stars>—</b> GitHub stars</span></div><nav aria-label="Footer navigation"><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/support">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Contact</a></nav><small>By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>. © 2026 FlyThe BG · Independent project · support@flythebg.com</small></footer></div>`;
 }
 
 function aiPulse():string{return `<section class="section ai-section reveal"><div class="section-kicker"><span>AI INTERNET PULSE</span><span>21 SEP 2026</span></div><div class="ai-grid">
@@ -99,6 +104,15 @@ function terms():string{return shell(`<main class="page prose legal reveal"><p c
 
 function contact():string{return shell(`<main class="page prose reveal"><p class="eyebrow">CONTACT</p><h1>Talk to the project.</h1><p>For privacy requests, security reports, feedback or project communication:</p><a class="contact-card" href="mailto:support@flythebg.com"><span>Email</span><strong>support@flythebg.com</strong></a></main>`,"Contact — FlyThe BG");}
 
+function wireInteriorNavigation():void{
+ const button=document.querySelector<HTMLButtonElement>(".fly-interior-burger");
+ const menu=document.querySelector<HTMLElement>(".fly-interior-mobile-menu");
+ if(!button||!menu)return;
+ const close=()=>{menu.hidden=true;button.setAttribute("aria-expanded","false");button.setAttribute("aria-label","Open menu");};
+ button.addEventListener("click",()=>{const open=menu.hidden;menu.hidden=!open;button.setAttribute("aria-expanded",String(open));button.setAttribute("aria-label",open?"Close menu":"Open menu");});
+ menu.querySelectorAll("a").forEach(a=>a.addEventListener("click",close));
+ document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+}
 function wireSpaceExperience():void{
  const root=document.querySelector<HTMLElement>(".experience");
  if(!root)return;
@@ -455,6 +469,7 @@ function render():void{
  wireTools();
  wireSpaceExperience();
  wireFlyLanding();
+ wireInteriorNavigation();
  wireEditorial();
  loadStars();
  revealElements();
