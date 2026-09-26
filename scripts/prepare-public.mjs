@@ -12,7 +12,7 @@ await cp("assets/pill-nav.js", "public/assets/pill-nav.js");
 await cp("worker.js", "public/worker.js");
 await cp("functions/api/remove-bg.js", "public/functions/api/remove-bg.js");
 
-for (const file of ["robots.txt", "sitemap.xml", "security.txt"]) {
+for (const file of ["robots.txt", "sitemap.xml", "security.txt", "ads.txt"]) {
   await cp(file, "public/" + file);
 }
 
