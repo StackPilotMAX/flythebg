@@ -559,18 +559,20 @@ body:has(.fly-home)>.notice,body:has(.fly-home)>.nav,body:has(.fly-home)>.footer
 }
 .fly-header{
  flex:0 0 auto;
- width:min(720px,100%);
- display:flex;
+ width:min(1180px,100%);
+ display:grid;
+ grid-template-columns:1fr auto 1fr;
  align-items:center;
- justify-content:center;
  gap:clamp(18px,2.8vw,28px);
 }
 .fly-logo{
  display:grid;
  place-items:center;
- flex:0 0 clamp(40px,4.4vw,46px);
- width:clamp(40px,4.4vw,46px);
- height:clamp(40px,4.4vw,46px);
+ justify-self:start;
+ grid-column:1;
+ flex:0 0 clamp(56px,7vw,92px);
+ width:clamp(56px,7vw,92px);
+ height:clamp(40px,5vw,52px);
  border-radius:50%;
  background:#fff;
  box-shadow:var(--fly-nav-shadow);
@@ -583,8 +585,9 @@ body:has(.fly-home)>.notice,body:has(.fly-home)>.nav,body:has(.fly-home)>.footer
  font:600 14px/1 var(--fly-font-sans);
  transform:none;
 }
-.fly-nav{
- flex:1;
+ .fly-nav{
+ grid-column:2;
+ flex:0 1 430px;
  height:clamp(44px,5.2vw,48px);
  max-width:430px;
  padding:4px 8px;
