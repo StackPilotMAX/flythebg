@@ -54,8 +54,8 @@ function postWork(kind:string):void{
 }
 
 function toolPage(id:ToolId,num:string,title:string,description:string,accept:string,note:string,privacy:string):string{
- const consent=id==="remove-bg"?`<label class="consent"><input type="checkbox" data-consent="remove-bg"><span>I understand that my selected image will be sent to the FlyThe BG background-removal processor running on Hugging Face Spaces.</span></label>`:"";
- return shell(`<main class="tool-page reveal"><div class="tool-intro"><p class="eyebrow">FLYTHE BG · ${num}</p><h1>${title}</h1><p>${description}</p><div class="pills"><span>${id==="remove-bg"?"PROTECTED AI":"LOCAL-FIRST"}</span><span>${note}</span></div></div><section class="tool-workspace"><div class="workspace-head"><span>${id==="remove-bg"?"PROTECTED UPLOAD":"YOUR DEVICE, YOUR FILE"}</span><span data-progress-label="${id}">0%</span></div>${consent}<label class="big-dropzone" data-dropzone="${id}"><input data-input="${id}" type="file" accept="${accept}"><span class="upload-arrow">↑</span><strong>Drop your file here</strong><small>or tap to browse your device</small><em>${id==="remove-bg"?"PNG · JPG · WEBP · max 15 MB":"nothing leaves your browser"}</em></label><p class="selected-file" data-file-name="${id}">No file selected.</p><button class="button primary process-button" data-process="${id}" type="button" disabled>${id==="remove-bg"?"Remove background →":"Compress file →"}</button><div class="progress-track"><div class="progress-bar" data-progress="${id}"></div></div><p class="status" role="status" aria-live="polite" data-status="${id}">Ready when you are. Processing status will appear here.</p></section><p class="processing-note">${privacy}</p></main>`,`${title} — FlyThe BG`);
+ const consent=`<label class="upload-confirm"><input type="checkbox" data-consent="${id}" disabled><span class="upload-confirm-check" aria-hidden="true">✓</span><span class="upload-confirm-copy"><strong>Confirm selected file</strong><small>${id==="remove-bg"?"I agree to send this image to the Hugging Face background-removal processor.":"I confirm this file can be processed locally in my browser."}</small></span></label>`;
+ return shell(`<main class="tool-page reveal"><div class="tool-intro"><p class="eyebrow">FLYTHE BG · ${num}</p><h1>${title}</h1><p>${description}</p><div class="pills"><span>${id==="remove-bg"?"PROTECTED AI":"LOCAL-FIRST"}</span><span>${note}</span></div></div><section class="tool-workspace"><div class="workspace-head"><span>${id==="remove-bg"?"PROTECTED UPLOAD":"YOUR DEVICE, YOUR FILE"}</span><span data-progress-label="${id}">0%</span></div><label class="big-dropzone" data-dropzone="${id}"><input data-input="${id}" type="file" accept="${accept}"><span class="upload-arrow">↑</span><strong>Drop one file here</strong><small>or tap to browse your device</small><em>${id==="remove-bg"?"PNG · JPG · WEBP · max 15 MB":"nothing leaves your browser"}</em></label><div class="upload-preview" data-preview="${id}" hidden><div class="upload-preview-media" data-preview-media="${id}"></div><div class="upload-preview-info"><strong data-file-name="${id}">File selected</strong><small data-file-size="${id}"></small><button type="button" class="upload-change" data-change="${id}">Choose a different file</button></div></div>${consent}<button class="button primary process-button" data-process="${id}" type="button" disabled>${id==="remove-bg"?"Remove background →":"Compress file →"}</button><div class="progress-track"><div class="progress-bar" data-progress="${id}"></div></div><p class="status" role="status" aria-live="polite" data-status="${id}">Ready when you are. Processing status will appear here.</p></section><p class="processing-note">${privacy}</p></main>`,`${title} — FlyThe BG`);
 }
 
 function home():string{
@@ -107,6 +107,7 @@ function home():string{
     <div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value" data-count="1" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Protected AI route</span></div>
    </footer>
   </div>
+ <footer class="fly-site-footer fly-home-footer"><a class="fly-footer-brand" href="/">FlyThe BG</a><nav aria-label="Footer navigation"><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/support">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/contact">Contact</a></nav><small>By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>. © 2026 FlyThe BG · Independent project · support@flythebg.com</small></footer>
  </main>`;
 }
 
@@ -398,32 +399,81 @@ async function compressImage(file:File):Promise<void>{setProgress("image-compres
 async function compressVideo(file:File):Promise<void>{if(!("MediaRecorder"in window))throw new Error("MediaRecorder is unavailable in this browser.");setProgress("video-compressor",3,"loading");updateStatus("video-compressor","Loading video locally… no upload is happening.");const source=document.createElement("video");source.muted=true;source.playsInline=true;source.src=URL.createObjectURL(file);await new Promise<void>((resolve,reject)=>{source.onloadedmetadata=()=>resolve();source.onerror=()=>reject(new Error("Video could not be read."));});const canvas=document.createElement("canvas");const scale=Math.min(1,1280/Math.max(1,source.videoWidth));canvas.width=Math.max(2,Math.round(source.videoWidth*scale));canvas.height=Math.max(2,Math.round(source.videoHeight*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("Video canvas is unavailable.");const stream=canvas.captureStream(30);const mime=MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":"video/webm";const recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:2000000});const chunks:Blob[]=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};const done=new Promise<void>((resolve,reject)=>{recorder.onstop=()=>resolve();recorder.onerror=()=>reject(new Error("Video compression failed."));});recorder.start(250);await source.play();const draw=()=>{if(source.ended){recorder.stop();return;}ctx.drawImage(source,0,0,canvas.width,canvas.height);const pct=source.duration?Math.min(99,Math.round(source.currentTime/source.duration*100)):0;setProgress("video-compressor",pct,`${pct}%`);updateStatus("video-compressor",`Processing locally… ${pct}%`);requestAnimationFrame(draw)};draw();await done;URL.revokeObjectURL(source.src);setProgress("video-compressor",98,"encoding");downloadBlob(new Blob(chunks,{type:"video/webm"}),file.name.replace(/\.[^.]+$/,"")+"-compressed.webm","video-compressor");setProgress("video-compressor",100,"done");updateStatus("video-compressor","Done — compressed WebM downloaded. Original stayed local.");postWork("video compression");}
 
 function wireTools():void{
+ const previewUrls:string[]=[];
  document.querySelectorAll<HTMLInputElement>("[data-input]").forEach(input=>input.addEventListener("change",()=>{
-  const file=input.files?.[0],tool=input.dataset.input as ToolId|undefined;
-  if(!file||!tool||state[tool])return;
+  const tool=input.dataset.input as ToolId|undefined;
+  if(!tool||state[tool])return;
+  const files=input.files;
+  if(!files?.length)return;
+  if(files.length!==1){updateStatus(tool,"Select exactly one file.");input.value="";return;}
+  const file=files[0];
+  if(tool==="remove-bg"&&file.size>15*1024*1024){updateStatus(tool,"This file exceeds the 15 MB upload limit.");input.value="";return;}
+  if(tool==="remove-bg"&&!["image/png","image/jpeg","image/webp"].includes(file.type)){updateStatus(tool,"Choose a PNG, JPG or WEBP image.");input.value="";return;}
+  if(tool==="image-compressor"&&!file.type.startsWith("image/")||tool==="video-compressor"&&!file.type.startsWith("video/")){updateStatus(tool,"Choose a supported file for this tool.");input.value="";return;}
   pendingFiles[tool]=file;
+  const zone=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`);
+  const preview=document.querySelector<HTMLElement>(`[data-preview="${tool}"]`);
+  const media=document.querySelector<HTMLElement>(`[data-preview-media="${tool}"]`);
   const name=document.querySelector<HTMLElement>(`[data-file-name="${tool}"]`);
-  if(name)name.textContent=file.name+" selected — nothing sent yet.";
+  const size=document.querySelector<HTMLElement>(`[data-file-size="${tool}"]`);
+  const consent=document.querySelector<HTMLInputElement>(`[data-consent="${tool}"]`);
   const button=document.querySelector<HTMLButtonElement>(`[data-process="${tool}"]`);
-  if(button)button.disabled=false;
-  updateStatus(tool,tool==="remove-bg"?"Ready. Nothing is uploaded until you press “Remove background” and accept the notice.":"Ready. Nothing is processed until you press the button.");
+  zone?.classList.add("has-file");
+  if(preview)preview.hidden=false;
+  if(name)name.textContent=file.name;
+  if(size)size.textContent=(file.size/1048576).toFixed(2)+" MB · One file selected";
+  if(media){
+   media.querySelectorAll("img,video").forEach(el=>{const src=(el as HTMLImageElement).src;if(src.startsWith("blob:"))URL.revokeObjectURL(src);el.remove();});
+   if(file.type.startsWith("image/")||file.type.startsWith("video/")){
+    const url=URL.createObjectURL(file);previewUrls.push(url);
+    const visual=document.createElement(file.type.startsWith("image/")?"img":"video");
+    visual.setAttribute("aria-label","Selected file preview");
+    if(visual instanceof HTMLVideoElement){visual.muted=true;visual.controls=true;visual.preload="metadata";}
+    visual.src=url;media.appendChild(visual);
+   }else media.textContent="Selected file";
+  }
+  if(consent){consent.checked=false;consent.disabled=false;}
+  if(button)button.disabled=true;
+  updateStatus(tool,"File ready. Tick the confirmation below the preview to enable processing.");
+ }));
+ document.querySelectorAll<HTMLInputElement>("[data-consent]").forEach(consent=>consent.addEventListener("change",()=>{
+  const tool=consent.dataset.consent as ToolId;
+  const button=document.querySelector<HTMLButtonElement>(`[data-process="${tool}"]`);
+  if(button)button.disabled=!consent.checked||!pendingFiles[tool]||state[tool];
+  updateStatus(tool,consent.checked?"Confirmed. Press the button to begin.":"Tick the confirmation to continue.");
+ }));
+ document.querySelectorAll<HTMLButtonElement>("[data-change]").forEach(button=>button.addEventListener("click",()=>{
+  const tool=button.dataset.change as ToolId;
+  if(state[tool])return;
+  const input=document.querySelector<HTMLInputElement>(`[data-input="${tool}"]`);
+  if(input){input.value="";input.click();}
  }));
  document.querySelectorAll<HTMLButtonElement>("[data-process]").forEach(button=>button.addEventListener("click",async()=>{
   const tool=button.dataset.process as ToolId|undefined,file=tool?pendingFiles[tool]:undefined;
   if(!tool||!file||state[tool])return;
-  if(tool==="remove-bg"&&!document.querySelector<HTMLInputElement>('[data-consent="remove-bg"]')?.checked){updateStatus(tool,"Please accept the processing notice before uploading.");return;}
-  state[tool]=true;button.disabled=true;const zone=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`);zone?.classList.add("is-working");
+  const consent=document.querySelector<HTMLInputElement>(`[data-consent="${tool}"]`);
+  if(!consent?.checked){updateStatus(tool,"Confirm the selected file before processing.");return;}
+  state[tool]=true;button.disabled=true;
+  const zone=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`);
+  const change=document.querySelector<HTMLButtonElement>(`[data-change="${tool}"]`);
+  zone?.classList.add("is-working");if(change)change.disabled=true;if(consent)consent.disabled=true;
   try{if(tool==="remove-bg")await removeBackground(file);else if(tool==="image-compressor")await compressImage(file);else await compressVideo(file);}
   catch(error){updateStatus(tool,error instanceof Error?error.message:"Something went wrong.");setProgress(tool,0,"retry");}
-  finally{state[tool]=false;delete pendingFiles[tool];button.disabled=true;zone?.classList.remove("is-working");}
+  finally{
+   state[tool]=false;zone?.classList.remove("is-working");if(change)change.disabled=false;
+   if(consent){consent.checked=false;consent.disabled=false;}
+   button.disabled=true;
+  }
  }));
  document.querySelectorAll<HTMLElement>("[data-dropzone]").forEach(zone=>{
   const tool=zone.dataset.dropzone as ToolId;
-  ["dragenter","dragover"].forEach(t=>zone.addEventListener(t,e=>{e.preventDefault();zone.classList.add("dragging")}));
+  ["dragenter","dragover"].forEach(t=>zone.addEventListener(t,e=>{e.preventDefault();if(!state[tool]&&!pendingFiles[tool])zone.classList.add("dragging")}));
   ["dragleave","drop"].forEach(t=>zone.addEventListener(t,e=>{e.preventDefault();zone.classList.remove("dragging")}));
   zone.addEventListener("drop",e=>{
-   const file=(e as DragEvent).dataTransfer?.files?.[0],input=zone.querySelector<HTMLInputElement>("[data-input]");
-   if(file&&input&&!state[tool]){const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;input.dispatchEvent(new Event("change",{bubbles:true}))}
+   const files=(e as DragEvent).dataTransfer?.files,input=zone.querySelector<HTMLInputElement>("[data-input]");
+   if(!files?.length||!input||state[tool]||pendingFiles[tool])return;
+   if(files.length!==1){updateStatus(tool,"Drop exactly one file.");return;}
+   const dt=new DataTransfer();dt.items.add(files[0]);input.files=dt.files;input.dispatchEvent(new Event("change",{bubbles:true}));
   });
  });
 }
