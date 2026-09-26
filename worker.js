@@ -183,7 +183,8 @@ export default {
     response.headers.set("Content-Type","text/html; charset=utf-8");
     response.headers.set("Cache-Control","public, max-age=0, must-revalidate");
     const secured = withSecurityHeaders(response);
-    secured.headers.set("Content-Security-Policy", SECURITY_HEADERS["Content-Security-Policy"] + "; script-src 'self' 'nonce-" + transformed.nonce + "'");
+    const csp = SECURITY_HEADERS["Content-Security-Policy"].replace("script-src 'self'", "script-src 'self' 'nonce-" + transformed.nonce + "'");
+    secured.headers.set("Content-Security-Policy", csp);
     return secured;
   }
 };
