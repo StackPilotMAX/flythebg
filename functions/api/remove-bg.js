@@ -36,14 +36,6 @@ function checkRateLimit(request) {
   return { allowed: true, remaining: Math.max(0, RATE_LIMIT_MAX - current.count), resetAt: current.resetAt };
 }
 
-function releaseRateLimit(request) {
-  // Failed validation should not consume a slot because it never reaches HF.
-  // Successful/accepted requests remain counted for the full abuse window.
-  const key = clientKey(request);
-  const current = rateBuckets.get(key);
-  if (current && current.count <= 0) rateBuckets.delete(key);
-}
-
 function corsOrigin(request) {
   const origin = request?.headers?.get("Origin") || "";
   return ALLOWED_ORIGINS.has(origin) ? origin : "https://flythebg.com";
