@@ -931,3 +931,18 @@ body:has(.fly-home)>.notice,body:has(.fly-home)>.nav,body:has(.fly-home)>.footer
 .fly-site-support .fly-site-content{padding-top:20px}
 @media(max-width:720px){.fly-site-hero{min-height:500px}.fly-site-content{width:calc(100% - 24px);padding-top:45px}.fly-site-footer{margin-top:50px;display:block}.fly-site-footer nav{justify-content:flex-start;margin:20px 0}.fly-site-footer small{display:block}}
 @media(prefers-reduced-motion:reduce){.fly-site-hero .fly-bg-video{display:none}}
+
+/* Site-wide navigation: refined transparent header instead of the white pill. */
+.fly-home .fly-header,.fly-site .fly-header{width:min(1240px,calc(100% - 48px));max-width:1240px;display:flex;align-items:center;justify-content:space-between;gap:clamp(18px,3vw,48px);margin:0 auto;padding:24px 0;background:transparent;border:0;box-shadow:none}
+.fly-home .fly-nav,.fly-site .fly-nav{flex:0 1 auto;width:auto;max-width:none;height:auto;min-height:48px;padding:0;gap:clamp(20px,3vw,40px);justify-content:center;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none}
+.fly-home .fly-nav a,.fly-site .fly-nav a{height:44px;padding:0 0 4px;color:#fff;font-size:14px;font-weight:550;opacity:.76;letter-spacing:.005em}
+.fly-home .fly-nav a:hover,.fly-site .fly-nav a:hover{opacity:1}
+.fly-home .fly-nav a.is-active,.fly-site .fly-nav a.is-active{opacity:1}
+.fly-home .fly-nav a.is-active:after,.fly-site .fly-nav a.is-active:after{left:0;right:0;bottom:2px;width:auto;height:2px;border-radius:2px;transform:none;box-shadow:none;background:#fff}
+.fly-home .fly-signin,.fly-site .fly-signin{flex-shrink:0}
+@media(max-width:720px){
+ .fly-home .fly-header,.fly-site .fly-header{width:calc(100% - 32px);padding:16px 0}
+ .fly-home .fly-nav,.fly-site .fly-nav{display:none}
+ .fly-home .fly-signin,.fly-site .fly-signin{display:none}
+}
+@media(prefers-reduced-motion:reduce){.fly-home .fly-nav a,.fly-site .fly-nav a{transition:none}}
