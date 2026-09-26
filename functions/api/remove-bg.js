@@ -120,9 +120,7 @@ async function readSseResult(response, onProgress) {
   try {
     while (Date.now() < deadline) {
       const { value, done } = await reader.read();
-      buffer += decoder.decode(value || new Uint8Array(), { stream: !done }).replace(/\r
-/g, "
-");
+      buffer += decoder.decode(value || new Uint8Array(), { stream: !done }).replace(/\r\n/g, "\n");
       let boundary;
       while ((boundary = buffer.indexOf("\n\n")) !== -1) {
         const block = buffer.slice(0, boundary);
