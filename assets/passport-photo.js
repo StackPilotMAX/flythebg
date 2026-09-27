@@ -1246,7 +1246,18 @@
   }
 
   window.__flyPassportWire = makePhotoPage;
-  const bootPassportPhoto = () => { if (document.querySelector("#passport-photo-root")) makePhotoPage(); };
+  const bootPassportPhoto = () => {
+    if (window.location.pathname.replace(/\\/+$/, "") !== "/passport-photo") return;
+    let root = document.querySelector("#passport-photo-root");
+    if (!root) {
+      const app = document.querySelector("#app");
+      if (app) {
+        app.innerHTML = '<main class="passport-page-shell reveal"><div id="passport-photo-root"></div></main>';
+        root = document.querySelector("#passport-photo-root");
+      }
+    }
+    if (root) makePhotoPage();
+  };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootPassportPhoto, { once: true });
   else bootPassportPhoto();
 })();
