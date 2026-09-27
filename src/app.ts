@@ -342,7 +342,7 @@ function home():string{
    </div>
    <div class="home-folder-grid">
     <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-remove-bg" style="--folder-color:#5227FF;--folder-back:#4722DE">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-remove-bg" style="--folder-color:#7C3AED;--folder-back:#5B21B6">
       <span class="folder-canvas" aria-hidden="true">
        <span class="folder-paper paper-one"><span class="paper-icon">✦</span><small>AI</small></span>
        <span class="folder-paper paper-two"><span class="paper-icon">PNG</span><small>JPG · WEBP</small></span>
@@ -357,7 +357,7 @@ function home():string{
      </div>
     </article>
     <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-image-compressor" style="--folder-color:#00A7C7;--folder-back:#008BA7">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-image-compressor" style="--folder-color:#2563EB;--folder-back:#1D4ED8">
       <span class="folder-canvas" aria-hidden="true">
        <span class="folder-paper paper-one"><span class="paper-icon">IMG</span><small>JPG · PNG</small></span>
        <span class="folder-paper paper-two"><span class="paper-icon">%</span><small>Smaller</small></span>
@@ -372,7 +372,7 @@ function home():string{
      </div>
     </article>
     <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-video-compressor" style="--folder-color:#FF3366;--folder-back:#DB244F">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-video-compressor" style="--folder-color:#EF4444;--folder-back:#B91C1C">
       <span class="folder-canvas" aria-hidden="true">
        <span class="folder-paper paper-one"><span class="paper-icon">▶</span><small>VIDEO</small></span>
        <span class="folder-paper paper-two"><span class="paper-icon">WEBM</span><small>Smaller</small></span>
@@ -387,7 +387,7 @@ function home():string{
      </div>
     </article>
     <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-passport-photo" style="--folder-color:#1A1A1B;--folder-back:#101011">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-passport-photo" style="--folder-color:#FACC15;--folder-back:#CA8A04">
       <span class="folder-canvas" aria-hidden="true">
        <span class="folder-paper paper-one"><span class="paper-icon">ID</span><small>CROP</small></span>
        <span class="folder-paper paper-two"><span class="paper-icon">A4</span><small>PRINT</small></span>
