@@ -180,7 +180,7 @@
             '<div class="passport-background-grid">',
               '<div class="passport-result-stage"><div class="passport-result-frame"><img alt="Passport photo preview" data-pp-result-image></div><span data-pp-ai-badge>AI background removed</span></div>',
               '<div class="passport-color-panel">',
-                '<div class="passport-control-group"><span>Recommended for photo documents</span><div class="passport-swatches" data-pp-swatches></div></div>',
+                '<div class="passport-control-group"><span>Recommended for photo documents</span><div class="passport-swatches" data-pp-swatches></div></div><div class="passport-control-group"><span>Use a custom background image</span><label class="passport-bg-image-picker"><input type="file" accept="image/png,image/jpeg,image/webp" data-pp-background-image><span>Choose background image</span></label><button type="button" class="passport-clear-bg" data-pp-clear-background-image>Use color only</button></div>',
                 '<div class="passport-color-row"><label>Color picker<input type="color" value="#FFFFFF" data-pp-color></label><label>HEX<input type="text" value="#FFFFFF" maxlength="7" data-pp-hex></label></div>',
                 '<div class="passport-rgb-row"><label>R<input type="number" min="0" max="255" value="255" data-pp-r></label><label>G<input type="number" min="0" max="255" value="255" data-pp-g></label><label>B<input type="number" min="0" max="255" value="255" data-pp-b></label></div>',
                 '<div class="passport-control-group"><span>Background status</span><p class="passport-mini-note" data-pp-bg-help>White is the default neutral choice. Check the official destination requirements before submission because different authorities can use different photo rules.</p></div>',
@@ -256,6 +256,8 @@
       resultUrl: "",
       resultImage: null,
       color: "#FFFFFF",
+      backgroundImage: null,
+      backgroundImageUrl: "",
       photoUnit: "cm",
       photoW: 3.5,
       photoH: 4.5,
@@ -687,13 +689,13 @@
     function setResultBadge() {
       const badge = q("[data-pp-ai-badge]");
       const note = q("[data-pp-bg-help]");
-      const colorInputs = qa("[data-pp-color], [data-pp-hex], [data-pp-r], [data-pp-g], [data-pp-b]");
+      const colorInputs = qa("[data-pp-color], [data-pp-hex], [data-pp-r], [data-pp-g], [data-pp-b], [data-pp-background-image], [data-pp-clear-background-image]");
       const disabled = state.bgMode === "keep";
       colorInputs.forEach(function (input) { input.disabled = disabled; });
       badge.textContent = disabled ? "Original background kept" : "AI background removed";
       note.textContent = disabled
-        ? "The original background is preserved. Background color controls are disabled because no background was removed."
-        : "White is a neutral default. Check the exact destination requirements before submitting official photos.";
+        ? "The original background is preserved. Background controls are disabled because no background was removed."
+        : "White is a neutral default. You can also place the cut-out on a browser-local custom background image. Check the exact destination requirements before submitting official photos.";
       updateResultPreview();
     }
 
@@ -702,6 +704,9 @@
       if (!state.resultImage || !frame) return;
       frame.src = state.resultImage.src;
       frame.style.background = state.color;
+      frame.style.backgroundImage = state.backgroundImageUrl ? "url(\"" + state.backgroundImageUrl + "\")" : "none";
+      frame.style.backgroundSize = "cover";
+      frame.style.backgroundPosition = "center";
       q("[data-pp-color-status]").textContent = state.bgMode === "keep" ? "Original background retained." : "Background color: " + state.color;
     }
 
@@ -720,6 +725,14 @@
       ctx.imageSmoothingQuality = "high";
       ctx.fillStyle = state.color;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (state.backgroundImage) {
+        const bw = state.backgroundImage.naturalWidth;
+        const bh = state.backgroundImage.naturalHeight;
+        const bgScale = Math.max(canvas.width / bw, canvas.height / bh);
+        const bgW = bw * bgScale;
+        const bgH = bh * bgScale;
+        ctx.drawImage(state.backgroundImage, (canvas.width - bgW) / 2, (canvas.height - bgH) / 2, bgW, bgH);
+      }
       const iw = state.resultImage.naturalWidth;
       const ih = state.resultImage.naturalHeight;
       const scale = Math.max(canvas.width / iw, canvas.height / ih);
@@ -829,7 +842,8 @@
       const rowsR = paper.w >= photo.h + marginIn * 2 ? Math.floor((paper.w - marginIn * 2 + gapIn) / (photo.h + gapIn)) : 0;
       const normal = cols * rows;
       const rotated = colsR * rowsR;
-      return { paper: paper, photo: photo, marginIn: marginIn, gapIn: gapIn, cols: cols, rows: rows, max: Math.max(normal, rotated), normal: normal, rotated: rotated };
+      const useRotated = rotated > normal;
+      return { paper: paper, photo: photo, marginIn: marginIn, gapIn: gapIn, cols: cols, rows: rows, colsR: colsR, rowsR: rowsR, max: Math.max(normal, rotated), normal: normal, rotated: rotated, useRotated: useRotated, workingW: useRotated ? paper.h : paper.w, workingH: useRotated ? paper.w : paper.h };
     }
 
     function updatePaperUI() {
@@ -870,8 +884,8 @@
       node.style.height = (aspect >= 1 ? 210 : Math.round(260 / aspect)) + "px";
       node.innerHTML = "";
       const photoAspect = layout.photo.w / layout.photo.h;
-      const cols = Math.max(1, layout.normal ? layout.cols : 1);
-      const rows = Math.max(1, layout.normal ? layout.rows : 1);
+      const cols = Math.max(1, layout.max ? (layout.useRotated ? layout.colsR || 1 : layout.cols) : 1);
+      const rows = Math.max(1, layout.max ? (layout.useRotated ? layout.rowsR || 1 : layout.rows) : 1);
       const used = Math.min(layout.max, 12);
       const miniW = 100 / cols;
       const miniH = 100 / rows;
@@ -983,6 +997,39 @@
       });
     });
 
+    q("[data-pp-background-image]").addEventListener("change", function (event) {
+      if (state.bgMode === "keep") return;
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      if (!/^image\\/(png|jpeg|webp)$/.test(file.type)) {
+        q("[data-pp-color-status]").textContent = "Please choose a PNG, JPG or WEBP background image.";
+        return;
+      }
+      if (state.backgroundImageUrl) URL.revokeObjectURL(state.backgroundImageUrl);
+      const url = URL.createObjectURL(file);
+      const image = new Image();
+      image.onload = function () {
+        state.backgroundImage = image;
+        state.backgroundImageUrl = url;
+        q("[data-pp-color-status]").textContent = "Custom background image selected.";
+        updateResultAfterColor();
+      };
+      image.onerror = function () {
+        URL.revokeObjectURL(url);
+        q("[data-pp-color-status]").textContent = "The background image could not be opened.";
+      };
+      image.src = url;
+    });
+
+    q("[data-pp-clear-background-image]").addEventListener("click", function () {
+      if (state.backgroundImageUrl) URL.revokeObjectURL(state.backgroundImageUrl);
+      state.backgroundImage = null;
+      state.backgroundImageUrl = "";
+      q("[data-pp-background-image]").value = "";
+      q("[data-pp-color-status]").textContent = "Using the selected background color.";
+      updateResultAfterColor();
+    });
+
     qa("[data-pp-photo-unit]").forEach(function (button) {
       button.addEventListener("click", function () { setPhotoUnit(button.dataset.ppPhotoUnit); });
     });
@@ -1069,8 +1116,8 @@
       }
       const layout = layoutInfo();
       const requestedDpi = 300;
-      const paperW = layout.paper.w;
-      const paperH = layout.paper.h;
+      const paperW = layout.workingW;
+      const paperH = layout.workingH;
       const approxPixels = paperW * requestedDpi * paperH * requestedDpi;
       const dpi = approxPixels > 45_000_000 ? Math.max(150, Math.floor(Math.sqrt(45_000_000 / (paperW * paperH)))) : requestedDpi;
       const canvas = document.createElement("canvas");
@@ -1091,8 +1138,8 @@
       const ph = layout.photo.h * dpi;
       const gap = layout.gapIn * dpi;
       const margin = layout.marginIn * dpi;
-      const cols = Math.max(1, Math.floor((paperW * dpi - margin * 2 + gap) / (pw + gap)));
-      const rows = Math.max(1, Math.floor((paperH * dpi - margin * 2 + gap) / (ph + gap)));
+      const cols = layout.useRotated ? Math.max(1, layout.colsR) : Math.max(1, layout.cols);
+      const rows = layout.useRotated ? Math.max(1, layout.rowsR) : Math.max(1, layout.rows);
       const capacity = cols * rows;
       const qty = Math.min(state.quantity, capacity);
       const usedW = cols * pw + (cols - 1) * gap;
@@ -1121,7 +1168,7 @@
         qty + " photo" + (qty === 1 ? "" : "s") + " · " +
         Number(state.photoW).toFixed(2) + " × " + Number(state.photoH).toFixed(2) + " " + state.photoUnit +
         " · " + PAPER_SIZES.find(function (p) { return p.id === state.paperId; }).name +
-        " · generated at " + dpi + " DPI.";
+        " · " + (layout.useRotated ? "landscape layout" : "portrait layout") + " · generated at " + dpi + " DPI.";
       if (dpi < 300) {
         q("[data-pp-final-summary]").textContent += " The selected paper is large, so the browser used a lower DPI to stay within a safe canvas size.";
       }
@@ -1149,6 +1196,9 @@
       state.bgMode = "remove";
       state.resultUrl = "";
       state.resultImage = null;
+      if (state.backgroundImageUrl) URL.revokeObjectURL(state.backgroundImageUrl);
+      state.backgroundImage = null;
+      state.backgroundImageUrl = "";
       state.color = "#FFFFFF";
       state.photoUnit = "cm";
       state.photoW = 3.5;
@@ -1171,6 +1221,7 @@
       q("[data-pp-r]").value = "255";
       q("[data-pp-g]").value = "255";
       q("[data-pp-b]").value = "255";
+      if (q("[data-pp-background-image]")) q("[data-pp-background-image]").value = "";
       updatePhotoSizeUI();
       updatePaperUI();
       state.step = 0;
