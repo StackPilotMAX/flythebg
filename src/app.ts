@@ -1,5 +1,5 @@
 type ToolId = "remove-bg" | "image-compressor" | "video-compressor";
-type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/passport-photo" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog";
+type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog";
 
 const VIDEO="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4";
 const POSTER="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg";
@@ -20,7 +20,6 @@ function setSeo(title:string,description:string):void{
   "/remove-bg":"remove background online, remove image background, transparent PNG, background remover",
   "/image-compressor":"compress image online, compress JPG, compress PNG, image compressor",
   "/video-compressor":"compress video online, WebM compressor, reduce video size, video compression",
-  "/passport-photo":"passport size photo maker, visa photo maker, ID photo sheet, passport photo printing",
   "/features":"image tools, background remover, image compressor, video compressor",
   "/about":"FlyThe BG, privacy-first media tools, browser image tools",
   "/faq":"FlyThe BG FAQ, background removal, image compression, video compression",
@@ -80,7 +79,7 @@ function setSeo(title:string,description:string):void{
  const siteUrl="https://flythebg.com/";
  const organizationId=siteUrl+"#organization";
  const websiteId=siteUrl+"#website";
- const toolRoutes=new Set<string>(["/remove-bg","/image-compressor","/video-compressor","/passport-photo"]);
+ const toolRoutes=new Set<string>(["/remove-bg","/image-compressor","/video-compressor"]);
  const isArticle=path.startsWith("/blogs/")&&path!=="/blogs";
 
  const organization={
@@ -203,7 +202,6 @@ function shell(content:string,title:string):string{
   "/remove-bg":"Remove an image background with FlyThe BG's protected AI processing route. No account required.",
   "/image-compressor":"Compress images locally in your browser without uploading the original file to FlyThe BG.",
   "/video-compressor":"Create a smaller WebM video locally in your browser with visible processing progress.",
-  "/passport-photo":"Create passport and visa-style photo sheets in one browser workflow with precise crop, physical sizing and print layouts.",
   "/about":"Learn how FlyThe BG works, why local processing matters and how its protected AI route is structured.",
   "/faq":"Answers to common FlyThe BG questions about uploads, privacy, downloads, mobile use and processing.",
   "/privacy":"FlyThe BG privacy policy covering local compression, background removal, providers, retention and rights.",
@@ -250,7 +248,7 @@ function shell(content:string,title:string):string{
   <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" muted loop playsinline preload="none" poster="${POSTER}" data-deferred-video aria-hidden="true"><source data-src="${VIDEO}" type="video/mp4"></video><div class="fly-bg-shade"></div></div>
   <div class="fly-page">
    <header class="fly-header"><a class="fly-logo" href="/" aria-label="FlyThe BG home"><img src="/assets/flythebg-logo.png" alt="FlyThe BG" class="site-logo"></a><nav class="fly-nav" aria-label="Primary navigation"><a href="/"${active("/")}>Home</a><a href="/features"${active("/features")}>Tools</a><a href="/about"${active("/about")}>About</a><a href="/contact"${active("/contact")}>Contact</a></nav><a class="fly-signin" href="/features">Get Started</a><button class="fly-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="fly-mobile-menu"><i></i><i></i><i></i></button></header>
-   <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/passport-photo">Passport Photos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/blogs">Blogs</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
+   <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/blogs">Blogs</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
    <section class="fly-hero"><div class="fly-trust anim" style="--d:.05s"><div class="fly-avatars" aria-hidden="true"><span><span class="fly-avatar-inner">✦</span></span><span><span class="fly-avatar-inner">◌</span></span><span><span class="fly-avatar-inner">↗</span></span></div><div class="fly-trust-pill">${eyebrow}</div></div><h2 class="fly-headline"><span>${line1}</span><span>${line2}</span></h2><p class="fly-subhead anim" style="--d:.28s">FlyThe BG brings practical media tools together in one focused experience.</p><a class="fly-cta anim" style="--d:.4s" href="#page-content">Explore ${line1} ↓</a></section>
    <div class="fly-stats"><div class="fly-stat anim" style="--d:.5s"><span class="fly-stat-icon">&lt;</span><span class="fly-stat-value">15 MB</span><span class="fly-stat-label">Background upload limit</span></div><div class="fly-stat anim" style="--d:.58s"><span class="fly-stat-icon">%</span><span class="fly-stat-value">2</span><span class="fly-stat-label">Browser-local tools</span></div><div class="fly-stat anim" style="--d:.66s"><span class="fly-stat-icon">*</span><span class="fly-stat-value">0</span><span class="fly-stat-label">Accounts required</span></div><div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value">1</span><span class="fly-stat-label">Protected AI route</span></div></div>
   </div>
@@ -305,7 +303,6 @@ function home():string{
     <a href="/remove-bg">Remove BG</a>
     <a href="/image-compressor">Image Compressor</a>
     <a href="/video-compressor">Video Compressor</a>
-    <a href="/passport-photo">Passport Size Photo Maker</a>
     <a href="/about">About</a>
     <a href="/faq">FAQ</a>
     <a href="/blogs">Blogs</a>
@@ -337,7 +334,7 @@ function home():string{
   <section class="home-scroll-section home-tools-section" id="home-tools" aria-labelledby="home-tools-title">
    <div class="home-section-heading">
     <p class="eyebrow">START HERE</p>
-    <h2 id="home-tools-title">Four tools. Clear boundaries.</h2>
+    <h2 id="home-tools-title">Three tools. Clear boundaries.</h2>
     <p>Open a folder to peek inside. Each tool keeps its processing boundary visible before you start.</p>
    </div>
    <div class="home-folder-grid">
@@ -436,7 +433,7 @@ function home():string{
 
 function notFound():string{return shell(`<main class="page prose reveal"><p class="eyebrow">404 · PAGE NOT FOUND</p><h1>That page has flown away.</h1><p>The address may be outdated or mistyped. The tools and guides are still here.</p><div class="home-final-actions"><a class="fly-cta" href="/">Back home</a><a class="text-link" href="/features">Open the toolkit ↗</a><a class="text-link" href="/faq">Read the FAQ ↗</a></div></main>`,"404 — FlyThe BG");}
 
-function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose a tool.<br>and get to work.</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a><a href="/passport-photo"><span>04</span><div><b>Passport Size Visa Photo Maker</b><small>Single-page guided workflow · crop, color, size and print sheet</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>Tip:</b> For large video files, close unnecessary browser tabs to keep more memory available.</div></main>`,"Get Started — FlyThe BG");}
+function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose a tool.<br>and get to work.</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>Tip:</b> For large video files, close unnecessary browser tabs to keep more memory available.</div></main>`,"Get Started — FlyThe BG");}
 
 function support():string{return shell(`<main class="support-studio reveal"><section class="support-studio-hero"><div class="support-spark">✦ SUPPORT MODE ✦</div><p class="eyebrow">THE ONE PAGE WITH A LITTLE CHAOS</p><h1>FlyThe BG<br><span>runs on vibes &amp; coffee.</span></h1><p>If the tools saved you a tab, a task or a tiny headache, you can keep the project moving. Zero pressure. Seriously.</p><div class="support-actions"><a class="support-btn support-btn-coffee" href="${COFFEE_URL}" target="_blank" rel="noopener noreferrer">☕ Buy me a coffee ↗</a><a class="support-btn support-btn-star" href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">⭐ Drop a star</a></div><div class="support-disclaimer">Payment happens on Buy Me a Coffee. FlyThe BG never processes your card, receives a payment confirmation, or pretends a redirect means you paid.</div></section><section class="support-chaos-grid"><article><b>01 / FREE SUPPORT</b><h2>Star it.</h2><p>No money. No signup. Just a tiny signal that the project should keep shipping.</p></article><article><b>02 / OPTIONAL IRL</b><h2>Coffee it.</h2><p>Choose your amount on the external Buy Me a Coffee page. Your payment stays there.</p></article><article><b>03 / ABSOLUTELY FINE</b><h2>Skip it.</h2><p>Use FlyThe BG and bounce. “Maybe later” is a completely valid support strategy.</p></article></section><section class="support-marquee" aria-hidden="true"><span>NO GUILT · NO FAKE PAYMENT STATUS · NO ACCOUNT · JUST OPTIONAL SUPPORT · </span><span>NO GUILT · NO FAKE PAYMENT STATUS · NO ACCOUNT · JUST OPTIONAL SUPPORT · </span></section></main>`,"Support FlyThe BG — Buy Me a Coffee");}
 
@@ -725,7 +722,7 @@ function wireFlyLanding():void{
   stats.forEach(s=>observer.observe(s));
  }else stats.forEach(s=>animate(s));
 }
-function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/passport-photo":"/passport-photo","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/blogs":"/blogs","/blogs/remove-background-online-privacy":"/blogs/remove-background-online-privacy","/blogs/compress-images-in-browser":"/blogs/compress-images-in-browser","/blogs/webm-video-compression-guide":"/blogs/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/";}
+function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/blogs":"/blogs","/blogs/remove-background-online-privacy":"/blogs/remove-background-online-privacy","/blogs/compress-images-in-browser":"/blogs/compress-images-in-browser","/blogs/webm-video-compression-guide":"/blogs/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string,tool?:ToolId):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();if(tool){const workspace=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`)?.closest(".tool-workspace");if(workspace){workspace.querySelector(".download-recovery")?.remove();const recovery=document.createElement("div");recovery.className="download-recovery";recovery.innerHTML=`<span><strong>Your file is ready.</strong> If the browser download was cancelled or missed, use Download again.</span><button type="button" class="button primary">Download again</button>`;recovery.querySelector("button")?.addEventListener("click",()=>{const retry=document.createElement("a");retry.href=url;retry.download=filename;retry.rel="noopener";document.body.appendChild(retry);retry.click();retry.remove();});workspace.appendChild(recovery);}}setTimeout(()=>URL.revokeObjectURL(url),300000);}
 function setProgress(tool:ToolId,value:number,label?:string):void{const n=Math.max(0,Math.min(100,value));const bar=document.querySelector<HTMLElement>(`[data-progress="${tool}"]`);if(bar)bar.style.width=`${n}%`;const text=document.querySelector<HTMLElement>(`[data-progress-label="${tool}"]`);if(text)text.textContent=label??`${Math.round(n)}%`;}
 function updateStatus(tool:ToolId,message:string):void{const el=document.querySelector<HTMLElement>(`[data-status="${tool}"]`);if(el)el.textContent=message;}
@@ -894,8 +891,6 @@ function render():void{
   break;
   case "/video-compressor":page=toolPage("video-compressor","03","Compress Video Online","Create a smaller WebM locally in your browser with visible progress.","video/*","local processing","The original video stays in your browser during compression.");
   break;
-  case "/passport-photo":page=shell('<main class="passport-page-shell"><div id="passport-photo-root"></div></main>',"Passport Size Visa Photo Maker — FlyThe BG");
-  break;
   case "/features":page=features();break;
   case "/about":page=about();break;
   case "/faq":page=faq();break;
@@ -916,21 +911,6 @@ function render():void{
   default:page=home();
  }
  app.innerHTML=page;
- if(route==="/passport-photo"){
-  const mount=()=>{const passportWire=(window as any).__flyPassportWire; if(typeof passportWire==="function"){passportWire();return true;}return false;};
-  if(!mount()){
-    const existing=document.querySelector<HTMLScriptElement>('script[data-passport-loader="1"]');
-    if(existing){existing.addEventListener("load",()=>mount(),{once:true});}
-    else{
-      const script=document.createElement("script");
-      script.src="/assets/passport-photo.js?v=20260927-2";
-      script.defer=true;
-      script.dataset.passportLoader="1";
-      script.addEventListener("load",()=>mount(),{once:true});
-      document.head.appendChild(script);
-    }
-  }
- }
  wireTools();
  wireSpaceExperience();
  wireFlyLanding();
