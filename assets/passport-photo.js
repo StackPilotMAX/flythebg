@@ -165,13 +165,12 @@
           '</section>',
 
           '<section class="passport-slide" data-pp-slide="2" aria-labelledby="pp-title-3" hidden>',
-            '<div class="passport-slide-title"><span>STEP 03</span><h2 id="pp-title-3">What should happen to the background?</h2><p>Choose the route once. If you remove the background, FlyThe BG reuses the existing protected AI endpoint and the same Cloudflare server-side Hugging Face token you already configured. No Hugging Face Space changes are made.</p></div>',
+            '<div class="passport-slide-title"><span>STEP 03</span><h2 id="pp-title-3">Keep the original background.</h2><p>Background removal is temporarily disabled while the AI processor is being stabilized. Your photo stays entirely in this browser workflow.</p></div>',
             '<div class="passport-choice-grid">',
-              '<button type="button" class="passport-choice is-selected" data-pp-bg-choice="remove"><span class="passport-choice-icon">✦</span><strong>Remove background</strong><small>Send only the cropped image to the existing FlyThe BG AI route and create a transparent result.</small></button>',
-              '<button type="button" class="passport-choice" data-pp-bg-choice="keep"><span class="passport-choice-icon">◌</span><strong>Keep original background</strong><small>Everything stays in the browser and the selected background remains part of the photo.</small></button>',
+              '<button type="button" class="passport-choice is-selected" data-pp-bg-choice="keep"><span class="passport-choice-icon">◌</span><strong>Keep original background</strong><small>The cropped photo remains local. No AI request is made.</small></button>',
             '</div>',
-            '<div class="passport-callout" data-pp-ai-note><b>Protected AI route</b><span>The browser never receives the Hugging Face token. The existing worker handles the protected request.</span></div>',
-            '<p class="passport-status" role="status" aria-live="polite" data-pp-bg-status>Remove background is selected.</p>',
+            '<div class="passport-callout"><b>Local-only for now</b><span>Background removal will be added back after the processor is stable.</span></div>',
+            '<p class="passport-status" role="status" aria-live="polite" data-pp-bg-status>Original background will be kept.</p>',
             '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-bg-next>Continue →</button></div>',
           '</section>',
 
@@ -252,7 +251,7 @@
       image: null,
       crop: null,
       cropAspect: null,
-      bgMode: "remove",
+      bgMode: "keep",
       resultUrl: "",
       resultImage: null,
       color: "#FFFFFF",
@@ -296,7 +295,9 @@
       slides.forEach(function (slide, i) {
         const active = i === state.step;
         slide.hidden = !active;
+        slide.style.display = active ? "block" : "none";
         slide.classList.toggle("is-active", active);
+        slide.setAttribute("aria-hidden", active ? "false" : "true");
       });
       if (state.step === 1) {
         requestAnimationFrame(drawCrop);
@@ -331,13 +332,9 @@
           return;
         }
         if (state.step === 2) {
-          state.step = 2;
-          prepareBackgroundResult().then(function () {
-            if (!state.busy) {
-              state.step = 3;
-              updateHeader();
-            }
-          });
+          prepareBackgroundResult();
+          state.step = 3;
+          updateHeader();
           return;
         }
         if (state.step === 3) {
@@ -641,49 +638,14 @@
       return canvas;
     }
 
-    async function prepareBackgroundResult() {
-      if (state.busy) return;
-      state.busy = true;
+    function prepareBackgroundResult() {
+      state.busy = false;
       const status = q("[data-pp-bg-status]");
-      const call = function (message) { status.textContent = message; };
-      q("[data-pp-bg-next]").disabled = true;
-      try {
-        const cropCanvasResult = extractCropCanvas();
-        if (state.bgMode === "keep") {
-          state.resultUrl = state.resultUrl ? state.resultUrl : cropCanvasResult.toDataURL("image/png");
-          state.resultImage = await loadImageFromBlob(await canvasBlob(cropCanvasResult, "image/png"));
-          call("Original background kept. Nothing was uploaded.");
-          setResultBadge();
-          return;
-        }
-        call("Preparing your cropped image for the existing protected AI route…");
-        const blob = await canvasBlob(cropCanvasResult, "image/png");
-        const response = await fetch("/api/remove-bg", {
-          method: "POST",
-          headers: { "Content-Type": "image/png", "Accept": "image/png" },
-          body: blob
-        });
-        if (!response.ok) {
-          let message = "Background removal failed.";
-          try {
-            const data = await response.json();
-            if (data && data.error) message = data.error;
-          } catch (_) {}
-          throw new Error(message);
-        }
-        call("AI finished. Preparing the photo preview…");
-        if (state.resultImage && state.resultImage.__flyObjectUrl) URL.revokeObjectURL(state.resultImage.__flyObjectUrl);
-        state.resultImage = await loadImageFromBlob(await response.blob());
-        state.resultUrl = state.resultImage.__flyObjectUrl || "";
-        call("Background removed. Choose your final background style next.");
-        setResultBadge();
-      } catch (error) {
-        call(error instanceof Error ? error.message : "Background processing failed.");
-        throw error;
-      } finally {
-        state.busy = false;
-        q("[data-pp-bg-next]").disabled = false;
-      }
+      if (status) status.textContent = "Original background kept. Nothing was uploaded.";
+      const cropCanvasResult = extractCropCanvas();
+      state.resultUrl = cropCanvasResult.toDataURL("image/png");
+      state.resultImage = cropCanvasResult;
+      setResultBadge();
     }
 
     function setResultBadge() {
@@ -702,7 +664,7 @@
     function updateResultPreview() {
       const frame = q("[data-pp-result-image]");
       if (!state.resultImage || !frame) return;
-      frame.src = state.resultImage.src;
+      frame.src = state.resultImage instanceof HTMLCanvasElement ? state.resultImage.toDataURL("image/png") : state.resultImage.src;
       frame.style.background = state.color;
       frame.style.backgroundImage = state.backgroundImageUrl ? "url(\"" + state.backgroundImageUrl + "\")" : "none";
       frame.style.backgroundSize = "cover";
@@ -938,17 +900,9 @@
 
     qa("[data-pp-bg-choice]").forEach(function (button) {
       button.addEventListener("click", function () {
-        if (state.busy) return;
-        qa("[data-pp-bg-choice]").forEach(function (b) { b.classList.remove("is-selected"); });
-        button.classList.add("is-selected");
-        state.bgMode = button.dataset.ppBgChoice;
-        q("[data-pp-ai-note]").hidden = state.bgMode !== "remove";
-        q("[data-pp-bg-status]").textContent = state.bgMode === "remove"
-          ? "Remove background is selected. Continue to run the existing protected AI route."
-          : "Keep original background is selected. The photo will stay in your browser.";
-        if (state.bgMode === "keep") {
-          q("[data-pp-ai-note]").hidden = true;
-        }
+        state.bgMode = "keep";
+        q("[data-pp-bg-status]").textContent = "Original background will be kept.";
+        setResultBadge();
       });
     });
 
