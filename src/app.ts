@@ -1,7 +1,7 @@
 type ToolId = "remove-bg" | "image-compressor" | "video-compressor";
 type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blog" | "/blog/remove-background-online-privacy" | "/blog/compress-images-in-browser" | "/blog/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog" | "/404";
 
-const VIDEO="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260912_104303_0c6d60b2-9353-408e-9449-585108a22fb5.mp4";
+const VIDEO="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4";
 const POSTER="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg";
 const GITHUB_REPO="StackPilotMAX/flythebg";
 const GITHUB_URL="https://github.com/StackPilotMAX/flythebg";
@@ -245,7 +245,7 @@ function shell(content:string,title:string):string{
  const active=(route:string)=>path===route?' class="is-active" aria-current="page"':'';
  return `<div class="fly-site ${path==="/support"?"fly-site-support":""}">
  <section class="fly-site-hero">
-  <div class="fly-bg fly-bg-static" aria-hidden="true"><video class="fly-bg-video" muted loop playsinline autoplay preload="metadata" aria-hidden="true"><source src="${VIDEO}" type="video/mp4"></video></div><div class="fly-bg-shade"></div>
+  <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" muted loop playsinline preload="none" poster="${POSTER}" data-deferred-video aria-hidden="true"><source data-src="${VIDEO}" type="video/mp4"></video></video><div class="fly-bg-shade"></div></div>
   <div class="fly-page">
    <header class="fly-header"><a class="fly-logo" href="/" aria-label="FlyThe BG home"><img src="/assets/flythebg-logo.png" alt="FlyThe BG" class="site-logo"></a><nav class="fly-nav" aria-label="Primary navigation"><a href="/"${active("/")}>Home</a><a href="/features"${active("/features")}>Tools</a><a href="/about"${active("/about")}>About</a><a href="/contact"${active("/contact")}>Contact</a></nav><a class="fly-signin" href="/features">Get Started</a><button class="fly-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="fly-mobile-menu"><i></i><i></i><i></i></button></header>
    <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/blog">Blog</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
@@ -280,7 +280,7 @@ function home():string{
  return `<main class="fly-home">
   <div class="fly-bg" aria-hidden="true">
    <video class="fly-bg-video" muted loop playsinline preload="none" poster="${POSTER}" data-deferred-video aria-hidden="true">
-    <source data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4" type="video/mp4">
+    <source data-src="${VIDEO}" type="video/mp4">
    </video>
    <div class="fly-bg-shade"></div>
   </div>
