@@ -146,7 +146,7 @@
                 '<div class="passport-file-meta"><strong data-pp-file-name>Photo selected</strong><span data-pp-file-dims></span></div>',
               '</div>',
             '</div>',
-            '<label class="passport-consent"><input type="checkbox" data-pp-consent><span class="passport-consent-box">✓</span><span><strong>I accept the FlyThe BG Terms and Privacy notice for this workflow.</strong><small>I understand that the image only leaves my browser if I choose AI background removal later. I have permission to process this photo.</small></span></label>',
+            '<label class="passport-consent"><input type="checkbox" data-pp-consent><span class="passport-consent-box">✓</span><span><strong>I accept the FlyThe BG <a href="/terms" target="_blank" rel="noopener">Terms</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> for this workflow.</strong><small>I understand that the image only leaves my browser if I choose AI background removal later. I have permission to process this photo.</small></span></label>',
             '<p class="passport-status" role="status" aria-live="polite" data-pp-status>Choose a photo and accept the notice to continue.</p>',
             '<div class="passport-nav"><span></span><button class="button primary" type="button" data-pp-next disabled>Continue to crop →</button></div>',
           '</section>',
