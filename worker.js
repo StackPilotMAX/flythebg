@@ -190,6 +190,16 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    const legacyHomeMap = {
+      "/index.html": "/",
+      "/index.htm": "/",
+      "/index": "/",
+      "/home": "/"
+    };
+    if (legacyHomeMap[url.pathname]) {
+      return Response.redirect(new URL(legacyHomeMap[url.pathname], request.url).toString(), 301);
+    }
+
     const legacyBlogMap = {
       "/blog": "/blogs",
       "/blog/remove-background-online-privacy": "/blogs/remove-background-online-privacy",
