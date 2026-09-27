@@ -1165,3 +1165,9 @@ body.app-pending #app .seo-fallback,body.app-pending #app .passport-page-shell{v
 body.app-pending #app{min-height:100svh;display:grid;place-items:center}
 body.app-pending #app:after{content:"Loading FlyThe BG…";color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
 body:not(.app-pending) #app:after{display:none}
+
+
+/* Deterministic first paint: never expose Worker fallback while the SPA is mounting. */
+body.app-pending #app{visibility:hidden;min-height:100svh}
+body.app-pending::after{content:"Loading FlyThe BG…";position:fixed;inset:0;display:grid;place-items:center;z-index:2147483647;color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;pointer-events:none}
+body:not(.app-pending)::after{display:none}
