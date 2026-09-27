@@ -10,6 +10,8 @@ await cp("assets/flythebg-logo.png", "public/assets/flythebg-logo.png");
 await cp("assets/site.css", "public/assets/site.css");
 await cp("assets/pill-nav.css", "public/assets/pill-nav.css");
 await cp("assets/pill-nav.js", "public/assets/pill-nav.js");
+await cp("assets/passport-photo.js", "public/assets/passport-photo.js");
+await cp("assets/passport-photo.css", "public/assets/passport-photo.css");
 await cp("worker.js", "public/worker.js");
 await cp("functions/api/remove-bg.js", "public/functions/api/remove-bg.js");
 
