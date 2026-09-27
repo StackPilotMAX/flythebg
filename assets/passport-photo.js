@@ -1246,4 +1246,7 @@
   }
 
   window.__flyPassportWire = makePhotoPage;
+  const bootPassportPhoto = () => { if (document.querySelector("#passport-photo-root")) makePhotoPage(); };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bootPassportPhoto, { once: true });
+  else bootPassportPhoto();
 })();
