@@ -1217,3 +1217,39 @@ body:not(.app-pending)::after{display:none}
 .home-folder-card:nth-child(3) .interactive-folder{--folder-color:#EF4444!important;--folder-back:#B91C1C!important}.home-folder-card:nth-child(3) .folder-back,.home-folder-card:nth-child(3) .folder-tab{background:#B91C1C!important}.home-folder-card:nth-child(3) .folder-flap{background:#EF4444!important}
 .home-folder-card:nth-child(4) .interactive-folder{--folder-color:#FACC15!important;--folder-back:#CA8A04!important}.home-folder-card:nth-child(4) .folder-back,.home-folder-card:nth-child(4) .folder-tab{background:#CA8A04!important}.home-folder-card:nth-child(4) .folder-flap{background:#FACC15!important}.home-folder-card:nth-child(4) .folder-label{color:#17130a!important}
 .home-folder-card:nth-child(1) .folder-paper{border-top:4px solid #8B5CF6}.home-folder-card:nth-child(2) .folder-paper{border-top:4px solid #3B82F6}.home-folder-card:nth-child(3) .folder-paper{border-top:4px solid #EF4444}.home-folder-card:nth-child(4) .folder-paper{border-top:4px solid #FACC15}
+
+
+/* Passport Size Visa Photo Maker — one-page print studio */
+.passport-page-shell{max-width:1180px;margin:0 auto;padding:32px 22px 80px;color:#17131f}
+.passport-hero{padding:48px 42px;margin-bottom:24px;border-radius:30px;background:linear-gradient(135deg,#171022,#3b1f67 58%,#6d35b8);color:#fff;box-shadow:0 24px 70px rgba(32,18,52,.18)}
+.passport-hero h1{margin:6px 0 12px;font-size:clamp(2rem,5vw,4.2rem);line-height:.98;letter-spacing:-.05em}
+.passport-hero p:last-child{max-width:760px;margin:0;color:rgba(255,255,255,.8);font-size:1.05rem}
+.passport-card{margin:0 0 22px;padding:30px;border:1px solid #e7e1ed;border-radius:24px;background:#fff;box-shadow:0 12px 35px rgba(33,20,45,.07)}
+.passport-step-head{display:flex;gap:18px;align-items:flex-start;margin-bottom:22px}
+.passport-step-head>span{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:#171022;color:#fff;font-weight:800}
+.passport-step-head h2{margin:2px 0 5px;font-size:clamp(1.25rem,2.2vw,1.8rem);letter-spacing:-.025em}
+.passport-step-head p{margin:0;color:#6d6673}
+.passport-upload-zone{display:grid;place-items:center;min-height:190px;padding:25px;border:2px dashed #c8bfd0;border-radius:20px;background:#faf8fc;cursor:pointer;text-align:center;transition:.2s ease}
+.passport-upload-zone:hover{border-color:#7040a8;background:#f6f0fb}
+.passport-upload-zone strong{font-size:1.15rem}.passport-upload-zone span{color:#756d7c}
+.passport-upload-preview{display:flex;gap:18px;align-items:center;margin-top:16px;padding:16px;border-radius:18px;background:#f7f4f9}
+.passport-upload-preview img{width:120px;height:120px;object-fit:cover;border-radius:12px}
+.passport-upload-preview div{display:grid;gap:7px}.passport-upload-preview small{color:#766f7c}
+.passport-consent{display:flex;gap:10px;align-items:flex-start;margin-top:18px;color:#514958;font-size:.94rem;line-height:1.5}.passport-consent input{margin-top:4px}
+.passport-status{margin:15px 0 0;padding:11px 14px;border-radius:12px;background:#f4f1f6;color:#514958}
+.passport-crop-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(240px,.7fr);gap:24px}
+.passport-crop-stage{position:relative;overflow:hidden;min-height:320px;display:grid;place-items:center;border-radius:20px;background:#151217;touch-action:none}
+.passport-crop-stage img{display:block;max-width:100%;max-height:620px;width:auto;height:auto;object-fit:contain;user-select:none}
+.passport-crop-stage.is-selecting{cursor:crosshair}
+.passport-crop-box{position:absolute;border:2px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}.passport-crop-box span{position:absolute;left:8px;top:8px;padding:4px 7px;border-radius:7px;background:#171022;color:#fff;font-size:.72rem}
+.passport-crop-controls{display:flex;flex-direction:column;gap:12px}.passport-crop-controls p{margin:0;color:#716a76;line-height:1.5}.passport-selection-readout{padding:14px;border-radius:14px;background:#f6f3f7;font-weight:700}
+.passport-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.passport-choice{padding:20px;border:1px solid #ded6e4;border-radius:18px;background:#fff;text-align:left;cursor:pointer}.passport-choice strong,.passport-choice span{display:block}.passport-choice span{margin-top:7px;color:#746c79;line-height:1.45}.passport-choice.is-selected{border-color:#7040a8;box-shadow:0 0 0 2px rgba(112,64,168,.12);background:#faf6ff}
+.passport-bg-action{margin-top:16px}
+.passport-form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.passport-form-grid label,.passport-color-controls label,.passport-image-bg,.passport-output-controls>label{display:grid;gap:7px;font-weight:700;font-size:.88rem;color:#4d4653}.passport-form-grid input,.passport-form-grid select,.passport-color-controls input,.passport-image-bg input,.passport-output-controls input{width:100%;min-height:44px;border:1px solid #d9d1df;border-radius:11px;padding:10px 12px;background:#fff;color:#211c25}
+.passport-swatches{display:flex;flex-wrap:wrap;gap:10px}.passport-swatches button{min-width:105px;min-height:66px;padding:9px;border:1px solid #ddd5e2;border-radius:14px;background:#fff;cursor:pointer;text-align:left}.passport-swatches button:before{content:"";display:block;width:100%;height:25px;margin-bottom:7px;border-radius:7px;background:var(--swatch);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}.passport-swatches button.is-selected{border-color:#7040a8;box-shadow:0 0 0 2px rgba(112,64,168,.12)}
+.passport-color-controls{display:grid;grid-template-columns:160px 1fr 1fr;gap:14px;margin-top:18px}.passport-image-bg{margin-top:16px;padding:14px;border:1px dashed #d6cddd;border-radius:14px}
+.passport-layout-summary{margin-top:18px;padding:16px;border-radius:15px;background:#f4f1f6;font-weight:700}
+.passport-output-controls{display:grid;grid-template-columns:180px 1fr auto;gap:16px;align-items:end}.passport-capacity{min-height:44px;padding:12px 14px;border-radius:12px;background:#f6f3f7;color:#4e4754}.passport-capacity strong{display:block}
+.passport-generate:disabled{opacity:.45;cursor:not-allowed}.passport-result{margin-top:25px;padding:18px;border-radius:20px;background:#f6f3f7}.passport-result-head{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:15px}.passport-result h3{margin:3px 0}.passport-result img{display:block;width:100%;max-height:700px;object-fit:contain;background:#fff;border-radius:12px}.passport-result small{display:block;margin-top:12px;color:#716a76}
+@media(max-width:800px){.passport-page-shell{padding:18px 12px 55px}.passport-hero,.passport-card{padding:22px;border-radius:20px}.passport-crop-layout,.passport-choice-grid,.passport-form-grid,.passport-color-controls,.passport-output-controls{grid-template-columns:1fr}.passport-crop-stage{min-height:240px}.passport-upload-preview{align-items:flex-start}.passport-upload-preview img{width:88px;height:88px}.passport-result-head{display:grid}.passport-result-head .button{width:100%;text-align:center}}
+@media(prefers-reduced-motion:reduce){.passport-upload-zone,.passport-choice{transition:none}}
