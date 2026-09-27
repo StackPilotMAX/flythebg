@@ -224,7 +224,6 @@ function shell(content:string,title:string):string{
  "/remove-bg":["PROTECTED AI","Remove Background","Designed To Fly"],
  "/image-compressor":["BROWSER-LOCAL","Compress Images","Designed To Fly"],
  "/video-compressor":["BROWSER-LOCAL","Compress Videos","Designed To Fly"],
- "/passport-photo":["BROWSER-FIRST","Passport & Visa Photos","Print Ready"],
  "/about":["OUR PROJECT","Built For Creators","Designed To Fly"],
  "/faq":["HELP CENTER","Clear Answers","Designed To Fly"],
  "/privacy":["YOUR PRIVACY","Privacy First","Designed To Fly"],
@@ -383,21 +382,7 @@ function home():string{
       <a href="/video-compressor" class="text-link">Open tool ↗</a>
      </div>
     </article>
-    <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-passport-photo" style="--folder-color:#FACC15;--folder-back:#CA8A04">
-      <span class="folder-canvas" aria-hidden="true">
-       <span class="folder-paper paper-one"><span class="paper-icon">ID</span><small>CROP</small></span>
-       <span class="folder-paper paper-two"><span class="paper-icon">A4</span><small>PRINT</small></span>
-       <span class="folder-paper paper-three"><span class="paper-icon">300</span><small>DPI</small></span>
-       <span class="folder-back"><span class="folder-tab"></span></span>
-       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">PASSPORT</span></span>
-      </span>
-     </button>
-     <div class="home-folder-info" id="folder-passport-photo">
-      <span>04 · BROWSER-FIRST</span><strong>Passport Size Photo</strong><small>Crop, size and arrange print-ready photos in your browser.</small>
-      <a href="/passport-photo" class="text-link">Open tool ↗</a>
-     </div>
-    </article>
+
    </div>
   </section>
   <section class="home-scroll-section home-privacy-section" aria-labelledby="home-privacy-title">
