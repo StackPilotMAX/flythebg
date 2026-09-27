@@ -53,3 +53,12 @@
 .passport-page-shell .passport-progress{display:none!important;}
 @media (min-width: 900px){.passport-one-page{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start;}.passport-one-page .passport-slide:first-child,.passport-one-page .passport-slide:last-child{grid-column:1 / -1;}}
 @media (max-width: 899px){.passport-one-page{grid-template-columns:1fr!important;}}
+
+
+/* Passport Photo Maker is a continuous page — no slide navigation or slide presentation. */
+.passport-one-page{display:block!important;grid-template-columns:none!important}
+.passport-one-page .passport-slide{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;transform:none!important;height:auto!important;min-height:0!important;overflow:visible!important;margin:0 0 24px!important}
+.passport-one-page .passport-slide:last-child{margin-bottom:0!important}
+.passport-one-page .passport-flow-actions{display:none!important}
+.passport-page-shell .passport-progress,.passport-page-shell .passport-stepper{display:none!important}
+@media(min-width:900px){.passport-one-page{width:100%!important}.passport-one-page .passport-slide{width:100%!important}}
