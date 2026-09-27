@@ -23,7 +23,7 @@ const [worker, app, html] = await Promise.all([
 if (!worker.includes("/api/remove-bg")) throw new Error("Worker API route missing");
 if (!app.includes("FlyThe BG")) throw new Error("Compiled app branding missing");
 if (!html.includes("assets/app.js")) throw new Error("HTML shell app entry missing");
-if (html.includes('rel="canonical" href="https://flythebg.com/"')) throw new Error("Static root canonical must not be shared by every SPA route");
+if (!worker.includes('output = output.replace("</head>"')) throw new Error("Server-side canonical injection missing");
 if (!app.includes("application/ld+json")) throw new Error("Route structured-data generation missing");
 if (!app.includes("BreadcrumbList")) throw new Error("Client BreadcrumbList schema missing");
 if (!worker.includes("ROUTE_META") || !worker.includes("applyRouteMeta")) throw new Error("Server-side route SEO metadata missing");
