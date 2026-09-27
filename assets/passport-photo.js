@@ -903,7 +903,7 @@
     function updateCopiesUI() {
       const layout = layoutInfo();
       q("[data-pp-max-copies]").textContent = String(layout.max || 0);
-      q("[data-pp-layout-summary]").textContent = layout.max ? (layout.cols + " × " + layout.rows + " regular layout") : "No valid layout";
+      q("[data-pp-layout-summary]").textContent = layout.max ? ((layout.useRotated ? layout.colsR : layout.cols) + " × " + (layout.useRotated ? layout.rowsR : layout.rows) + (layout.useRotated ? " landscape layout" : " portrait layout")) : "No valid layout";
       const qty = q("[data-pp-qty]");
       if (qty) {
         qty.max = String(layout.max || 1);
@@ -1222,6 +1222,7 @@
       q("[data-pp-g]").value = "255";
       q("[data-pp-b]").value = "255";
       if (q("[data-pp-background-image]")) q("[data-pp-background-image]").value = "";
+      setResultBadge();
       updatePhotoSizeUI();
       updatePaperUI();
       state.step = 0;
