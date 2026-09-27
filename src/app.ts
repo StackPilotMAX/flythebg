@@ -832,7 +832,7 @@ function render():void{
   break;
   case "/video-compressor":page=toolPage("video-compressor","03","Compress Video Online","Create a smaller WebM locally in your browser with visible progress.","video/*","local processing","The original video stays in your browser during compression.");
   break;
-  case "/passport-photo":page=shell('<main class="passport-page-shell reveal"><div id="passport-photo-root"></div></main>',"Passport Size Visa Photo Maker — FlyThe BG");
+  case "/passport-photo":page=shell('<main class="passport-page-shell"><div id="passport-photo-root"></div></main>',"Passport Size Visa Photo Maker — FlyThe BG");
   break;
   case "/features":page=features();break;
   case "/about":page=about();break;
