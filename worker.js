@@ -167,6 +167,9 @@ function applyRouteMeta(html, canonical, meta, isMissing) {
   output = output.replace("</head>", '<meta name="csp-nonce" content="' + nonce + '"><link rel="canonical" href="' + escapeHtml(canonical) + '"><script type="application/ld+json" data-fly-server-schema nonce="' + nonce + '">' + schema + '</script></head>');
   output = output.replace(/<meta name="robots"[^>]*>/i, isMissing ? '<meta name="robots" content="noindex,follow,noarchive">' : '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">');
   output = output.replace(/<div id="app">[\s\S]*?<\/div>/i, '<div id="app">' + buildSeoFallback(route, meta, canonical) + "</div>");
+  // Prevent the server-side SEO shell from flashing before the SPA mounts.
+  // If client JavaScript fails, reveal the fallback after 12 seconds.
+  output = output.replace("</body>", '<script nonce="' + nonce + '">setTimeout(function(){document.body.classList.remove("app-pending")},12000);</script></body>');
   return { body: output, status: isMissing ? 404 : 200, nonce };
 }
 
