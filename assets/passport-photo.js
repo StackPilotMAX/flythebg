@@ -288,23 +288,31 @@
       const label = q("[data-pp-step-label]");
       if (bar) bar.style.width = pct + "%";
       if (label) label.textContent = "STEP " + String(state.step + 1).padStart(2, "0") + " OF " + slides.length;
+
       dots.forEach(function (dot, i) {
         dot.classList.toggle("is-active", i === state.step);
         dot.classList.toggle("is-complete", i < state.step);
       });
-      slides.forEach(function (slide, i) {
-        const active = i === state.step;
-        slide.hidden = !active;
-        slide.style.display = active ? "block" : "none";
-        slide.classList.toggle("is-active", active);
-        slide.setAttribute("aria-hidden", active ? "false" : "true");
-      });
-      if (state.step === 1) {
-        requestAnimationFrame(drawCrop);
+
+      // Single mounted panel: only the current step exists in the live DOM.
+      // This avoids hidden/display/visibility CSS conflicts entirely.
+      const slideHost = q("[data-pp-slides]");
+      if (slideHost) {
+        slides.forEach(function (slide) {
+          if (slide.parentElement === slideHost) slideHost.removeChild(slide);
+        });
+        const activeSlide = slides[state.step];
+        if (activeSlide) {
+          activeSlide.hidden = false;
+          activeSlide.style.display = "block";
+          activeSlide.classList.add("is-active");
+          activeSlide.setAttribute("aria-hidden", "false");
+          slideHost.appendChild(activeSlide);
+        }
       }
-      if (state.step === 3) {
-        requestAnimationFrame(updateResultPreview);
-      }
+
+      if (state.step === 1) requestAnimationFrame(drawCrop);
+      if (state.step === 3) requestAnimationFrame(updateResultPreview);
       if (state.step === 4) updatePhotoSizeUI();
       if (state.step === 5) updatePaperUI();
       if (state.step === 6) updateCopiesUI();
