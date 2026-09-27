@@ -28,5 +28,6 @@ if (!app.includes("application/ld+json")) throw new Error("Route structured-data
 if (!app.includes("BreadcrumbList")) throw new Error("Client BreadcrumbList schema missing");
 if (!worker.includes("ROUTE_META") || !worker.includes("applyRouteMeta")) throw new Error("Server-side route SEO metadata missing");
 if (!worker.includes("application/ld+json") || !worker.includes("SoftwareApplication") || !worker.includes("Organization")) throw new Error("Server Schema.org graph missing");
-if (!worker.includes("status: isMissing ? 404 : 200")) throw new Error("Unknown routes must return HTTP 404");
+if (!worker.includes("return { body: output, status: 200, nonce }")) throw new Error("SPA fallback response contract missing");
+if (!worker.includes("return ROUTES.has(normalized) ? normalized : "/"")) throw new Error("Unknown routes must resolve to the FlyThe BG home route");
 console.log("FlyThe BG deployment artifact smoke checks passed.");
