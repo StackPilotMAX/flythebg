@@ -6,6 +6,7 @@ const ROUTE_META = {
   "/remove-bg": { title: "Remove Background Online Free — PNG & JPG | FlyThe BG", description: "Remove image backgrounds online with protected AI. Process PNG, JPG, and WEBP images up to 15 MB and download a transparent result." },
   "/image-compressor": { title: "Compress Images Online — JPG, PNG & WEBP | FlyThe BG", description: "Compress JPG, PNG, and WEBP images in your browser to reduce file size without uploading the original image to FlyThe BG." },
   "/video-compressor": { title: "Compress Video Online — WebM Video Compressor | FlyThe BG", description: "Compress video online in your browser and create a smaller WebM file with visible progress while your original video stays on your device." },
+  "/passport-photo": { title: "Passport Size Visa Photo Maker — Print-Ready Photo Sheets | FlyThe BG", description: "Create passport, visa and ID-style photo sheets in one browser workflow: crop the photo, keep or remove the background, choose cm or inches, select paper and set the number of copies." },
   "/about": { title: "About FlyThe BG — Privacy-First Image & Video Tools", description: "Learn how FlyThe BG combines protected AI background removal with local-first image and video tools and clear processing boundaries." },
   "/faq": { title: "FlyThe BG FAQ — Background Removal & Compression Guide", description: "Get answers about background removal, local image compression, video compression, file limits, downloads, privacy, and mobile use on FlyThe BG." },
   "/privacy": { title: "Privacy Policy — FlyThe BG — Media Tools Online", description: "Read the FlyThe BG privacy policy covering local compression, background-removal requests, providers, processing, retention, and user rights." },
@@ -30,7 +31,7 @@ function normalizeRoute(pathname) {
 const SITE_URL = "https://flythebg.com";
 const GITHUB_URL = "https://github.com/StackPilotMAX/flythebg";
 const INSTAGRAM_URL = "https://www.instagram.com/flythebg/";
-const TOOL_ROUTES = new Set(["/remove-bg","/image-compressor","/video-compressor"]);
+const TOOL_ROUTES = new Set(["/remove-bg","/image-compressor","/video-compressor","/passport-photo"]);
 
 function buildBreadcrumb(route, meta, canonical) {
   if (route === "/") return null;
