@@ -43,3 +43,13 @@
 .passport-page-shell{opacity:1!important;transform:none!important;visibility:visible!important}
 .passport-slide[hidden]{display:none!important}
 .passport-slide.is-active{display:block!important;visibility:visible!important;opacity:1!important}
+
+/* Passport Photo Maker — continuous one-page workflow. */
+.passport-one-page{display:grid!important;grid-template-columns:1fr!important;gap:24px!important;width:100%!important;}
+.passport-one-page .passport-slide{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;height:auto!important;min-height:0!important;transform:none!important;overflow:visible!important;}
+.passport-one-page .passport-slide[hidden]{display:block!important;}
+.passport-one-page .passport-nav{display:flex!important;}
+.passport-page-shell .passport-stepper{display:none!important;}
+.passport-page-shell .passport-progress{display:none!important;}
+@media (min-width: 900px){.passport-one-page{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start;}.passport-one-page .passport-slide:first-child,.passport-one-page .passport-slide:last-child{grid-column:1 / -1;}}
+@media (max-width: 899px){.passport-one-page{grid-template-columns:1fr!important;}}
