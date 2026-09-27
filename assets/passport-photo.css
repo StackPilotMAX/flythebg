@@ -38,3 +38,8 @@
 .passport-clear-bg:disabled{opacity:.45;cursor:not-allowed}
 
 .passport-consent a{color:var(--green);text-decoration:underline;text-underline-offset:2px}
+
+/* Passport workflow hardening: slide state is controlled by JS and must remain visible. */
+.passport-page-shell{opacity:1!important;transform:none!important;visibility:visible!important}
+.passport-slide[hidden]{display:none!important}
+.passport-slide.is-active{display:block!important;visibility:visible!important;opacity:1!important}
