@@ -249,7 +249,7 @@ function shell(content:string,title:string):string{
   <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" muted loop playsinline preload="none" poster="${POSTER}" data-deferred-video aria-hidden="true"><source data-src="${VIDEO}" type="video/mp4"></video><div class="fly-bg-shade"></div></div>
   <div class="fly-page">
    <header class="fly-header"><a class="fly-logo" href="/" aria-label="FlyThe BG home"><img src="/assets/flythebg-logo.png" alt="FlyThe BG" class="site-logo"></a><nav class="fly-nav" aria-label="Primary navigation"><a href="/"${active("/")}>Home</a><a href="/features"${active("/features")}>Tools</a><a href="/about"${active("/about")}>About</a><a href="/contact"${active("/contact")}>Contact</a></nav><a class="fly-signin" href="/features">Get Started</a><button class="fly-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="fly-mobile-menu"><i></i><i></i><i></i></button></header>
-   <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/blogs">Blogs</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
+   <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/passport-photo">Passport Photos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/blogs">Blogs</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
    <section class="fly-hero"><div class="fly-trust anim" style="--d:.05s"><div class="fly-avatars" aria-hidden="true"><span><span class="fly-avatar-inner">✦</span></span><span><span class="fly-avatar-inner">◌</span></span><span><span class="fly-avatar-inner">↗</span></span></div><div class="fly-trust-pill">${eyebrow}</div></div><h2 class="fly-headline"><span>${line1}</span><span>${line2}</span></h2><p class="fly-subhead anim" style="--d:.28s">FlyThe BG brings practical media tools together in one focused experience.</p><a class="fly-cta anim" style="--d:.4s" href="#page-content">Explore ${line1} ↓</a></section>
    <div class="fly-stats"><div class="fly-stat anim" style="--d:.5s"><span class="fly-stat-icon">&lt;</span><span class="fly-stat-value">15 MB</span><span class="fly-stat-label">Background upload limit</span></div><div class="fly-stat anim" style="--d:.58s"><span class="fly-stat-icon">%</span><span class="fly-stat-value">2</span><span class="fly-stat-label">Browser-local tools</span></div><div class="fly-stat anim" style="--d:.66s"><span class="fly-stat-icon">*</span><span class="fly-stat-value">0</span><span class="fly-stat-label">Accounts required</span></div><div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value">1</span><span class="fly-stat-label">Protected AI route</span></div></div>
   </div>
@@ -335,7 +335,7 @@ function home():string{
   <section class="home-scroll-section home-tools-section" id="home-tools" aria-labelledby="home-tools-title">
    <div class="home-section-heading">
     <p class="eyebrow">START HERE</p>
-    <h2 id="home-tools-title">Three tools. Clear boundaries.</h2>
+    <h2 id="home-tools-title">Four tools. Clear boundaries.</h2>
     <p>Open a folder to peek inside. Each tool keeps its processing boundary visible before you start.</p>
    </div>
    <div class="home-folder-grid">
@@ -382,6 +382,21 @@ function home():string{
      <div class="home-folder-info" id="folder-video-compressor">
       <span>03 · BROWSER-LOCAL</span><strong>Compress Video</strong><small>Create a smaller WebM without uploading the original.</small>
       <a href="/video-compressor" class="text-link">Open tool ↗</a>
+     </div>
+    </article>
+    <article class="home-folder-card">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-passport-photo" style="--folder-color:#FACC15;--folder-back:#CA8A04">
+      <span class="folder-canvas" aria-hidden="true">
+       <span class="folder-paper paper-one"><span class="paper-icon">ID</span><small>PHOTO</small></span>
+       <span class="folder-paper paper-two"><span class="paper-icon">CM</span><small>INCHES</small></span>
+       <span class="folder-paper paper-three"><span class="paper-icon">A4</span><small>PRINT</small></span>
+       <span class="folder-back"><span class="folder-tab"></span></span>
+       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">PASSPORT</span></span>
+      </span>
+     </button>
+     <div class="home-folder-info" id="folder-passport-photo">
+      <span>04 · PRINT STUDIO</span><strong>Passport Size Visa Photo Maker</strong><small>Crop, background, exact size, paper layout and printable copies.</small>
+      <a href="/passport-photo" class="text-link">Open tool ↗</a>
      </div>
     </article>
 
