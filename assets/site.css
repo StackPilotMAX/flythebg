@@ -1161,7 +1161,7 @@ body:has(.experience){
 @media(max-width:720px){.fly-logo{min-width:118px;height:38px}.fly-logo .site-logo{height:38px;max-width:118px}}
 
 /* Stable first paint: keep server SEO fallback hidden until the SPA has mounted. */
-body.app-pending #app .seo-fallback,body.app-pending #app .passport-page-shell{visibility:hidden}
+body.app-pending #app .seo-fallback{visibility:hidden}
 body.app-pending #app{min-height:100svh;display:grid;place-items:center}
 body.app-pending #app:after{content:"Loading FlyThe BG…";color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
 body:not(.app-pending) #app:after{display:none}
