@@ -13,10 +13,10 @@ const ROUTE_META = {
   "/terms": { title: "Terms of Use — FlyThe BG — Online Media Tools", description: "Read the FlyThe BG terms covering tool use, downloads, third-party services, availability, acceptable use, and user responsibilities." },
   "/contact": { title: "Contact FlyThe BG — Support & Privacy Requests", description: "Contact FlyThe BG for product support, privacy requests, corrections, accessibility problems, or security reports related to the website." },
   "/support": { title: "Support FlyThe BG — Keep the Project Running", description: "Support the independent FlyThe BG project through GitHub or Buy Me a Coffee. Supporting the project is optional and does not unlock features." },
-  "/blog": { title: "FlyThe BG Journal — Image, Video & Privacy Guides", description: "Read practical guides about background removal, image compression, WebM video compression, browser processing, privacy, and media workflows." },
-  "/blog/remove-background-online-privacy": { title: "Remove Background Online: Privacy Guide | FlyThe BG", description: "Learn what happens when you remove an image background online, what data may leave your device, and which privacy questions to ask." },
-  "/blog/compress-images-in-browser": { title: "How to Compress Images in Your Browser | FlyThe BG", description: "Learn how browser-based image compression works, how file size changes, and why keeping the original image on your device matters." },
-  "/blog/webm-video-compression-guide": { title: "WebM Video Compression Guide — Codecs & Size | FlyThe BG", description: "Learn how WebM video compression works in browsers, how codecs affect size and quality, and what to check for compatibility." },
+  "/blogs": { title: "FlyThe BG Blogs — Image, Video & Privacy Guides", description: "Read practical first-party guides about background removal, image compression, passport-photo preparation, browser processing, privacy, and media workflows." },
+  "/blogs/remove-background-online-privacy": { title: "Remove Background Online: Privacy Guide | FlyThe BG", description: "Learn what happens when you remove an image background online, what data may leave your device, and which privacy questions to ask." },
+  "/blogs/compress-images-in-browser": { title: "How to Compress Images in Your Browser | FlyThe BG", description: "Learn how browser-based image compression works, how file size changes, and why keeping the original image on your device matters." },
+  "/blogs/webm-video-compression-guide": { title: "WebM Video Compression Guide — Codecs & Size | FlyThe BG", description: "Learn how WebM video compression works in browsers, how codecs affect size and quality, and what to check for compatibility." },
   "/code-of-conduct": { title: "Code of Conduct — FlyThe BG Community", description: "Read the FlyThe BG community standards for respectful, constructive, inclusive, and privacy-conscious participation across the project." },
   "/accessibility": { title: "Accessibility — FlyThe BG Website & Tools", description: "Read how FlyThe BG approaches keyboard access, touch controls, reduced motion, readable content, and reporting accessibility barriers." },
   "/security": { title: "Security at FlyThe BG — Vulnerability Reporting", description: "Learn how FlyThe BG protects its media tools and how to report a security vulnerability or privacy-sensitive problem." },
@@ -36,8 +36,8 @@ const TOOL_ROUTES = new Set(["/remove-bg","/image-compressor","/video-compressor
 function buildBreadcrumb(route, meta, canonical) {
   if (route === "/") return null;
   const items = [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL + "/" }];
-  if (route.startsWith("/blog/")) {
-    items.push({ "@type": "ListItem", position: 2, name: "Blog", item: SITE_URL + "/blog" });
+  if (route.startsWith("/blogs/")) {
+    items.push({ "@type": "ListItem", position: 2, name: "Blogs", item: SITE_URL + "/blogs" });
     items.push({ "@type": "ListItem", position: 3, name: meta.title });
   } else if (TOOL_ROUTES.has(route)) {
     items.push({ "@type": "ListItem", position: 2, name: "Tools", item: SITE_URL + "/features" });
@@ -53,8 +53,11 @@ function buildStructuredData(route, canonical, meta) {
     "@type": "Organization",
     "@id": SITE_URL + "/#organization",
     name: "FlyThe BG",
+    alternateName: "FlyTheBG",
     url: SITE_URL + "/",
     description: "Independent privacy-focused media tools and background-removal project.",
+    logo: SITE_URL + "/assets/flythebg-icon.png",
+    image: SITE_URL + "/assets/flythebg-icon.png",
     email: "support@flythebg.com",
     sameAs: [GITHUB_URL, INSTAGRAM_URL]
   };
@@ -89,7 +92,7 @@ function buildStructuredData(route, canonical, meta) {
   if (TOOL_ROUTES.has(route)) graph.push(application);
 
   const breadcrumb = buildBreadcrumb(route, meta, canonical);
-  if (route.startsWith("/blog/")) {
+  if (route.startsWith("/blogs/")) {
     graph.push({
       "@type": "BlogPosting",
       "@id": canonical + "#article",
@@ -127,7 +130,7 @@ function buildSeoFallback(route, meta, canonical) {
   ];
   let sections = "";
   if (route === "/") {
-    sections = '<h2>Free background removal and media tools</h2><p>Remove a background from a PNG, JPG, or WEBP image through the protected FlyThe BG AI route. Image compression and video compression are designed to run locally in your browser, keeping the original file on your device during those workflows.</p><h2>Choose the right tool</h2><p>' + link("/remove-bg", "Remove background online") + ' for AI background removal, ' + link("/image-compressor", "compress images online") + ' for browser-local JPEG compression, or ' + link("/video-compressor", "compress video online") + ' to create a smaller WebM file locally.</p><h2>Clear privacy boundaries</h2><p>No FlyThe BG account is required. The background-removal request is sent only when you select a supported image, accept the processing notice, and start the tool. Local compression does not upload the original media to FlyThe BG.</p><h2>Guides and answers</h2><p>Read the ' + link("/blog", "FlyThe BG Journal") + ' for practical media and privacy guides, or visit ' + link("/features", "all FlyThe BG tools") + ' to compare the available workflows.</p>';
+    sections = '<h2>Free background removal and media tools</h2><p>Remove a background from a PNG, JPG, or WEBP image through the protected FlyThe BG AI route. Image compression and video compression are designed to run locally in your browser, keeping the original file on your device during those workflows.</p><h2>Choose the right tool</h2><p>' + link("/remove-bg", "Remove background online") + ' for AI background removal, ' + link("/image-compressor", "compress images online") + ' for browser-local JPEG compression, or ' + link("/video-compressor", "compress video online") + ' to create a smaller WebM file locally.</p><h2>Clear privacy boundaries</h2><p>No FlyThe BG account is required. The background-removal request is sent only when you select a supported image, accept the processing notice, and start the tool. Local compression does not upload the original media to FlyThe BG.</p><h2>Guides and answers</h2><p>Read the ' + link("/blogs", "FlyThe BG Blogs") + ' for practical media and privacy guides, or visit ' + link("/features", "all FlyThe BG tools") + ' to compare the available workflows.</p>';
   } else if (route === "/remove-bg") {
     sections = '<h2>Remove an image background online</h2><p>FlyThe BG removes backgrounds from supported PNG, JPG, and WEBP images through a protected AI processing route. Files up to 15 MB are accepted, and the result can be previewed and downloaded after processing.</p><h2>How background removal works</h2><p>Select one image, confirm the processing notice, and start the tool. The browser sends the selected image to the same-origin processing route; the Hugging Face credential stays server-side.</p><h2>Privacy before processing</h2><p>FlyThe BG does not provide an account gallery or persistent media library. Read the ' + link("/privacy", "privacy policy") + ' before using the tool if your image contains sensitive information.</p>';
   } else if (route === "/image-compressor") {
@@ -136,12 +139,12 @@ function buildSeoFallback(route, meta, canonical) {
     sections = '<h2>Passport and visa photo maker</h2><p>Create a print-ready photo sheet in one page using guided steps. Upload a photo, accept the processing notice, crop the exact area, keep or remove the background, set physical dimensions in centimeters or inches, choose from common paper sizes, and generate the number of copies you need.</p><h2>Browser-first workflow</h2><p>Crop selection, physical sizing, background color controls, paper layout and sheet generation run in the browser. The existing protected FlyThe BG background-removal route is used only when you explicitly select background removal.</p><h2>Important destination checks</h2><p>Passport and visa requirements vary by issuing authority. Verify the exact current photo specification before submitting an official application.</p>';
   } else if (route === "/video-compressor") {
     sections = '<h2>Compress video online in your browser</h2><p>FlyThe BG creates a smaller WebM video locally in a modern browser. Progress is shown while the video is resized and encoded, and the original file remains on your device.</p><h2>WebM video compression</h2><p>The browser uses its available media APIs to process video and produce a WebM output. File size and visual quality depend on the source video, dimensions, codec support, and browser.</p><h2>Keep the original on your device</h2><p>This tool is designed for local processing, so the original video is not uploaded to FlyThe BG as part of the compression workflow.</p>';
-  } else if (route === "/blog") {
-    sections = '<h2>Practical media guides</h2><p>The FlyThe BG Journal explains background removal privacy, browser-based image compression, WebM video compression, and practical questions about local media processing.</p><h2>Start with a guide</h2><p>Read the ' + link("/blog/remove-background-online-privacy", "background removal privacy guide") + ', the ' + link("/blog/compress-images-in-browser", "browser image compression guide") + ', or the ' + link("/blog/webm-video-compression-guide", "WebM video compression guide") + '.</p>';
-  } else if (route.startsWith("/blog/")) {
+  } else if (route === "/blogs") {
+    sections = '<h2>Practical media guides</h2><p>The FlyThe BG Journal explains background removal privacy, browser-based image compression, WebM video compression, and practical questions about local media processing.</p><h2>Start with a guide</h2><p>Read the ' + link("/blogs/remove-background-online-privacy", "background removal privacy guide") + ', the ' + link("/blogs/compress-images-in-browser", "browser image compression guide") + ', or the ' + link("/blogs/webm-video-compression-guide", "WebM video compression guide") + '.</p>';
+  } else if (route.startsWith("/blogs/")) {
     sections = '<h2>About this guide</h2><p>' + meta.description + '</p><h2>Explore FlyThe BG tools</h2><p>Compare ' + link("/remove-bg", "background removal") + ', ' + link("/image-compressor", "image compression") + ', and ' + link("/video-compressor", "video compression") + ' to see which workflow matches your file and privacy needs.</p>';
   } else {
-    sections = '<h2>About this FlyThe BG page</h2><p>' + meta.description + '</p><h2>Explore the media toolkit</h2><p>Visit ' + link("/features", "FlyThe BG tools") + ' or read the ' + link("/faq", "FAQ") + ' for practical information. The site also publishes ' + link("/blog", "media and privacy guides") + ' to explain how the workflows operate.</p>';
+    sections = '<h2>About this FlyThe BG page</h2><p>' + meta.description + '</p><h2>Explore the media toolkit</h2><p>Visit ' + link("/features", "FlyThe BG tools") + ' or read the ' + link("/faq", "FAQ") + ' for practical information. The site also publishes ' + link("/blogs", "media and privacy guides") + ' to explain how the workflows operate.</p>';
   }
   return '<main class="seo-fallback" aria-label="FlyThe BG page content"><p class="eyebrow">FLYTHE BG</p><h1>' + meta.title + '</h1>' + sections + common.join("") + '<p><a href="' + canonical + '">Canonical page: ' + meta.title + "</a></p></main>";
 }
@@ -186,6 +189,16 @@ function withSecurityHeaders(response) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    const legacyBlogMap = {
+      "/blog": "/blogs",
+      "/blog/remove-background-online-privacy": "/blogs/remove-background-online-privacy",
+      "/blog/compress-images-in-browser": "/blogs/compress-images-in-browser",
+      "/blog/webm-video-compression-guide": "/blogs/webm-video-compression-guide"
+    };
+    if (legacyBlogMap[url.pathname]) {
+      return Response.redirect(new URL(legacyBlogMap[url.pathname], request.url).toString(), 301);
+    }
 
     if (url.pathname === "/api/remove-bg") {
       return onRequest({ request, env, params: {}, waitUntil: () => {} });
