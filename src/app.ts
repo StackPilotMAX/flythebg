@@ -1,5 +1,5 @@
 type ToolId = "remove-bg" | "image-compressor" | "video-compressor";
-type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/passport-photo" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog" | "/404";
+type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/passport-photo" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog";
 
 const VIDEO="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4";
 const POSTER="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg";
@@ -219,9 +219,8 @@ function shell(content:string,title:string):string{
   "/security":"FlyThe BG security guidance and private vulnerability reporting process.",
   "/cookies":"FlyThe BG notice about cookies and similar browser or advertising technologies.",
   "/changelog":"Recent FlyThe BG product, privacy, navigation and reliability changes.",
-  "/404":"The FlyThe BG page you requested could not be found."
  };
- setSeo(title,descriptions[path]||descriptions["/404"]);
+ setSeo(title,descriptions[path]||descriptions["/"]);
  const labels:Record<string,[string,string,string]>={
  "/features":["THE TOOLKIT","Media Tools","Designed To Fly"],
  "/remove-bg":["PROTECTED AI","Remove Background","Designed To Fly"],
@@ -663,7 +662,7 @@ function wireFlyLanding():void{
   stats.forEach(s=>observer.observe(s));
  }else stats.forEach(s=>animate(s));
 }
-function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/passport-photo":"/passport-photo","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/blogs":"/blogs","/blogs/remove-background-online-privacy":"/blogs/remove-background-online-privacy","/blogs/compress-images-in-browser":"/blogs/compress-images-in-browser","/blogs/webm-video-compression-guide":"/blogs/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/404";}
+function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/passport-photo":"/passport-photo","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/blogs":"/blogs","/blogs/remove-background-online-privacy":"/blogs/remove-background-online-privacy","/blogs/compress-images-in-browser":"/blogs/compress-images-in-browser","/blogs/webm-video-compression-guide":"/blogs/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string,tool?:ToolId):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();if(tool){const workspace=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`)?.closest(".tool-workspace");if(workspace){workspace.querySelector(".download-recovery")?.remove();const recovery=document.createElement("div");recovery.className="download-recovery";recovery.innerHTML=`<span><strong>Your file is ready.</strong> If the browser download was cancelled or missed, use Download again.</span><button type="button" class="button primary">Download again</button>`;recovery.querySelector("button")?.addEventListener("click",()=>{const retry=document.createElement("a");retry.href=url;retry.download=filename;retry.rel="noopener";document.body.appendChild(retry);retry.click();retry.remove();});workspace.appendChild(recovery);}}setTimeout(()=>URL.revokeObjectURL(url),300000);}
 function setProgress(tool:ToolId,value:number,label?:string):void{const n=Math.max(0,Math.min(100,value));const bar=document.querySelector<HTMLElement>(`[data-progress="${tool}"]`);if(bar)bar.style.width=`${n}%`;const text=document.querySelector<HTMLElement>(`[data-progress-label="${tool}"]`);if(text)text.textContent=label??`${Math.round(n)}%`;}
 function updateStatus(tool:ToolId,message:string):void{const el=document.querySelector<HTMLElement>(`[data-status="${tool}"]`);if(el)el.textContent=message;}
@@ -850,11 +849,25 @@ function render():void{
   case "/security":page=security();break;
   case "/cookies":page=cookies();break;
   case "/changelog":page=changelog();break;
-  case "/404":page=notFound();break;
-  default:page=notFound();
+  case "/":page=home();break;
+  default:page=home();
  }
  app.innerHTML=page;
- if(route==="/passport-photo"){ const passportWire=(window as any).__flyPassportWire; if(typeof passportWire==="function") passportWire(); }
+ if(route==="/passport-photo"){
+  const mount=()=>{const passportWire=(window as any).__flyPassportWire; if(typeof passportWire==="function"){passportWire();return true;}return false;};
+  if(!mount()){
+    const existing=document.querySelector<HTMLScriptElement>('script[data-passport-loader="1"]');
+    if(existing){existing.addEventListener("load",()=>mount(),{once:true});}
+    else{
+      const script=document.createElement("script");
+      script.src="/assets/passport-photo.js?v=20260927";
+      script.defer=true;
+      script.dataset.passportLoader="1";
+      script.addEventListener("load",()=>mount(),{once:true});
+      document.head.appendChild(script);
+    }
+  }
+ }
  wireTools();
  wireSpaceExperience();
  wireFlyLanding();
