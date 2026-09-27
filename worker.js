@@ -26,7 +26,7 @@ const ROUTE_META = {
 const ROUTES = new Set(Object.keys(ROUTE_META));
 function normalizeRoute(pathname) {
   const normalized = pathname.replace(/\/+$/, "") || "/";
-  return ROUTES.has(normalized) ? normalized : "/404";
+  return ROUTES.has(normalized) ? normalized : "/";
 }
 const SITE_URL = "https://flythebg.com";
 const GITHUB_URL = "https://github.com/StackPilotMAX/flythebg";
@@ -152,7 +152,7 @@ function buildSeoFallback(route, meta, canonical) {
 function applyRouteMeta(html, canonical, meta, isMissing) {
   const escapeHtml = value => String(value).replace(/[&<>"]/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[char]));
   const nonce = crypto.randomUUID().replace(/-/g, "");
-  const route = isMissing ? "/404" : normalizeRoute(new URL(canonical).pathname);
+  const route = normalizeRoute(new URL(canonical).pathname);
   const schema = JSON.stringify(buildStructuredData(route, canonical, meta)).replace(/</g, "\\u003c");
   let output = html;
   output = output.replace(/<title>[^<]*<\/title>/i, "<title>" + escapeHtml(meta.title) + "</title>");
@@ -170,7 +170,7 @@ function applyRouteMeta(html, canonical, meta, isMissing) {
   // Prevent the server-side SEO shell from flashing before the SPA mounts.
   // If client JavaScript fails, reveal the fallback after 12 seconds.
   output = output.replace("</body>", '<script nonce="' + nonce + '">setTimeout(function(){document.body.classList.remove("app-pending")},12000);</script></body>');
-  return { body: output, status: isMissing ? 404 : 200, nonce };
+  return { body: output, status: 200, nonce };
 }
 
 const SECURITY_HEADERS = {
@@ -231,9 +231,9 @@ export default {
     const contentType = assetResponse.headers.get("Content-Type") || "";
     if (!contentType.includes("text/html")) return withSecurityHeaders(assetResponse);
     const route = normalizeRoute(url.pathname);
-    const meta = ROUTE_META[route] || ROUTE_META["/404"];
+    const meta = ROUTE_META[route] || ROUTE_META["/"];
     const html = await assetResponse.text();
-    const transformed = applyRouteMeta(html, url.origin + route, meta, route === "/404" && !ROUTE_META[url.pathname]);
+    const transformed = applyRouteMeta(html, url.origin + route, meta, false);
     const response = new Response(transformed.body, { status: transformed.status, headers: new Headers(assetResponse.headers) });
     response.headers.set("Content-Type","text/html; charset=utf-8");
     response.headers.set("Cache-Control","public, max-age=0, must-revalidate");
