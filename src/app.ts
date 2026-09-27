@@ -861,6 +861,7 @@ function render():void{
  wireEditorial();
  loadStars();
  revealElements();
+ document.body.classList.remove("app-pending");
 }
 
 wireNavigation();
