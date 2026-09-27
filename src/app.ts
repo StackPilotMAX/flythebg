@@ -334,15 +334,6 @@ function home():string{
     <div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value" data-count="1" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Protected AI route</span></div>
    </footer>
   </div>
-  <section id="home-tools" class="home-scroll-section home-tools-section" aria-labelledby="home-tools-title">
-   <div class="home-section-heading"><p class="eyebrow">START HERE</p><h2 id="home-tools-title">Four tools. Clear boundaries.</h2><p>Use the AI route when you need background removal. Keep image and video compression on your device when you want local-first processing.</p></div>
-   <div class="home-tool-grid">
-    <a href="/remove-bg"><span>01</span><strong>Remove Background</strong><small>Protected AI · PNG, JPG, WEBP · up to 15 MB</small><b>Open tool ↗</b></a>
-    <a href="/image-compressor"><span>02</span><strong>Compress Image</strong><small>Browser-local JPEG compression with no upload required.</small><b>Open tool ↗</b></a>
-    <a href="/video-compressor"><span>03</span><strong>Compress Video</strong><small>Create a smaller WebM locally with visible progress.</small><b>Open tool ↗</b></a>
-    <a href="/passport-photo"><span>04</span><strong>Passport Size Visa Photo Maker</strong><small>Crop, size and arrange official-style photos on a print sheet in your browser.</small><b>Open tool ↗</b></a>
-   </div>
-  </section>
   <section class="home-scroll-section home-privacy-section" aria-labelledby="home-privacy-title">
    <div class="home-split">
     <div><p class="eyebrow">PRIVACY BY DESIGN</p><h2 id="home-privacy-title">Nothing here needs an account.</h2></div>
