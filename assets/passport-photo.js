@@ -138,7 +138,7 @@
             '</div>',
             '<label class="passport-consent"><input type="checkbox" data-pp-consent><span class="passport-consent-box">✓</span><span><strong>I accept the FlyThe BG <a href="/terms" target="_blank" rel="noopener">Terms</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a> for this workflow.</strong><small>I understand that the image only leaves my browser if I choose AI background removal later. I have permission to process this photo.</small></span></label>',
             '<p class="passport-status" role="status" aria-live="polite" data-pp-status>Choose a photo and accept the notice to continue.</p>',
-            '<div class="passport-nav"><span></span><button class="button primary" type="button" data-pp-next disabled>Continue to crop →</button></div>',
+            '<div class="passport-nav passport-flow-actions"><span></span><button class="button primary" type="button" data-pp-next disabled>Continue to crop →</button></div>',
           '</section>',
 
           '<section class="passport-slide" data-pp-slide="1" aria-labelledby="pp-title-2">',
@@ -151,7 +151,7 @@
                 '<div class="passport-editor-tip"><b>Tip</b><span>Keep the subject centered and leave enough headroom. The final physical size comes in the next step.</span></div>',
               '</aside>',
             '</div>',
-            '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Use this area →</button></div>',
+            '<div class="passport-nav passport-flow-actions"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Use this area →</button></div>',
           '</section>',
 
           '<section class="passport-slide" data-pp-slide="2" aria-labelledby="pp-title-3">',
@@ -161,7 +161,7 @@
             '</div>',
             '<div class="passport-callout"><b>Local-only for now</b><span>Background removal will be added back after the processor is stable.</span></div>',
             '<p class="passport-status" role="status" aria-live="polite" data-pp-bg-status>Original background will be kept.</p>',
-            '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-bg-next>Continue →</button></div>',
+            '<div class="passport-nav passport-flow-actions"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-bg-next>Continue →</button></div>',
           '</section>',
 
           '<section class="passport-slide" data-pp-slide="3" aria-labelledby="pp-title-4">',
@@ -176,7 +176,7 @@
               '</div>',
             '</div>',
             '<p class="passport-status" role="status" aria-live="polite" data-pp-color-status>Background ready.</p>',
-            '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Set photo size →</button></div>',
+            '<div class="passport-nav passport-flow-actions"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Set photo size →</button></div>',
           '</section>',
 
           '<section class="passport-slide" data-pp-slide="4" aria-labelledby="pp-title-5">',
@@ -192,7 +192,7 @@
               '<div class="passport-dpi-note" data-pp-photo-quality>Print target: 300 DPI when the browser can allocate the required canvas.</div>',
             '</div>',
             '<div class="passport-size-preview"><div class="passport-size-silhouette" data-pp-size-box></div><span data-pp-size-label>3.5 × 4.5 cm</span></div>',
-            '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Choose paper →</button></div>',
+            '<div class="passport-nav passport-flow-actions"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Choose paper →</button></div>',
           '</section>',
 
           '<section class="passport-slide" data-pp-slide="5" aria-labelledby="pp-title-6">',
@@ -208,7 +208,7 @@
               '<div class="passport-validation" data-pp-layout-validation></div>',
             '</div>',
             '<div class="passport-paper-preview"><div class="passport-mini-paper" data-pp-paper-preview><span>PHOTO SHEET</span></div></div>',
-            '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Choose copies →</button></div>',
+            '<div class="passport-nav passport-flow-actions"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Choose copies →</button></div>',
           '</section>',
 
           '<section class="passport-slide" data-pp-slide="6" aria-labelledby="pp-title-7">',
@@ -227,7 +227,7 @@
               '<div class="passport-final-preview"><canvas data-pp-final-canvas></canvas></div>',
               '<div class="passport-final-copy"><span class="eyebrow">RESULT READY</span><h3>Your print sheet is ready.</h3><p data-pp-final-summary></p><div class="passport-final-buttons"><button class="button primary" type="button" data-pp-download-png>Download PNG</button><button class="button ghost" type="button" data-pp-download-jpg>Download JPG</button></div><small>The generated sheet stays in this browser tab until you leave or start over.</small></div>',
             '</div>',
-            '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><span></span></div>',
+            '<div class="passport-nav passport-flow-actions"><button class="button ghost" type="button" data-pp-back>← Back</button><span></span></div>',
           '</section>',
         '</div>',
       '</section>',
