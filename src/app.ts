@@ -334,12 +334,76 @@ function home():string{
     <div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value" data-count="1" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Protected AI route</span></div>
    </footer>
   </div>
-  <section class="home-scroll-section home-privacy-section" aria-labelledby="home-privacy-title">
-   <div class="home-split">
-    <div><p class="eyebrow">PRIVACY BY DESIGN</p><h2 id="home-privacy-title">Nothing here needs an account.</h2></div>
-    <div><p>Image and video compression are designed to run in your browser. Background removal uses a protected same-origin route so the Hugging Face credential stays server-side. FlyThe BG does not provide an account gallery or persistent media library.</p><a class="text-link" href="/privacy">Read the full privacy policy ↗</a></div>
+  <section class="home-scroll-section home-tools-section" id="home-tools" aria-labelledby="home-tools-title">
+   <div class="home-section-heading">
+    <p class="eyebrow">START HERE</p>
+    <h2 id="home-tools-title">Four tools. Clear boundaries.</h2>
+    <p>Open a folder to peek inside. Each tool keeps its processing boundary visible before you start.</p>
+   </div>
+   <div class="home-folder-grid">
+    <article class="home-folder-card">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-remove-bg" style="--folder-color:#5227FF;--folder-back:#4722DE">
+      <span class="folder-canvas" aria-hidden="true">
+       <span class="folder-paper paper-one"><span class="paper-icon">✦</span><small>AI</small></span>
+       <span class="folder-paper paper-two"><span class="paper-icon">PNG</span><small>JPG · WEBP</small></span>
+       <span class="folder-paper paper-three"><span class="paper-icon">↗</span><small>15 MB</small></span>
+       <span class="folder-back"><span class="folder-tab"></span></span>
+       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">REMOVE BG</span></span>
+      </span>
+     </button>
+     <div class="home-folder-info" id="folder-remove-bg">
+      <span>01 · PROTECTED AI</span><strong>Remove Background</strong><small>Send one image through the protected processing route.</small>
+      <a href="/remove-bg" class="text-link">Open tool ↗</a>
+     </div>
+    </article>
+    <article class="home-folder-card">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-image-compressor" style="--folder-color:#00A7C7;--folder-back:#008BA7">
+      <span class="folder-canvas" aria-hidden="true">
+       <span class="folder-paper paper-one"><span class="paper-icon">IMG</span><small>JPG · PNG</small></span>
+       <span class="folder-paper paper-two"><span class="paper-icon">%</span><small>Smaller</small></span>
+       <span class="folder-paper paper-three"><span class="paper-icon">↘</span><small>Local</small></span>
+       <span class="folder-back"><span class="folder-tab"></span></span>
+       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">COMPRESS</span></span>
+      </span>
+     </button>
+     <div class="home-folder-info" id="folder-image-compressor">
+      <span>02 · BROWSER-LOCAL</span><strong>Compress Image</strong><small>Reduce image size directly on your device.</small>
+      <a href="/image-compressor" class="text-link">Open tool ↗</a>
+     </div>
+    </article>
+    <article class="home-folder-card">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-video-compressor" style="--folder-color:#FF3366;--folder-back:#DB244F">
+      <span class="folder-canvas" aria-hidden="true">
+       <span class="folder-paper paper-one"><span class="paper-icon">▶</span><small>VIDEO</small></span>
+       <span class="folder-paper paper-two"><span class="paper-icon">WEBM</span><small>Smaller</small></span>
+       <span class="folder-paper paper-three"><span class="paper-icon">↘</span><small>Local</small></span>
+       <span class="folder-back"><span class="folder-tab"></span></span>
+       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">VIDEO</span></span>
+      </span>
+     </button>
+     <div class="home-folder-info" id="folder-video-compressor">
+      <span>03 · BROWSER-LOCAL</span><strong>Compress Video</strong><small>Create a smaller WebM without uploading the original.</small>
+      <a href="/video-compressor" class="text-link">Open tool ↗</a>
+     </div>
+    </article>
+    <article class="home-folder-card">
+     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-passport-photo" style="--folder-color:#1A1A1B;--folder-back:#101011">
+      <span class="folder-canvas" aria-hidden="true">
+       <span class="folder-paper paper-one"><span class="paper-icon">ID</span><small>CROP</small></span>
+       <span class="folder-paper paper-two"><span class="paper-icon">A4</span><small>PRINT</small></span>
+       <span class="folder-paper paper-three"><span class="paper-icon">300</span><small>DPI</small></span>
+       <span class="folder-back"><span class="folder-tab"></span></span>
+       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">PASSPORT</span></span>
+      </span>
+     </button>
+     <div class="home-folder-info" id="folder-passport-photo">
+      <span>04 · BROWSER-FIRST</span><strong>Passport Size Photo</strong><small>Crop, size and arrange print-ready photos in your browser.</small>
+      <a href="/passport-photo" class="text-link">Open tool ↗</a>
+     </div>
+    </article>
    </div>
   </section>
+  <section class="home-scroll-section home-privacy-section" aria-labelledby="home-privacy-title">
   <section class="home-scroll-section home-faq-section" aria-labelledby="home-faq-title">
    <div class="home-section-heading"><p class="eyebrow">REAL QUESTIONS</p><h2 id="home-faq-title">The things people usually want to know first.</h2><p>Answers are written around the actual decisions people make before uploading a file.</p></div>
    <div class="home-faq-list">
@@ -636,6 +700,14 @@ function wireFlyLanding():void{
  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenu();},{once:true});
  const mq=matchMedia("(min-width:721px)");
  mq.addEventListener?.("change",e=>{if(e.matches)closeMenu();});
+ const folders=root.querySelectorAll<HTMLButtonElement>("[data-folder-toggle]");
+ folders.forEach(folder=>{
+  folder.addEventListener("click",()=>{
+   const open=folder.classList.toggle("is-open");
+   folder.setAttribute("aria-expanded",String(open));
+   folders.forEach(other=>{if(other!==folder){other.classList.remove("is-open");other.setAttribute("aria-expanded","false");}});
+  });
+ });
  const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
  const items=root.querySelectorAll<HTMLElement>(".anim");
  items.forEach(el=>{if(!reduced)el.classList.add("fly-reveal");else el.classList.add("fly-reveal-ready");});
