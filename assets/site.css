@@ -1257,3 +1257,20 @@ body:not(.app-pending)::after{display:none}
 /* Do not display unloaded passport photos as broken-image icons. */
 .passport-page-shell [hidden]{display:none!important}
 .passport-crop-placeholder{max-width:24rem;padding:24px;text-align:center;color:#eee;font-size:1rem;line-height:1.5}
+
+/* Visa photo maker: accessible, responsive background-processing feedback. */
+.passport-processing{display:flex;align-items:center;gap:20px;margin-top:18px;padding:22px;border:1px solid #d9d0f1;border-radius:20px;background:linear-gradient(120deg,#f6f1ff,#f0f8ff);box-shadow:0 10px 30px rgba(53,38,95,.08)}
+.passport-processing-spinner{width:54px;height:54px;flex:none;border:5px solid #dcd4f4;border-top-color:#7752ce;border-radius:50%;animation:passport-spin .95s linear infinite}
+.passport-processing-copy{min-width:0;flex:1;color:#282037}
+.passport-processing-copy strong{display:block;font-size:1.1rem}
+.passport-processing-copy p{margin:8px 0 14px;line-height:1.5;color:#5d526d}
+.passport-processing-copy small{display:block;margin-top:10px;color:#655b74;line-height:1.5}
+.passport-processing-track{height:7px;overflow:hidden;border-radius:20px;background:#e0d9ee}
+.passport-processing-track span{display:block;width:36%;height:100%;border-radius:20px;background:linear-gradient(90deg,#7651c9,#55b2ed);animation:passport-progress 1.8s ease-in-out infinite alternate}
+.passport-processed-preview{margin-top:18px;padding:18px;border:1px solid #e0d9eb;border-radius:18px;background:#f9f8fb}
+.passport-processed-preview strong{display:block;margin-bottom:12px;color:#2a2335}
+.passport-processed-preview img{display:block;max-width:100%;max-height:360px;width:auto;height:auto;margin:auto;object-fit:contain;border-radius:12px;background:repeating-conic-gradient(#e9e9ed 0 25%,#fff 0 50%) 0 0/22px 22px}
+@keyframes passport-spin{to{transform:rotate(360deg)}}
+@keyframes passport-progress{from{transform:translateX(-8%)}to{transform:translateX(185%)}}
+@media(max-width:560px){.passport-processing{align-items:flex-start;gap:14px;padding:16px}.passport-processing-spinner{width:40px;height:40px;border-width:4px}.passport-processing-copy strong{font-size:1rem}}
+@media(prefers-reduced-motion:reduce){.passport-processing-spinner,.passport-processing-track span{animation:none}}
