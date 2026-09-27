@@ -1171,3 +1171,41 @@ body:not(.app-pending) #app:after{display:none}
 body.app-pending #app{visibility:hidden;min-height:100svh}
 body.app-pending::after{content:"Loading FlyThe BG…";position:fixed;inset:0;display:grid;place-items:center;z-index:2147483647;color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;pointer-events:none}
 body:not(.app-pending)::after{display:none}
+
+
+/* Interactive folder tool gallery — native CSS/TS adaptation of the supplied React concept. */
+.home-tools-section{padding-top:clamp(70px,9vw,118px)}
+.home-folder-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2.4vw,30px);align-items:start}
+.home-folder-card{min-width:0;text-align:center}
+.interactive-folder{display:block;width:100%;height:240px;padding:0;border:0;background:transparent;color:#fff;cursor:pointer}
+.folder-canvas{position:relative;display:block;width:180px;height:145px;margin:30px auto 0;transform:scale(var(--folder-scale,1));transform-origin:center bottom;filter:drop-shadow(0 22px 24px rgba(0,0,0,.28));transition:filter .35s ease,transform .35s ease}
+.interactive-folder:hover .folder-canvas,.interactive-folder:focus-visible .folder-canvas{transform:translateY(-5px) scale(var(--folder-scale,1));filter:drop-shadow(0 28px 30px rgba(0,0,0,.34))}
+.folder-back{position:absolute;left:25px;right:25px;bottom:8px;height:112px;border-radius:10px 18px 18px 18px;background:var(--folder-back);box-shadow:inset 0 1px rgba(255,255,255,.1)}
+.folder-tab{position:absolute;left:0;top:-16px;width:58px;height:19px;border-radius:9px 9px 0 0;background:var(--folder-back)}
+.folder-paper{position:absolute;left:50%;bottom:27px;display:flex;flex-direction:column;align-items:center;justify-content:center;width:92px;height:74px;border:1px solid rgba(0,0,0,.06);border-radius:9px;background:#fff;color:#18181a;box-shadow:0 4px 12px rgba(0,0,0,.13);opacity:.98;z-index:3;transform:translate(-50%,10%) rotate(0deg) scale(.98);transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease}
+.folder-paper small{margin-top:4px;font:700 8px/1 var(--fly-font-sans);letter-spacing:.12em;color:#777}
+.paper-icon{font:700 15px/1 var(--fly-font-sans);letter-spacing:-.03em}
+.paper-one{width:70px;height:58px;z-index:5}.paper-two{width:84px;height:66px;z-index:4}.paper-three{width:98px;height:74px;z-index:3}
+.folder-flap{position:absolute;inset:16px 25px 8px;z-index:8;background:var(--folder-color);border-radius:7px 14px 14px 14px;transform-origin:bottom center;transition:transform .55s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease}
+.folder-flap-left{clip-path:polygon(0 0,50% 0,50% 100%,0 100%);transform:skewX(0deg) scaleY(1)}
+.folder-flap-right{clip-path:polygon(50% 0,100% 0,100% 100%,50% 100%);transform:skewX(0deg) scaleY(1)}
+.folder-label{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:700 10px/1 var(--fly-font-sans);letter-spacing:.1em;white-space:nowrap;color:rgba(255,255,255,.9)}
+.interactive-folder.is-open .folder-flap-left{transform:skewX(15deg) scaleY(.6) translateY(4px)}
+.interactive-folder.is-open .folder-flap-right{transform:skewX(-15deg) scaleY(.6) translateY(4px)}
+.interactive-folder.is-open .folder-paper{box-shadow:0 9px 22px rgba(0,0,0,.2)}
+.interactive-folder.is-open .paper-one{transform:translate(-120%,-72%) rotate(-15deg)}
+.interactive-folder.is-open .paper-two{transform:translate(5%,-72%) rotate(15deg)}
+.interactive-folder.is-open .paper-three{transform:translate(-50%,-102%) rotate(5deg)}
+.interactive-folder.is-open .paper-one:hover{transform:translate(calc(-120% + 5px),calc(-72% - 3px)) rotate(-15deg) scale(1.08)}
+.interactive-folder.is-open .paper-two:hover{transform:translate(calc(5% + 5px),calc(-72% - 3px)) rotate(15deg) scale(1.08)}
+.interactive-folder.is-open .paper-three:hover{transform:translate(calc(-50% + 5px),calc(-102% - 3px)) rotate(5deg) scale(1.08)}
+.interactive-folder:focus-visible{outline:3px solid #fff;outline-offset:8px;border-radius:18px}
+.home-folder-info{margin:2px auto 0;max-width:250px}
+.home-folder-info>span{display:block;font:700 10px/1.2 var(--fly-font-sans);letter-spacing:.16em;color:#8f8f8f}
+.home-folder-info strong{display:block;margin-top:9px;font:500 21px/1.05 var(--fly-font-sans);letter-spacing:-.035em}
+.home-folder-info small{display:block;margin-top:9px;color:#aaa;font:400 12px/1.55 var(--fly-font-sans)}
+.home-folder-info .text-link{margin-top:10px;opacity:.45;pointer-events:none;transform:translateY(3px);transition:opacity .25s ease,transform .25s ease}
+.home-folder-card:has(.interactive-folder.is-open) .home-folder-info .text-link{opacity:1;pointer-events:auto;transform:none}
+@media(max-width:980px){.home-folder-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:48px}.interactive-folder{height:225px}}
+@media(max-width:600px){.home-folder-grid{grid-template-columns:1fr;gap:48px}.interactive-folder{height:215px}.folder-canvas{transform:scale(.95)}.interactive-folder:hover .folder-canvas,.interactive-folder:focus-visible .folder-canvas{transform:translateY(-3px) scale(.95)}}
+@media(prefers-reduced-motion:reduce){.folder-canvas,.folder-paper,.folder-flap,.home-folder-info .text-link{transition:none}.interactive-folder:hover .folder-canvas,.interactive-folder:focus-visible .folder-canvas{transform:scale(var(--folder-scale,1))}}
