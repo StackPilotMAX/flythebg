@@ -36,3 +36,5 @@
 .passport-bg-image-picker span{color:var(--white)}
 .passport-clear-bg{align-self:flex-start;border:0;background:transparent;color:var(--green);padding:0;font:700 11px inherit;cursor:pointer}
 .passport-clear-bg:disabled{opacity:.45;cursor:not-allowed}
+
+.passport-consent a{color:var(--green);text-decoration:underline;text-underline-offset:2px}
