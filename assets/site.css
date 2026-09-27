@@ -1253,3 +1253,7 @@ body:not(.app-pending)::after{display:none}
 .passport-generate:disabled{opacity:.45;cursor:not-allowed}.passport-result{margin-top:25px;padding:18px;border-radius:20px;background:#f6f3f7}.passport-result-head{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:15px}.passport-result h3{margin:3px 0}.passport-result img{display:block;width:100%;max-height:700px;object-fit:contain;background:#fff;border-radius:12px}.passport-result small{display:block;margin-top:12px;color:#716a76}
 @media(max-width:800px){.passport-page-shell{padding:18px 12px 55px}.passport-hero,.passport-card{padding:22px;border-radius:20px}.passport-crop-layout,.passport-choice-grid,.passport-form-grid,.passport-color-controls,.passport-output-controls{grid-template-columns:1fr}.passport-crop-stage{min-height:240px}.passport-upload-preview{align-items:flex-start}.passport-upload-preview img{width:88px;height:88px}.passport-result-head{display:grid}.passport-result-head .button{width:100%;text-align:center}}
 @media(prefers-reduced-motion:reduce){.passport-upload-zone,.passport-choice{transition:none}}
+
+/* Do not display unloaded passport photos as broken-image icons. */
+.passport-page-shell [hidden]{display:none!important}
+.passport-crop-placeholder{max-width:24rem;padding:24px;text-align:center;color:#eee;font-size:1rem;line-height:1.5}
