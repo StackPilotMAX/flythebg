@@ -113,24 +113,14 @@
           '<h1>Passport Size Visa Photo Maker</h1>',
           '<p>Create print-ready ID, passport and visa-style photo sheets from one image. Crop precisely, choose background treatment, set the physical photo size, choose your paper, then print or download.</p>',
         '</div>',
-        '<div class="passport-progress" aria-label="Photo maker steps">',
+        '<div class="passport-progress" aria-hidden="true">',
           '<div class="passport-progress-track"><span data-pp-progress></span></div>',
           '<span data-pp-step-label>STEP 1 OF 7</span>',
         '</div>',
       '</div>',
 
       '<section class="passport-workspace">',
-        '<aside class="passport-stepper" aria-label="Workflow steps">',
-          '<button class="passport-step-dot is-active" type="button" data-pp-jump="0"><span>01</span><b>Upload</b><small>Photo + terms</small></button>',
-          '<button class="passport-step-dot" type="button" data-pp-jump="1"><span>02</span><b>Crop</b><small>Select the area</small></button>',
-          '<button class="passport-step-dot" type="button" data-pp-jump="2"><span>03</span><b>Background</b><small>Keep or remove</small></button>',
-          '<button class="passport-step-dot" type="button" data-pp-jump="3"><span>04</span><b>Background style</b><small>Color + preview</small></button>',
-          '<button class="passport-step-dot" type="button" data-pp-jump="4"><span>05</span><b>Photo size</b><small>cm or inches</small></button>',
-          '<button class="passport-step-dot" type="button" data-pp-jump="5"><span>06</span><b>Paper</b><small>Sheet size</small></button>',
-          '<button class="passport-step-dot" type="button" data-pp-jump="6"><span>07</span><b>Copies</b><small>Generate sheet</small></button>',
-        '</aside>',
-
-        '<div class="passport-slides" data-pp-slides>',
+        '<div class="passport-slides passport-one-page" data-pp-slides>',
           '<section class="passport-slide is-active" data-pp-slide="0" aria-labelledby="pp-title-1">',
             '<div class="passport-slide-title"><span>STEP 01</span><h2 id="pp-title-1">Upload the photo you want to use.</h2><p>PNG, JPG and WEBP are supported. Your original stays in the browser until you choose to send a cropped version for background removal.</p></div>',
             '<div class="passport-upload-grid">',
@@ -141,7 +131,7 @@
                 '<small>or tap to browse your device</small>',
                 '<em>One image · local-first workflow</em>',
               '</label>',
-              '<div class="passport-source-preview" data-pp-source-preview hidden>',
+              '<div class="passport-source-preview" data-pp-source-preview>',
                 '<div class="passport-preview-image-wrap"><img alt="Selected photo preview" data-pp-source-image></div>',
                 '<div class="passport-file-meta"><strong data-pp-file-name>Photo selected</strong><span data-pp-file-dims></span></div>',
               '</div>',
@@ -151,7 +141,7 @@
             '<div class="passport-nav"><span></span><button class="button primary" type="button" data-pp-next disabled>Continue to crop →</button></div>',
           '</section>',
 
-          '<section class="passport-slide" data-pp-slide="1" aria-labelledby="pp-title-2" hidden>',
+          '<section class="passport-slide" data-pp-slide="1" aria-labelledby="pp-title-2">',
             '<div class="passport-slide-title"><span>STEP 02</span><h2 id="pp-title-2">Select the exact area you need.</h2><p>Works with 9:16, 16:9, square or any other image ratio. Drag the crop box or resize a corner; nothing about the original photo is changed.</p></div>',
             '<div class="passport-editor-grid">',
               '<div class="passport-canvas-shell"><canvas class="passport-crop-canvas" data-pp-crop-canvas></canvas></div>',
@@ -164,7 +154,7 @@
             '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Use this area →</button></div>',
           '</section>',
 
-          '<section class="passport-slide" data-pp-slide="2" aria-labelledby="pp-title-3" hidden>',
+          '<section class="passport-slide" data-pp-slide="2" aria-labelledby="pp-title-3">',
             '<div class="passport-slide-title"><span>STEP 03</span><h2 id="pp-title-3">Keep the original background.</h2><p>Background removal is temporarily disabled while the AI processor is being stabilized. Your photo stays entirely in this browser workflow.</p></div>',
             '<div class="passport-choice-grid">',
               '<button type="button" class="passport-choice is-selected" data-pp-bg-choice="keep"><span class="passport-choice-icon">◌</span><strong>Keep original background</strong><small>The cropped photo remains local. No AI request is made.</small></button>',
@@ -174,7 +164,7 @@
             '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-bg-next>Continue →</button></div>',
           '</section>',
 
-          '<section class="passport-slide" data-pp-slide="3" aria-labelledby="pp-title-4" hidden>',
+          '<section class="passport-slide" data-pp-slide="3" aria-labelledby="pp-title-4">',
             '<div class="passport-slide-title"><span>STEP 04</span><h2 id="pp-title-4">Choose the background look.</h2><p>Use a recommended neutral option, pick any color, or enter exact RGB values. Background styling is enabled for AI-removed images; an untouched original background is preserved.</p></div>',
             '<div class="passport-background-grid">',
               '<div class="passport-result-stage"><div class="passport-result-frame"><img alt="Passport photo preview" data-pp-result-image></div><span data-pp-ai-badge>AI background removed</span></div>',
@@ -189,7 +179,7 @@
             '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Set photo size →</button></div>',
           '</section>',
 
-          '<section class="passport-slide" data-pp-slide="4" aria-labelledby="pp-title-5" hidden>',
+          '<section class="passport-slide" data-pp-slide="4" aria-labelledby="pp-title-5">',
             '<div class="passport-slide-title"><span>STEP 05</span><h2 id="pp-title-5">Set the physical photo size.</h2><p>Use centimeters or inches. The maker keeps your measurement in physical units and uses print pixels only when it creates the final sheet.</p></div>',
             '<div class="passport-settings-card">',
               '<div class="passport-unit-tabs"><button type="button" class="passport-chip is-active" data-pp-photo-unit="cm">Centimeters</button><button type="button" class="passport-chip" data-pp-photo-unit="in">Inches</button></div>',
@@ -205,7 +195,7 @@
             '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Choose paper →</button></div>',
           '</section>',
 
-          '<section class="passport-slide" data-pp-slide="5" aria-labelledby="pp-title-6" hidden>',
+          '<section class="passport-slide" data-pp-slide="5" aria-labelledby="pp-title-6">',
             '<div class="passport-slide-title"><span>STEP 06</span><h2 id="pp-title-6">Choose the paper you will print on.</h2><p>More than ten common paper sizes are built in. The current unit is shown directly beside every size so there is no guesswork.</p></div>',
             '<div class="passport-settings-card">',
               '<div class="passport-unit-tabs"><button type="button" class="passport-chip is-active" data-pp-paper-unit="cm">Centimeters</button><button type="button" class="passport-chip" data-pp-paper-unit="in">Inches</button></div>',
@@ -221,7 +211,7 @@
             '<div class="passport-nav"><button class="button ghost" type="button" data-pp-back>← Back</button><button class="button primary" type="button" data-pp-next>Choose copies →</button></div>',
           '</section>',
 
-          '<section class="passport-slide" data-pp-slide="6" aria-labelledby="pp-title-7" hidden>',
+          '<section class="passport-slide" data-pp-slide="6" aria-labelledby="pp-title-7">',
             '<div class="passport-slide-title"><span>STEP 07</span><h2 id="pp-title-7">How many photos should the sheet contain?</h2><p>The maker calculates the maximum that fits on your chosen paper before anything is generated.</p></div>',
             '<div class="passport-copies-card">',
               '<div class="passport-max-stat"><span>Maximum that fits</span><strong data-pp-max-copies>—</strong><small data-pp-layout-summary>—</small></div>',
@@ -233,7 +223,7 @@
                 '<button class="button ghost" type="button" data-pp-reset>Start over</button>',
               '</div>',
             '</div>',
-            '<div class="passport-final-card" data-pp-final hidden>',
+            '<div class="passport-final-card" data-pp-final>',
               '<div class="passport-final-preview"><canvas data-pp-final-canvas></canvas></div>',
               '<div class="passport-final-copy"><span class="eyebrow">RESULT READY</span><h3>Your print sheet is ready.</h3><p data-pp-final-summary></p><div class="passport-final-buttons"><button class="button primary" type="button" data-pp-download-png>Download PNG</button><button class="button ghost" type="button" data-pp-download-jpg>Download JPG</button></div><small>The generated sheet stays in this browser tab until you leave or start over.</small></div>',
             '</div>',
@@ -294,22 +284,14 @@
         dot.classList.toggle("is-complete", i < state.step);
       });
 
-      // Single mounted panel: only the current step exists in the live DOM.
-      // This avoids hidden/display/visibility CSS conflicts entirely.
-      const slideHost = q("[data-pp-slides]");
-      if (slideHost) {
-        slides.forEach(function (slide) {
-          if (slide.parentElement === slideHost) slideHost.removeChild(slide);
-        });
-        const activeSlide = slides[state.step];
-        if (activeSlide) {
-          activeSlide.hidden = false;
-          activeSlide.style.display = "block";
-          activeSlide.classList.add("is-active");
-          activeSlide.setAttribute("aria-hidden", "false");
-          slideHost.appendChild(activeSlide);
-        }
-      }
+      // One-page workflow: every section stays mounted and visible.
+      // State is used only for validation/status and optional smooth scrolling.
+      slides.forEach(function (slide) {
+        slide.hidden = false;
+        slide.style.display = "block";
+        slide.classList.toggle("is-active", slide === slides[state.step]);
+        slide.setAttribute("aria-hidden", "false");
+      });
 
       if (state.step === 1) requestAnimationFrame(drawCrop);
       if (state.step === 3) requestAnimationFrame(updateResultPreview);
@@ -325,12 +307,9 @@
 
     function goTo(step) {
       if (state.busy) return;
-      if (step < state.step && step >= 0) {
-        state.step = step;
-        updateHeader();
-        return;
-      }
-      if (step === state.step + 1) {
+      const target = clamp(step, 0, slides.length - 1);
+
+      if (target > state.step) {
         if (state.step === 0 && !(state.file && q("[data-pp-consent]").checked)) {
           setStatus("Choose a photo and accept the notice first.");
           return;
@@ -341,25 +320,21 @@
         }
         if (state.step === 2) {
           prepareBackgroundResult();
-          state.step = 3;
-          updateHeader();
-          return;
         }
-        if (state.step === 3) {
-          state.step = 4;
-        } else if (state.step === 4) {
+        if (state.step === 4) {
           updatePhotoValidation();
           if (!isPhotoSizeValid()) return;
-          state.step = 5;
-        } else if (state.step === 5) {
+        }
+        if (state.step === 5) {
           updateLayoutValidation();
           if (!isLayoutUsable()) return;
-          state.step = 6;
-        } else {
-          state.step = step;
         }
-        updateHeader();
       }
+
+      state.step = target;
+      updateHeader();
+      const destination = slides[target];
+      if (destination) destination.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function setupUpload() {
