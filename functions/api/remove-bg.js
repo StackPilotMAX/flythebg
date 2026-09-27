@@ -6,6 +6,7 @@ const API_NAME = "/remove_background";
 const STARTUP_GRACE_MS = 90_000;
 const MAX_JOB_MS = 180_000;
 const RETRY_DELAY_MS = 4_000;
+const MAX_HF_ATTEMPTS = 8;
 
 // Application-level abuse guard. This is intentionally kept server-side so no
 // secret or limiter state is exposed to the browser. Cloudflare may execute
@@ -173,7 +174,9 @@ async function gradioCall(token, input, onProgress) {
   // A sleeping Space can take 20–25 seconds to boot and initialize rembg.
   // Retry the complete upload/prediction sequence from the Worker so the
   // browser never has to open or keep the Hugging Face Space alive.
-  while (Date.now() - startedAt < STARTUP_GRACE_MS) {
+  let attempts = 0;
+  while (Date.now() - startedAt < STARTUP_GRACE_MS && attempts < MAX_HF_ATTEMPTS) {
+    attempts += 1;
     onProgress?.(14, "Waking AI processor");
     const wakeStatus = await wakeSpace(token);
     if (wakeStatus === 401 || wakeStatus === 403) {
@@ -345,19 +348,19 @@ export async function onRequest(context) {
   if (!rate.allowed) return fail("Too many background-removal requests. Please try again later.", 429, context.request);
 
   activeRequests += 1;
-  const contentType = (context.request.headers.get("content-type") || "").split(";")[0].toLowerCase();
-  if (!ALLOWED_TYPES.has(contentType)) { activeRequests -= 1; return fail("Only PNG, JPG and WEBP images are accepted.", 415, context.request); }
-
-  const length = Number(context.request.headers.get("content-length") || "0");
-  if (length > MAX_BYTES) { activeRequests -= 1; return fail("Image exceeds the 15 MB limit.", 413, context.request); }
-
-  const body = await context.request.arrayBuffer();
-  if (!body.byteLength) { activeRequests -= 1; return fail("No image was received.", 400, context.request); }
-  if (body.byteLength > MAX_BYTES) { activeRequests -= 1; return fail("Image exceeds the 15 MB limit.", 413, context.request); }
-  if (!hasValidImageSignature(new Uint8Array(body), contentType)) { activeRequests -= 1; return fail("The uploaded file does not match the declared image type.", 415, context.request); }
-
   let emit = null;
   try {
+    const contentType = (context.request.headers.get("content-type") || "").split(";")[0].toLowerCase();
+    if (!ALLOWED_TYPES.has(contentType)) return fail("Only PNG, JPG and WEBP images are accepted.", 415, context.request);
+
+    const length = Number(context.request.headers.get("content-length") || "0");
+    if (length > MAX_BYTES) return fail("Image exceeds the 15 MB limit.", 413, context.request);
+
+    const body = await context.request.arrayBuffer();
+    if (!body.byteLength) return fail("No image was received.", 400, context.request);
+    if (body.byteLength > MAX_BYTES) return fail("Image exceeds the 15 MB limit.", 413, context.request);
+    if (!hasValidImageSignature(new Uint8Array(body), contentType)) return fail("The uploaded file does not match the declared image type.", 415, context.request);
+
     const input = { bytes: new Uint8Array(body), type: contentType };
     const wantsProgress = (context.request.headers.get("Accept") || "").includes("text/event-stream");
     if (wantsProgress) {
@@ -394,6 +397,6 @@ export async function onRequest(context) {
     }
     return fail(message, 502, context.request);
   } finally {
-    activeRequests -= 1;
+    activeRequests = Math.max(0, activeRequests - 1);
   }
 }
