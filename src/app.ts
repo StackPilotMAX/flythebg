@@ -923,7 +923,7 @@ function render():void{
     if(existing){existing.addEventListener("load",()=>mount(),{once:true});}
     else{
       const script=document.createElement("script");
-      script.src="/assets/passport-photo.js?v=20260927";
+      script.src="/assets/passport-photo.js?v=20260927-2";
       script.defer=true;
       script.dataset.passportLoader="1";
       script.addEventListener("load",()=>mount(),{once:true});
