@@ -1332,3 +1332,39 @@ body:not(.app-pending)::after{display:none}
 .passport-crop-controls .passport-processed-preview img{width:auto;max-width:100%;height:auto;max-height:min(60vh,460px)}
 @media(max-width:1024px){.passport-crop-layout{grid-template-columns:minmax(0,1fr)}.passport-crop-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.passport-crop-controls>p,.passport-selection-readout,.passport-step2-ai,.passport-crop-controls .passport-processing,.passport-crop-controls .passport-processed-preview{grid-column:1/-1}.passport-crop-stage{min-height:250px}.passport-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.passport-page-shell{padding:12px 10px 50px}.passport-card{padding:18px 14px}.passport-crop-controls{grid-template-columns:minmax(0,1fr)}.passport-crop-stage{min-height:210px;border-radius:14px}.passport-crop-stage img{max-height:50vh}.passport-step2-ai{padding:14px}.passport-crop-controls .passport-processing{padding:14px}.passport-form-grid,.passport-color-controls,.passport-output-controls{grid-template-columns:minmax(0,1fr)}.passport-step-head h2{overflow-wrap:anywhere}}
+
+/* Mobile-first: bring every tool close to the top instead of requiring a full-screen hero scroll. */
+.fly-bg{background:#171321 url("https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg") center/cover no-repeat}
+.fly-video-fallback .fly-bg-video{opacity:0}
+.fly-site-hero .fly-bg-shade,.fly-home .fly-bg-shade{background:linear-gradient(180deg,rgba(0,0,0,.26),rgba(0,0,0,.5))}
+.fly-site-content{padding-top:clamp(20px,3vw,42px)}
+.fly-site-content .tool-workspace{margin-top:clamp(16px,2.5vw,28px)}
+.fly-site-content .tool-intro h1{font-size:clamp(2.4rem,6vw,5.5rem)}
+.passport-page-shell{padding-top:clamp(12px,2vw,26px)}
+.passport-hero{padding:clamp(18px,3vw,32px);margin-bottom:clamp(10px,2vw,20px)}
+@media(max-width:899px){
+ .fly-site-hero{height:auto;min-height:0;overflow:visible}
+ .fly-site-hero .fly-page{min-height:0;height:auto;gap:0;padding:12px 14px 18px;overflow:visible}
+ .fly-site-hero .fly-header{margin-bottom:16px}
+ .fly-site-hero .fly-hero{min-height:0!important;padding:12px 0 16px!important;margin:0!important}
+ .fly-site-hero .fly-headline{font-size:clamp(2.2rem,8vw,4.2rem);line-height:1.02}
+ .fly-site-hero .fly-subhead{margin:10px auto!important;font-size:clamp(.9rem,3vw,1.05rem)}
+ .fly-site-hero .fly-cta{margin-top:12px!important}
+ .fly-site-hero .fly-bg{position:absolute}
+ .fly-site-content{padding-top:12px;width:calc(100% - 24px)}
+ .fly-site-content>.tool-page{padding:0 0 40px}
+ .fly-site-content .tool-intro{padding:4px 0 0}
+ .fly-site-content .tool-intro h1{font-size:clamp(2.15rem,8vw,3.7rem);margin:5px 0 10px;line-height:1.02}
+ .fly-site-content .tool-intro>p:last-child{font-size:15px;line-height:1.45}
+ .fly-site-content .tool-intro .pills{margin-top:10px}
+ .fly-site-content .tool-workspace{margin-top:14px;padding:14px;border-radius:16px}
+ .fly-site-content .big-dropzone{min-height:210px;padding:20px 12px}
+ .passport-page-shell{padding:10px 10px 45px}
+ .passport-hero{padding:20px 17px;margin-bottom:12px;border-radius:18px}
+ .passport-hero h1{font-size:clamp(1.8rem,7vw,2.8rem);line-height:1.07}
+ .passport-hero p:last-child{font-size:.92rem;line-height:1.45}
+ .passport-card{margin-bottom:12px;padding:17px 14px}
+ .passport-step-head{margin-bottom:12px}
+ .passport-upload-zone{min-height:145px;padding:16px}
+}
+@media(max-width:480px){.fly-site-hero .fly-header{margin-bottom:8px}.fly-site-hero .fly-hero{padding:4px 0 12px!important}.fly-site-content{padding-top:8px}.fly-site-content .tool-workspace{padding:10px;margin-top:12px}.fly-site-content .big-dropzone{min-height:180px}.passport-hero{padding:16px 14px}.passport-card{padding:15px 12px}}
