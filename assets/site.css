@@ -1286,3 +1286,26 @@ body:not(.app-pending)::after{display:none}
 @keyframes passport-progress{from{transform:translateX(-90%)}to{transform:translateX(260%)}}
 @media(max-width:520px){.passport-processing{gap:12px;padding:16px}.passport-processing-spinner{flex-basis:34px;width:34px;height:34px}}
 @media(prefers-reduced-motion:reduce){.passport-processing-spinner,.passport-processing-track span{animation:none}.passport-processing-track span{width:65%}}
+
+/* Passport Photo Maker form polish: consent, choices, fields, mobile and processing */
+.passport-page-shell,.passport-page-shell *{box-sizing:border-box}
+.passport-page-shell .passport-consent{display:grid;grid-template-columns:24px minmax(0,1fr);gap:0 12px;align-items:start;margin:20px 0 0;padding:16px 18px;border:1.5px solid #d9cfe7;border-radius:16px;background:#f9f6fd;color:#30273b;cursor:pointer;line-height:1.6;box-shadow:0 4px 16px rgba(62,38,91,.04)}
+.passport-consent input{grid-column:1;grid-row:1;width:22px;height:22px;margin:2px 0 0;opacity:0;position:relative;z-index:1;cursor:pointer}
+.passport-consent-check{grid-column:1;grid-row:1;display:grid;place-items:center;width:22px;height:22px;margin-top:2px;border:2px solid #8665b0;border-radius:7px;background:#fff;color:transparent;font-size:15px;font-weight:800;transition:background .15s,border-color .15s}
+.passport-consent input:checked+.passport-consent-check{background:#7040a8;border-color:#7040a8;color:#fff}
+.passport-consent input:focus-visible+.passport-consent-check{outline:3px solid #ad88e9;outline-offset:3px}
+.passport-consent>span:last-child{grid-column:2;grid-row:1;min-width:0}
+.passport-consent a{color:#573098;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.passport-consent a:hover{color:#30145f}
+.passport-page-shell .passport-status{overflow-wrap:anywhere;border-left:4px solid #8756bc}
+.passport-page-shell .passport-choice{position:relative;min-width:0;transition:background .18s,border-color .18s,box-shadow .18s,transform .18s}
+.passport-page-shell .passport-choice:hover{border-color:#946ec1;transform:translateY(-2px)}
+.passport-page-shell .passport-choice.is-selected:after{content:"✓";position:absolute;top:13px;right:14px;display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#7040a8;color:#fff;font-weight:800}
+.passport-page-shell button:focus-visible,.passport-page-shell input:focus-visible,.passport-page-shell select:focus-visible,.passport-page-shell a:focus-visible{outline:3px solid #a47be0;outline-offset:3px}
+.passport-page-shell button:disabled{cursor:not-allowed;opacity:.55}
+.passport-page-shell .passport-upload-zone:focus-within{outline:3px solid #a47be0;outline-offset:3px}
+.passport-page-shell .passport-form-grid input,.passport-page-shell .passport-form-grid select,.passport-page-shell .passport-color-controls input,.passport-page-shell .passport-output-controls input{font:inherit;max-width:100%}
+.passport-page-shell .passport-processing{scroll-margin-top:100px}
+.passport-page-shell .passport-processing[hidden],.passport-page-shell .passport-processed-preview[hidden]{display:none!important}
+@media(max-width:600px){.passport-page-shell .passport-consent{padding:14px 12px}.passport-page-shell .passport-step-head{gap:12px}.passport-page-shell .passport-choice{padding:18px 38px 18px 14px}.passport-page-shell .passport-processing{flex-direction:column}.passport-page-shell .passport-processing-copy{width:100%}.passport-page-shell .passport-upload-preview{flex-wrap:wrap}.passport-page-shell .passport-upload-preview div{min-width:0;overflow-wrap:anywhere}}
+@media(prefers-reduced-motion:reduce){.passport-page-shell .passport-choice:hover{transform:none}.passport-consent-check{transition:none}}
