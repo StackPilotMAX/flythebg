@@ -1318,3 +1318,17 @@ body:not(.app-pending)::after{display:none}
 .passport-crop-controls .passport-processed-preview img{max-height:460px;max-width:100%;width:auto;height:auto;object-fit:contain}
 .passport-crop-controls .passport-processed-preview{overflow-wrap:anywhere}
 @media(max-width:800px){.passport-step2-ai{padding:15px}.passport-crop-controls .passport-processing{padding:14px}}
+
+/* Responsive visa photo workspace: compact phones, tablets, and wide desktops. */
+.passport-page-shell{width:100%;min-width:0;max-width:1180px}
+.passport-card,.passport-crop-layout,.passport-crop-controls,.passport-crop-stage{min-width:0}
+.passport-crop-stage{isolation:isolate;touch-action:pan-y;max-width:100%;min-height:260px}
+.passport-crop-stage.is-selecting{touch-action:none}
+.passport-crop-stage img{max-width:100%;max-height:min(64vh,620px);height:auto;object-fit:contain}
+.passport-crop-box{z-index:2}
+.passport-crop-controls .button,.passport-step2-ai .button{white-space:normal;min-height:46px;overflow-wrap:anywhere}
+.passport-step2-ai .button[aria-busy="true"]{cursor:progress;opacity:.7}
+.passport-crop-controls .passport-processing,.passport-crop-controls .passport-processed-preview{max-width:100%;overflow:hidden}
+.passport-crop-controls .passport-processed-preview img{width:auto;max-width:100%;height:auto;max-height:min(60vh,460px)}
+@media(max-width:1024px){.passport-crop-layout{grid-template-columns:minmax(0,1fr)}.passport-crop-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.passport-crop-controls>p,.passport-selection-readout,.passport-step2-ai,.passport-crop-controls .passport-processing,.passport-crop-controls .passport-processed-preview{grid-column:1/-1}.passport-crop-stage{min-height:250px}.passport-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.passport-page-shell{padding:12px 10px 50px}.passport-card{padding:18px 14px}.passport-crop-controls{grid-template-columns:minmax(0,1fr)}.passport-crop-stage{min-height:210px;border-radius:14px}.passport-crop-stage img{max-height:50vh}.passport-step2-ai{padding:14px}.passport-crop-controls .passport-processing{padding:14px}.passport-form-grid,.passport-color-controls,.passport-output-controls{grid-template-columns:minmax(0,1fr)}.passport-step-head h2{overflow-wrap:anywhere}}
