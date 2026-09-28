@@ -1309,3 +1309,12 @@ body:not(.app-pending)::after{display:none}
 .passport-page-shell .passport-processing[hidden],.passport-page-shell .passport-processed-preview[hidden]{display:none!important}
 @media(max-width:600px){.passport-page-shell .passport-consent{padding:14px 12px}.passport-page-shell .passport-step-head{gap:12px}.passport-page-shell .passport-choice{padding:18px 38px 18px 14px}.passport-page-shell .passport-processing{flex-direction:column}.passport-page-shell .passport-processing-copy{width:100%}.passport-page-shell .passport-upload-preview{flex-wrap:wrap}.passport-page-shell .passport-upload-preview div{min-width:0;overflow-wrap:anywhere}}
 @media(prefers-reduced-motion:reduce){.passport-page-shell .passport-choice:hover{transform:none}.passport-consent-check{transition:none}}
+
+/* Step 2 AI action and result: stay inside the crop workspace. */
+.passport-step2-ai{margin-top:12px;padding:18px;border:1px solid #d8c6f0;border-radius:18px;background:linear-gradient(135deg,#faf6ff,#f0f7ff)}
+.passport-step2-ai h3{margin:0 0 8px;font-size:1.18rem;color:#302049}.passport-step2-ai p{margin:0 0 15px;line-height:1.5;color:#60556d}.passport-step2-ai .button{width:100%;min-height:48px}
+.passport-crop-controls .passport-processing,.passport-crop-controls .passport-processed-preview{width:100%;min-width:0;margin-top:12px}
+.passport-crop-controls .passport-processing{display:flex;flex-direction:column;gap:12px;padding:16px}.passport-crop-controls .passport-processing-copy{width:100%}
+.passport-crop-controls .passport-processed-preview img{max-height:460px;max-width:100%;width:auto;height:auto;object-fit:contain}
+.passport-crop-controls .passport-processed-preview{overflow-wrap:anywhere}
+@media(max-width:800px){.passport-step2-ai{padding:15px}.passport-crop-controls .passport-processing{padding:14px}}
