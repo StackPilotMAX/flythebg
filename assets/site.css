@@ -1274,3 +1274,15 @@ body:not(.app-pending)::after{display:none}
 @keyframes passport-progress{from{transform:translateX(-8%)}to{transform:translateX(185%)}}
 @media(max-width:560px){.passport-processing{align-items:flex-start;gap:14px;padding:16px}.passport-processing-spinner{width:40px;height:40px;border-width:4px}.passport-processing-copy strong{font-size:1rem}}
 @media(prefers-reduced-motion:reduce){.passport-processing-spinner,.passport-processing-track span{animation:none}}
+
+/* Passport Photo Maker: accessible AI processing panel and finished preview */
+.passport-processing{display:flex;align-items:flex-start;gap:18px;margin-top:22px;padding:22px;border:1px solid #d9c9f5;border-radius:20px;background:linear-gradient(135deg,#f8f3ff,#eef5ff);box-shadow:0 10px 30px rgba(76,43,129,.09);color:#35254c}
+.passport-processing-spinner{flex:0 0 44px;width:44px;height:44px;border:4px solid #ddd0f4;border-top-color:#7040a8;border-right-color:#9364c9;border-radius:50%;animation:passport-spin 1s linear infinite}
+.passport-processing-copy{flex:1;min-width:0}.passport-processing-copy strong{display:block;font-size:1.1rem;line-height:1.4}.passport-processing-copy p{margin:8px 0 14px;line-height:1.55;color:#574c69}.passport-processing-copy small{display:block;margin-top:10px;color:#675b76;line-height:1.5}
+.passport-processing-track{height:9px;overflow:hidden;border-radius:999px;background:#e1d9f1}.passport-processing-track span{display:block;width:38%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7040a8,#aa82e4);animation:passport-progress 2.1s ease-in-out infinite alternate}
+.passport-processed-preview{margin-top:20px;padding:18px;border:1px solid #e5ddeb;border-radius:18px;background:#fff}.passport-processed-preview>strong{display:block;margin-bottom:14px;color:#362b42}.passport-processed-preview img{display:block;max-width:100%;max-height:420px;margin:auto;object-fit:contain;border-radius:12px;background-color:#f4f0f7;background-image:linear-gradient(45deg,#e7e2ed 25%,transparent 25%),linear-gradient(-45deg,#e7e2ed 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e7e2ed 75%),linear-gradient(-45deg,transparent 75%,#e7e2ed 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+.passport-bg-action[aria-busy="true"]{opacity:.7;cursor:progress}
+@keyframes passport-spin{to{transform:rotate(360deg)}}
+@keyframes passport-progress{from{transform:translateX(-90%)}to{transform:translateX(260%)}}
+@media(max-width:520px){.passport-processing{gap:12px;padding:16px}.passport-processing-spinner{flex-basis:34px;width:34px;height:34px}}
+@media(prefers-reduced-motion:reduce){.passport-processing-spinner,.passport-processing-track span{animation:none}.passport-processing-track span{width:65%}}
