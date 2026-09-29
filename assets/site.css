@@ -1422,3 +1422,21 @@ body:not(.app-pending)::after{display:none}
 @media(max-width:1023px){.fly-site-hero{height:auto;min-height:0}.fly-site-hero .fly-page{height:auto;min-height:0;padding:14px 16px 22px}.fly-site-hero .fly-hero{min-height:0;padding:24px 0 28px!important}.fly-site-content{padding-top:14px}.fly-site-content .tool-workspace{margin-top:14px}.fly-nav{display:none}.fly-header{grid-template-columns:1fr auto auto}.fly-burger{display:flex}.fly-signin{min-height:42px}}
 @media(max-width:640px){.fly-site-hero .fly-page{padding:12px 14px 14px}.fly-site-hero .fly-hero{padding:12px 0 16px!important}.fly-site-hero .fly-headline{font-size:clamp(30px,9vw,46px);white-space:normal;overflow:visible}.fly-site-hero .fly-subhead{font-size:14px;line-height:1.45;margin:10px auto}.fly-site-content{width:calc(100% - 20px);padding-top:8px}.fly-site-content .tool-intro h1{font-size:clamp(31px,9vw,49px)}.fly-site-content .tool-workspace{padding:12px}.passport-page-shell{padding:8px 0 42px!important}.passport-hero{padding:19px 15px;margin-bottom:12px}.passport-card{padding:16px 13px;margin-bottom:12px}.passport-crop-layout{grid-template-columns:minmax(0,1fr)}.passport-choice-grid{grid-template-columns:minmax(0,1fr)}}
 @media(prefers-reduced-motion:reduce){.fly-headline span{opacity:1;transform:none;animation:none}.fly-bg-video{display:none}.fly-cta,.fly-signin,.fly-nav a{transition:none}}
+
+/* 2026-09-29: authoritative overrides for legacy space/hero rules. */
+.fly-site-hero{isolation:isolate;position:relative;background:#000;overflow:hidden}
+.fly-site-hero>.fly-bg{position:absolute!important;inset:0!important;z-index:0!important;pointer-events:none;background:#080510 url("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0bf7409c-9fa2-4bef-a49d-34903dcc91ad.png") center top/cover no-repeat!important}
+.fly-site-hero .fly-bg-video,.fly-home .fly-bg-video{position:absolute!important;top:0!important;left:0!important;right:0!important;bottom:0!important;transform:none!important;filter:none!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center top!important;opacity:1}
+.fly-site-hero .fly-bg-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.64),rgba(0,0,0,.22) 75%,rgba(0,0,0,.4))}
+.fly-site-hero>.fly-page{position:relative;z-index:2}
+.fly-site .fly-site-content{position:relative;z-index:1;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.fly-site-content .passport-one-page.reveal,.fly-site-content .tool-page.reveal{opacity:1;transform:none}
+.passport-page-shell .passport-card{visibility:visible;opacity:1}
+.passport-page-shell .passport-card:nth-of-type(-n+4){background:#fff!important;color:#21192b!important}
+.passport-page-shell .passport-card:nth-of-type(-n+4) h2,.passport-page-shell .passport-card:nth-of-type(-n+4) h3,.passport-page-shell .passport-card:nth-of-type(-n+4) strong{color:#21192b!important}
+.passport-page-shell .passport-card:nth-of-type(-n+4) .passport-step-head>span{color:#fff!important}
+.passport-page-shell .passport-card:nth-of-type(-n+4) .passport-crop-placeholder{color:#fff!important}
+.passport-page-shell .passport-card:nth-of-type(-n+4) .passport-choice{color:#21192b!important;background:#fff!important}
+.passport-page-shell .passport-card:nth-of-type(-n+4) .passport-upload-zone{background:#faf8fc!important;color:#21192b!important}
+@media(max-width:1023px){.fly-site-hero{height:auto!important;min-height:0!important}.fly-site-hero>.fly-page{height:auto!important;min-height:0!important}.fly-site-hero .fly-hero{flex:0 0 auto;min-height:0!important;padding:16px 0!important}.fly-site-content{padding-top:12px!important}.fly-site-content .tool-workspace{margin-top:12px!important}}
+@media(max-width:640px){.fly-site-hero .fly-headline{white-space:normal!important;overflow:visible!important}.fly-site-content .passport-one-page{padding:8px 0 32px!important}.passport-card{padding:16px 13px!important}}
