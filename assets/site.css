@@ -1440,3 +1440,9 @@ body:not(.app-pending)::after{display:none}
 .passport-page-shell .passport-card:nth-of-type(-n+4) .passport-upload-zone{background:#faf8fc!important;color:#21192b!important}
 @media(max-width:1023px){.fly-site-hero{height:auto!important;min-height:0!important}.fly-site-hero>.fly-page{height:auto!important;min-height:0!important}.fly-site-hero .fly-hero{flex:0 0 auto;min-height:0!important;padding:16px 0!important}.fly-site-content{padding-top:12px!important}.fly-site-content .tool-workspace{margin-top:12px!important}}
 @media(max-width:640px){.fly-site-hero .fly-headline{white-space:normal!important;overflow:visible!important}.fly-site-content .passport-one-page{padding:8px 0 32px!important}.passport-card{padding:16px 13px!important}}
+
+/* FINAL HERO VIDEO OVERRIDE — keep the supplied planet artwork visible. */
+.fly-site-hero .fly-bg{display:block!important;visibility:visible!important;opacity:1!important;background:#000 url("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0bf7409c-9fa2-4bef-a49d-34903dcc91ad.png") center top/cover no-repeat!important}
+.fly-site-hero .fly-bg-video{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;min-width:100%!important;min-height:100%!important;object-fit:cover!important;object-position:center top!important;z-index:0!important}
+.fly-site-hero .fly-bg-shade{z-index:1!important}
+@media(max-width:640px){.fly-site-hero .fly-bg-video{object-position:center top!important}}
