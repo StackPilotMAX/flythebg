@@ -1,8 +1,8 @@
 type ToolId = "remove-bg" | "image-compressor" | "video-compressor" | "passport-photo";
 type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/passport-photo" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog";
 
-const VIDEO="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4";
-const POSTER="https://d2ol7oe51mr4n9d.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/130837c4-0244-4f37-9c61-8d801d93fd29.jpg";
+const VIDEO="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/4b73c700-3112-4c07-bd48-0af2893dff7c.mp4";
+const POSTER="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0bf7409c-9fa2-4bef-a49d-34903dcc91ad.png";
 const GITHUB_REPO="StackPilotMAX/flythebg";
 const GITHUB_URL="https://github.com/StackPilotMAX/flythebg";
 const COFFEE_URL="https://www.buymeacoffee.com/flythebg";
@@ -246,7 +246,7 @@ function shell(content:string,title:string):string{
  const active=(route:string)=>path===route?' class="is-active" aria-current="page"':'';
  return `<div class="fly-site ${path==="/support"?"fly-site-support":""}">
  <section class="fly-site-hero">
-  <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" muted loop playsinline preload="none" poster="${POSTER}" data-deferred-video aria-hidden="true"><source data-src="${VIDEO}" type="video/mp4"></video><div class="fly-bg-shade"></div></div>
+  <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" autoplay muted loop playsinline preload="auto" poster="${POSTER}" data-deferred-video aria-hidden="true"><source data-src="${VIDEO}" type="video/mp4"></video><div class="fly-bg-shade"></div></div>
   <div class="fly-page">
    <header class="fly-header"><a class="fly-logo" href="/" aria-label="FlyThe BG home"><img src="/assets/flythebg-logo.png" alt="FlyThe BG" class="site-logo"></a><nav class="fly-nav" aria-label="Primary navigation"><a href="/"${active("/")}>Home</a><a href="/features"${active("/features")}>Tools</a><a href="/about"${active("/about")}>About</a><a href="/contact"${active("/contact")}>Contact</a></nav><a class="fly-signin" href="/features">Get Started</a><button class="fly-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="fly-mobile-menu"><i></i><i></i><i></i></button></header>
    <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/passport-photo">Passport Photos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/blogs">Blogs</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
@@ -280,7 +280,7 @@ function home():string{
  setSeo("FlyThe BG — Media Tools Designed To Fly","Remove backgrounds with protected AI, compress images locally and create smaller videos in one focused media toolkit.");
  return `<main class="fly-home">
   <div class="fly-bg" aria-hidden="true">
-   <video class="fly-bg-video" muted loop playsinline preload="none" poster="${POSTER}" data-deferred-video aria-hidden="true">
+   <video class="fly-bg-video" autoplay muted loop playsinline preload="auto" poster="${POSTER}" data-deferred-video aria-hidden="true">
     <source data-src="${VIDEO}" type="video/mp4">
    </video>
    <div class="fly-bg-shade"></div>
@@ -685,10 +685,11 @@ function wireEditorial():void{
 function wireFlyLanding():void{
  const root=document.querySelector<HTMLElement>(".fly-home, .fly-site");if(!root)return;
  const deferredVideo=root.querySelector<HTMLVideoElement>("[data-deferred-video]");
- if(deferredVideo){deferredVideo.setAttribute("webkit-playsinline","");deferredVideo.addEventListener("error",()=>root.classList.add("fly-video-fallback"));}
+ if(deferredVideo){deferredVideo.muted=true;deferredVideo.setAttribute("webkit-playsinline","");deferredVideo.addEventListener("error",()=>root.classList.add("fly-video-fallback"));}
  if(deferredVideo&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
   const loadVideo=()=>{const source=deferredVideo.querySelector<HTMLElement>("[data-src]");if(!source||deferredVideo.dataset.loaded==="1")return;source.setAttribute("src",source.dataset.src||"");deferredVideo.dataset.loaded="1";deferredVideo.load();deferredVideo.play().catch(()=>{root.classList.add("fly-video-fallback")});};
   const idle=(window as Window&typeof globalThis&{requestIdleCallback?: (cb:()=>void,options?:{timeout:number})=>number}).requestIdleCallback;if(matchMedia("(max-width: 899px)").matches){loadVideo();document.addEventListener("visibilitychange",()=>{if(!document.hidden&&deferredVideo.paused)deferredVideo.play().catch(()=>{})})}else if(idle)idle(loadVideo,{timeout:2500});else window.setTimeout(loadVideo,1800);
+  const retry=()=>{if(deferredVideo.paused)deferredVideo.play().catch(()=>{})};for(const event of ["pointerdown","touchstart","scroll"])window.addEventListener(event,retry,{once:true,passive:true});
  }
  const burger=root.querySelector<HTMLButtonElement>(".fly-burger");
  const menu=root.querySelector<HTMLElement>(".fly-mobile-menu");
