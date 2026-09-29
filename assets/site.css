@@ -1368,3 +1368,57 @@ body:not(.app-pending)::after{display:none}
  .passport-upload-zone{min-height:145px;padding:16px}
 }
 @media(max-width:480px){.fly-site-hero .fly-header{margin-bottom:8px}.fly-site-hero .fly-hero{padding:4px 0 12px!important}.fly-site-content{padding-top:8px}.fly-site-content .tool-workspace{padding:10px;margin-top:12px}.fly-site-content .big-dropzone{min-height:180px}.passport-hero{padding:16px 14px}.passport-card{padding:15px 12px}}
+
+/* Orbit-inspired FlyThe BG system: same brand and actual tools on every route. */
+:root{--orbit-ink:#fff;--orbit-muted:rgba(255,255,255,.70);--orbit-glass:rgba(255,255,255,.10);--orbit-line:rgba(255,255,255,.22);--orbit-radius:18px}
+.fly-home,.fly-site{font-family:Inter,"Helvetica Neue",Arial,system-ui,sans-serif;background:#000;color:#fff}
+.fly-bg{background:#080510 url("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0bf7409c-9fa2-4bef-a49d-34903dcc91ad.png") center top/cover no-repeat!important}
+.fly-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;opacity:1}
+.fly-bg-shade,.fly-site-hero .fly-bg-shade,.fly-home .fly-bg-shade{background:linear-gradient(to bottom,rgba(0,0,0,.57) 0%,rgba(0,0,0,.27) 44%,rgba(0,0,0,.13) 100%)}
+.fly-header{width:min(1100px,100%);grid-template-columns:1fr auto 1fr;gap:24px}
+.fly-logo{justify-self:start;min-width:0}
+.fly-nav{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:none}
+.fly-nav a{color:#fff;opacity:.82}
+.fly-nav a:hover,.fly-nav a.is-active{color:#fff;opacity:1}
+.fly-nav a.is-active:after{background:#fff;box-shadow:-5px 0 #fff,5px 0 #fff}
+.fly-signin{background:#fff;color:#080808;border-radius:12px;box-shadow:none}
+.fly-signin:hover{background:#e9e9ea;color:#000}
+.fly-burger{border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.12);backdrop-filter:blur(12px)}
+.fly-hero{max-width:900px}
+.fly-headline{font-family:Inter,"Helvetica Neue",Arial,system-ui,sans-serif;font-weight:550;letter-spacing:-.035em;line-height:1.06}
+.fly-subhead{color:rgba(255,255,255,.76);opacity:1}
+.fly-cta{background:#fff;color:#080808;border-radius:12px;box-shadow:0 12px 30px #0004}
+.fly-cta:hover{background:#e9e9ea;color:#000}
+.fly-site-hero{height:min(75vh,690px);height:min(75dvh,690px);min-height:400px}
+.fly-site-hero .fly-page{height:100%;min-height:0}
+.fly-site-content{padding-top:26px}
+.fly-site-content>.tool-page,.fly-site-content>.page,.fly-site-content>.passport-page-shell{max-width:1100px}
+.fly-site-content .tool-workspace{border:1px solid rgba(255,255,255,.23);background:rgba(20,18,29,.91);backdrop-filter:blur(16px);border-radius:20px}
+.fly-site-footer{margin-top:48px}
+.fly-site-content .tool-intro h1{font-family:Inter,"Helvetica Neue",Arial,system-ui,sans-serif;font-weight:600;letter-spacing:-.045em}
+.fly-site-content .tool-workspace{margin-top:20px}
+.fly-site-content a:focus-visible,.fly-site-content button:focus-visible,.fly-header a:focus-visible,.fly-header button:focus-visible{outline:2px solid #9b8cff;outline-offset:3px}
+.fly-site-content .passport-page-shell{color:#17131f!important}
+.fly-site-content .passport-card{background:#fff!important;color:#21192b!important;border:1px solid #e7e1ed!important;box-shadow:0 12px 36px #0002}
+.fly-site-content .passport-card .passport-step-head h2,.fly-site-content .passport-card .passport-step-head p,.fly-site-content .passport-card label,.fly-site-content .passport-card strong,.fly-site-content .passport-card h3{color:#21192b}
+.fly-site-content .passport-card .passport-step-head p,.fly-site-content .passport-card .passport-choice span,.fly-site-content .passport-card .passport-crop-controls>p{color:#62596b}
+.fly-site-content .passport-card .passport-upload-zone{background:#faf8fc;color:#21192b}
+.fly-site-content .passport-card .passport-upload-zone span{color:#62596b}
+.fly-site-content .passport-card .passport-consent{background:#f9f6fd;color:#30273b}
+.fly-site-content .passport-card .passport-choice{background:#fff;color:#21192b}
+.fly-site-content .passport-card .passport-choice.is-selected{background:#faf6ff}
+.fly-site-content .passport-card .passport-selection-readout{color:#30273b}
+.fly-site-content .passport-card .passport-step2-ai{background:linear-gradient(135deg,#faf6ff,#f0f7ff);color:#302049}
+.fly-site-content .passport-card .passport-processing{background:linear-gradient(135deg,#f8f3ff,#eef5ff);color:#35254c}
+.fly-site-content .passport-card .passport-processed-preview{background:#fff;color:#21192b}
+.fly-site-content .passport-card .passport-crop-stage{background:#171321}
+.fly-site-content .passport-card .passport-crop-placeholder{color:#fff}
+.fly-site-content .passport-card .passport-status{color:#514958;background:#f4f1f6}
+.fly-site-content .passport-card .passport-form-grid input,.fly-site-content .passport-card .passport-form-grid select{color:#211c25;background:#fff}
+.fly-site-content .passport-card .button.primary{background:#7040a8;color:#fff}
+.fly-site-content .passport-card .button.ghost{background:#fff;color:#382350;border:1px solid #cbb9dd}
+.fly-site-content .passport-card .passport-hero{color:#fff}
+.fly-site-content .passport-card [hidden],.passport-page-shell [hidden]{display:none!important}
+@media(max-width:1023px){.fly-site-hero{height:auto;min-height:0}.fly-site-hero .fly-page{height:auto;min-height:0;padding:14px 16px 22px}.fly-site-hero .fly-hero{min-height:0;padding:24px 0 28px!important}.fly-site-content{padding-top:14px}.fly-site-content .tool-workspace{margin-top:14px}.fly-nav{display:none}.fly-header{grid-template-columns:1fr auto auto}.fly-burger{display:flex}.fly-signin{min-height:42px}}
+@media(max-width:640px){.fly-site-hero .fly-page{padding:12px 14px 14px}.fly-site-hero .fly-hero{padding:12px 0 16px!important}.fly-site-hero .fly-headline{font-size:clamp(30px,9vw,46px);white-space:normal;overflow:visible}.fly-site-hero .fly-subhead{font-size:14px;line-height:1.45;margin:10px auto}.fly-site-content{width:calc(100% - 20px);padding-top:8px}.fly-site-content .tool-intro h1{font-size:clamp(31px,9vw,49px)}.fly-site-content .tool-workspace{padding:12px}.passport-page-shell{padding:8px 0 42px!important}.passport-hero{padding:19px 15px;margin-bottom:12px}.passport-card{padding:16px 13px;margin-bottom:12px}.passport-crop-layout{grid-template-columns:minmax(0,1fr)}.passport-choice-grid{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.fly-headline span{opacity:1;transform:none;animation:none}.fly-bg-video{display:none}.fly-cta,.fly-signin,.fly-nav a{transition:none}}
