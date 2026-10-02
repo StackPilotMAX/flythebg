@@ -217,7 +217,9 @@ export default {
     // This avoids third-party media/CSP/browser delivery failures and gives the video
     // the same-origin URL used by the homepage.
     if (url.pathname === "/assets/flythebg-hero.mp4") {
+      const range = request.headers.get("Range");
       const upstream = await fetch("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/4b73c700-3112-4c07-bd48-0af2893dff7c.mp4", {
+        headers: range ? { Range: range } : {},
         cf: { cacheEverything: true, cacheTtl: 86400 }
       });
       if (!upstream.ok) return new Response("Hero video unavailable", { status: 502 });
