@@ -666,25 +666,70 @@ function wireFlyLanding():void{
 function wireSupportGalaxy():void{
  const root=document.querySelector<HTMLElement>(".fly-site-support"),canvas=document.getElementById("andromeda-canvas") as HTMLCanvasElement|null;
  if(!root||!canvas||canvas.dataset.ready==="1")return;canvas.dataset.ready="1";
- const ctx=canvas.getContext("2d",{alpha:true});if(!ctx)return;const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
- const POINTS=120000,count=matchMedia("(max-width:700px)").matches?72000:POINTS;type Star={x:number;y:number;z:number;s:number;b:number;t:number};const stars:Star[]=[];let seed=314159;
- const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};const gauss=()=>{const u=Math.max(rand(),1e-9),v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(Math.PI*2*v)};
- for(let i=0;i<count;i++){const q=i/count;let x=0,y=0,z=0,s=.6+rand()*1.5,b=.35+rand()*.65,t=0;
+ const ctx=canvas.getContext("2d",{alpha:true});if(!ctx)return;
+ const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const POINTS=120000,count=matchMedia("(max-width:700px)").matches?72000:POINTS;
+ type Star={x:number;y:number;z:number;s:number;b:number;t:number};
+ const stars:Star[]=[];let seed=314159;
+ const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
+ const gauss=()=>{const u=Math.max(rand(),1e-9),v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(Math.PI*2*v)};
+ for(let i=0;i<count;i++){
+  const q=i/count;let x=0,y=0,z=0,s=.6+rand()*1.5,b=.35+rand()*.65,t=0;
   if(q<.16){const rr=Math.abs(gauss())*.18,a=rand()*Math.PI*2;x=rr*Math.cos(a);y=rr*Math.sin(a)*.72;z=(rand()-.5)*.22;s=.7+rand()*2.2;b=.48+rand()*.52;t=1}
   else if(q<.92){const rr=.08+Math.sqrt(rand())*.92,arm=(i%5)*(Math.PI*2/5),a=arm+rr*7.2+(rand()-.5)*.85,lane=Math.sin(a*2.5+rr*8);x=rr*Math.cos(a);y=rr*Math.sin(a)*.34;z=(rand()-.5)*(.035+rr*.12);if(Math.abs(lane)<.12){b*=.38;s*=.72}t=rand()<.13?2:0;s=.35+rand()*1.25+(rr<.28?1.2:0)}
   else{const rr=1.15+Math.pow(rand(),.45)*1.8,a=rand()*Math.PI*2;x=rr*Math.cos(a);y=rr*Math.sin(a)*.52;z=(rand()-.5)*1.1;s=.25+rand()*.9;b=.18+rand()*.55;t=3}
   stars.push({x,y,z,s,b,t});
  }
- let width=0,height=0,dpr=1,scrollTarget=0,scroll=0,raf=0,last=0;
+ let width=0,height=0,dpr=1,scrollTarget=0,scroll=0,raf=0;
  const resize=()=>{dpr=Math.min(devicePixelRatio||1,2);width=innerWidth;height=innerHeight;canvas.width=Math.max(1,Math.round(width*dpr));canvas.height=Math.max(1,Math.round(height*dpr));canvas.style.width=width+"px";canvas.style.height=height+"px";ctx.setTransform(dpr,0,0,dpr,0,0)};
- const draw=()=>{scroll+=(scrollTarget-scroll)*.085;const zoom=.72+scroll*2.55,tilt=.34+scroll*.18,cx=width*.5+Math.sin(scroll*Math.PI*1.8)*width*.035,cy=height*.52+Math.cos(scroll*Math.PI*1.2)*height*.025;ctx.clearRect(0,0,width,height);ctx.fillStyle="rgba(0,0,0,.16)";ctx.fillRect(0,0,width,height);
-  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(width,height)*(.11+scroll*.05));glow.addColorStop(0,"rgba(255,236,190,.95)");glow.addColorStop(.22,"rgba(255,215,150,.45)");glow.addColorStop(1,"rgba(120,150,255,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,width,height);
-  const farAlpha=Math.max(.18,1-scroll*.25);for(let pass=0;pass<3;pass++){ctx.fillStyle=pass===0?"#e9e4d5":pass===1?"#a9c9ff":"#fff4c9";for(let i=pass;i<stars.length;i+=3){const p=stars[i],px=p.x*zoom*width*.24,py=p.y*zoom*width*.24/Math.max(.22,tilt),depth=p.z*zoom*width*.025,sx=cx+px+depth,sy=cy+py-depth*.45,size=Math.max(.32,p.s*(.42+scroll*.92)),alpha=Math.min(.92,p.b*farAlpha*(p.t===3?.72:1));if(size<.5&&alpha<.24)continue;ctx.globalAlpha=alpha;ctx.fillRect(sx,sy,size,size)}}ctx.globalAlpha=1;
-  const vignette=ctx.createRadialGradient(width*.5,height*.5,Math.min(width,height)*.18,width*.5,height*.5,Math.max(width,height)*.72);vignette.addColorStop(0,"rgba(0,0,0,0)");vignette.addColorStop(.72,"rgba(0,0,0,.08)");vignette.addColorStop(1,"rgba(0,0,0,.68)");ctx.fillStyle=vignette;ctx.fillRect(0,0,width,height);raf=0;
+ const updateScroll=()=>{
+  if(reduced){scrollTarget=0;return}
+  const pageTop=root.getBoundingClientRect().top+scrollY;
+  const pageBottom=pageTop+root.offsetHeight;
+  const travel=Math.max(1,pageBottom-innerHeight);
+  scrollTarget=Math.min(1,Math.max(0,(scrollY-pageTop)/travel));
+  if(!raf)raf=requestAnimationFrame(frame);
+ };
+ const draw=()=>{
+  scroll+=(scrollTarget-scroll)*.075;
+  const zoom=.68+scroll*3.05;
+  const tilt=.31+scroll*.27;
+  const spin=scroll*Math.PI*1.65;
+  const driftX=Math.sin(scroll*Math.PI*2.2)*width*.075;
+  const driftY=Math.cos(scroll*Math.PI*1.6)*height*.045;
+  const cx=width*.5+driftX,cy=height*.52+driftY;
+  ctx.clearRect(0,0,width,height);
+  ctx.fillStyle="rgba(0,0,0,.16)";ctx.fillRect(0,0,width,height);
+  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(width,height)*(.11+scroll*.07));
+  glow.addColorStop(0,"rgba(255,236,190,.98)");glow.addColorStop(.22,"rgba(255,215,150,.46)");glow.addColorStop(1,"rgba(120,150,255,0)");
+  ctx.fillStyle=glow;ctx.fillRect(0,0,width,height);
+  const farAlpha=Math.max(.12,1-scroll*.18);
+  for(let pass=0;pass<3;pass++){
+   ctx.fillStyle=pass===0?"#e9e4d5":pass===1?"#a9c9ff":"#fff4c9";
+   const c=Math.cos(spin),si=Math.sin(spin);
+   for(let i=pass;i<stars.length;i+=3){
+    const p=stars[i];
+    const baseX=p.x*zoom*width*.24,baseY=p.y*zoom*width*.24/Math.max(.2,tilt);
+    const rx=baseX*c-baseY*si,ry=baseX*si+baseY*c;
+    const depth=p.z*zoom*width*.025;
+    const sx=cx+rx+depth,sy=cy+ry-depth*.45;
+    const size=Math.max(.32,p.s*(.42+scroll*1.18));
+    const alpha=Math.min(.95,p.b*farAlpha*(p.t===3?.72:1));
+    if(size<.5&&alpha<.2)continue;
+    ctx.globalAlpha=alpha;ctx.fillRect(sx,sy,size,size);
+   }
+  }
+  ctx.globalAlpha=1;
+  const vignette=ctx.createRadialGradient(width*.5,height*.5,Math.min(width,height)*.18,width*.5,height*.5,Math.max(width,height)*.72);
+  vignette.addColorStop(0,"rgba(0,0,0,0)");vignette.addColorStop(.72,"rgba(0,0,0,.08)");vignette.addColorStop(1,"rgba(0,0,0,.68)");
+  ctx.fillStyle=vignette;ctx.fillRect(0,0,width,height);
+  raf=0;
  };
  const frame=()=>{draw();if(Math.abs(scrollTarget-scroll)>.0008)raf=requestAnimationFrame(frame);else raf=0};
- const updateScroll=()=>{const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);scrollTarget=Math.min(1,Math.max(0,(scrollY||0)/max));if(!raf)raf=requestAnimationFrame(frame)};
- resize();draw();addEventListener("resize",resize,{passive:true});addEventListener("scroll",updateScroll,{passive:true});updateScroll();
+ resize();draw();
+ addEventListener("resize",resize,{passive:true});
+ addEventListener("scroll",updateScroll,{passive:true});
+ updateScroll();
 }
 function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/passport-photo":"/passport-photo","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/blogs":"/blogs","/blogs/remove-background-online-privacy":"/blogs/remove-background-online-privacy","/blogs/compress-images-in-browser":"/blogs/compress-images-in-browser","/blogs/webm-video-compression-guide":"/blogs/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string,tool?:ToolId):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();if(tool){const workspace=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`)?.closest(".tool-workspace");if(workspace){workspace.querySelector(".download-recovery")?.remove();const recovery=document.createElement("div");recovery.className="download-recovery";recovery.innerHTML=`<span><strong>Your file is ready.</strong> If the browser download was cancelled or missed, use Download again.</span><button type="button" class="button primary">Download again</button>`;recovery.querySelector("button")?.addEventListener("click",()=>{const retry=document.createElement("a");retry.href=url;retry.download=filename;retry.rel="noopener";document.body.appendChild(retry);retry.click();retry.remove();});workspace.appendChild(recovery);}}setTimeout(()=>URL.revokeObjectURL(url),300000);}
