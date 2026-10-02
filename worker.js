@@ -213,6 +213,32 @@ export default {
       return Response.redirect(new URL(legacyBlogMap[url.pathname], request.url).toString(), 301);
     }
 
+    // Proxy the master-prompt hero media through the FlyThe BG origin.
+    // This avoids third-party media/CSP/browser delivery failures and gives the video
+    // the same-origin URL used by the homepage.
+    if (url.pathname === "/assets/flythebg-hero.mp4") {
+      const upstream = await fetch("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/4b73c700-3112-4c07-bd48-0af2893dff7c.mp4", {
+        cf: { cacheEverything: true, cacheTtl: 86400 }
+      });
+      if (!upstream.ok) return new Response("Hero video unavailable", { status: 502 });
+      const headers = new Headers(upstream.headers);
+      headers.set("Content-Type", "video/mp4");
+      headers.set("Cache-Control", "public, max-age=86400, immutable");
+      headers.set("Accept-Ranges", "bytes");
+      return withSecurityHeaders(new Response(upstream.body, { status: upstream.status, headers }));
+    }
+
+    if (url.pathname === "/assets/flythebg-hero-poster.png") {
+      const upstream = await fetch("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0bf7409c-9fa2-4bef-a49d-34903dcc91ad.png", {
+        cf: { cacheEverything: true, cacheTtl: 86400 }
+      });
+      if (!upstream.ok) return new Response("Hero poster unavailable", { status: 502 });
+      const headers = new Headers(upstream.headers);
+      headers.set("Content-Type", "image/png");
+      headers.set("Cache-Control", "public, max-age=86400, immutable");
+      return withSecurityHeaders(new Response(upstream.body, { status: upstream.status, headers }));
+    }
+
     if (url.pathname === "/api/remove-bg") {
       return onRequest({ request, env, params: {}, waitUntil: () => {} });
     }
