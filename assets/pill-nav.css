@@ -1,9 +1,10 @@
 /* FlyThe BG pill navigation: black base, glacier pills, orange active accent. */
 .ft-pill-nav{--pn-ink:#0B0E14;--pn-light:#F2F4F1;--pn-orange:#FF4D00;position:sticky;top:0;z-index:90;display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:calc(100% - 24px);margin:0 auto;padding:12px 0;background:transparent;font-family:"Archivo",Inter,Arial,sans-serif}
 .ft-pill-nav a{text-decoration:none}
-.ft-pill-logo{width:170px;height:48px;display:flex;align-items:center;justify-content:center;flex:none;padding:6px 12px;background:rgba(11,14,20,.92);color:var(--pn-light);border:1px solid #34383f;border-radius:999px;overflow:hidden;animation:ft-pill-in .7s cubic-bezier(.16,1,.3,1) both}
-.ft-pill-logo img{display:block;width:146px;height:auto;max-width:100%;object-fit:contain}.ft-pill-logo span{display:grid;place-items:center;width:32px;height:32px;font-size:22px;font-weight:900;font-stretch:63%;transition:transform .8s cubic-bezier(.16,1,.3,1)}
-.ft-pill-logo:hover span,.ft-pill-logo:focus-visible span{transform:rotate(360deg)}
+.ft-pill-logo{width:196px;height:48px;display:flex;align-items:center;justify-content:center;gap:9px;flex:none;padding:5px 14px;background:rgba(11,14,20,.96);color:#fff;border:1px solid #34383f;border-radius:999px;overflow:hidden;animation:ft-pill-in .7s cubic-bezier(.16,1,.3,1) both;box-sizing:border-box}
+.ft-pill-logo img{display:block;width:34px;height:34px;flex:none;object-fit:contain;border-radius:50%}
+.ft-pill-logo span{display:block;color:#fff!important;font-family:"Archivo",Inter,Arial,sans-serif;font-size:15px;font-weight:800;line-height:1;letter-spacing:-.02em;white-space:nowrap}
+.ft-pill-logo:hover span,.ft-pill-logo:focus-visible span{color:#fff!important}
 .ft-pill-desktop{height:48px;padding:6px;background:var(--pn-ink);border:1px solid #34383f;border-radius:999px}
 .ft-pill-desktop ul{display:flex;align-items:center;gap:5px;height:100%;padding:0;margin:0;list-style:none}
 .ft-pill-desktop li{height:100%;animation:ft-pill-in .65s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i,0)*50ms)}
