@@ -1502,3 +1502,13 @@ body:not(.app-pending)::after{display:none}
   .fly-site:not(.fly-site-support) .fly-site-hero .fly-bg-video{transition:none}
   .fly-site:not(.fly-site-support).is-scrolled .fly-site-hero .fly-bg-video{filter:brightness(.52);transform:scale(1.02)}
 }
+
+/* Orbit media layer: same-origin hero video, readable content, and scroll depth. */
+.fly-site:not(.fly-site-support) .fly-bg-video{will-change:transform,filter;backface-visibility:hidden}
+.fly-site:not(.fly-site-support) .fly-site-content{min-height:42vh}
+.fly-site:not(.fly-site-support) .fly-site-footer{background:rgba(7,7,8,.96);border-top:1px solid rgba(255,255,255,.1)}
+.fly-site:not(.fly-site-support) .fly-site-footer a{transition:color .18s ease,opacity .18s ease}
+.fly-site:not(.fly-site-support) .fly-site-footer a:hover{color:#fff;opacity:1}
+@media(max-width:720px){
+ .fly-site:not(.fly-site-support) .fly-site-content{border-radius:22px 22px 0 0}
+}
