@@ -1446,3 +1446,59 @@ body:not(.app-pending)::after{display:none}
 .fly-site-hero .fly-bg-video{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;min-width:100%!important;min-height:100%!important;object-fit:cover!important;object-position:center top!important;z-index:0!important}
 .fly-site-hero .fly-bg-shade{z-index:1!important}
 @media(max-width:640px){.fly-site-hero .fly-bg-video{object-position:center top!important}}
+
+.fly-site:not(.fly-site-support){
+  position:relative;
+  isolation:isolate;
+  min-height:100svh;
+  background:#080808;
+}
+.fly-site:not(.fly-site-support) .fly-site-hero{
+  min-height:100svh;
+  height:auto;
+  overflow:visible;
+  background:transparent;
+}
+.fly-site:not(.fly-site-support) .fly-site-hero>.fly-bg{
+  position:fixed!important;
+  inset:0!important;
+  z-index:0!important;
+  pointer-events:none;
+}
+.fly-site:not(.fly-site-support) .fly-site-hero .fly-bg-video{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+  filter:blur(0) brightness(.68);
+  transform:scale(1.02);
+  transition:filter .55s ease,transform .55s ease,opacity .55s ease;
+}
+.fly-site:not(.fly-site-support) .fly-site-hero .fly-bg-shade{
+  position:absolute!important;
+  inset:0!important;
+  background:linear-gradient(180deg,rgba(0,0,0,.72),rgba(0,0,0,.30) 45%,rgba(8,8,8,.86) 100%);
+}
+.fly-site:not(.fly-site-support) .fly-site-content{
+  position:relative;
+  z-index:1;
+  background:rgba(8,8,8,.68);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(255,255,255,.08);
+  border-radius:28px 28px 0 0;
+}
+.fly-site:not(.fly-site-support) .fly-site-footer{
+  position:relative;
+  z-index:1;
+}
+.fly-site:not(.fly-site-support).is-scrolled .fly-site-hero .fly-bg-video{
+  filter:blur(10px) brightness(.52);
+  transform:scale(1.06);
+}
+@media(prefers-reduced-motion:reduce){
+  .fly-site:not(.fly-site-support) .fly-site-hero .fly-bg-video{transition:none}
+  .fly-site:not(.fly-site-support).is-scrolled .fly-site-hero .fly-bg-video{filter:brightness(.52);transform:scale(1.02)}
+}
