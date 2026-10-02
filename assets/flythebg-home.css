@@ -373,3 +373,14 @@
  .fb-folder,.fb-folder-face,.fb-folder-paper{transition:none!important;transform:none!important}
  .fb-home-benefits article{transition:none}
 }
+
+
+/* Full-width footer: keep it above the fixed hero video and never clip it inside the home frame. */
+.fb-home{isolation:isolate;overflow:visible}
+.fb-home-footer{position:relative;z-index:20;isolation:isolate;width:100vw;max-width:none;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);min-height:220px;display:grid;grid-template-columns:minmax(220px,1fr) minmax(320px,1.8fr) minmax(180px,.7fr);align-items:start;gap:32px;padding:56px max(24px,calc((100vw - 1240px)/2)) 38px;background:#070708;color:#fff;border-top:1px solid rgba(255,255,255,.14);box-shadow:0 -20px 60px rgba(0,0,0,.35)}
+.fb-home-footer nav{min-width:0}
+.fb-footer-attribution{color:rgba(255,255,255,.5);font-size:12px;line-height:1.6;white-space:nowrap}
+.fb-footer-attribution a{color:rgba(255,255,255,.82);text-decoration:underline;text-underline-offset:3px}
+.fb-footer-attribution a:hover{color:#fff}
+.fb-home-footer small{grid-column:1/-1;padding-top:20px;border-top:1px solid rgba(255,255,255,.08)}
+@media(max-width:760px){.fb-home-footer{grid-template-columns:1fr;gap:18px;min-height:0;padding:42px 20px 28px}.fb-footer-attribution{white-space:normal}.fb-home-footer small{grid-column:1;padding-top:16px}}
