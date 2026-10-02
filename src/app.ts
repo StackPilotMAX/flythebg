@@ -613,7 +613,7 @@ function wireFlyLanding():void{
  if(deferredVideo&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
   const loadVideo=()=>{const source=deferredVideo.querySelector<HTMLElement>("[data-src]");if(!source||deferredVideo.dataset.loaded==="1")return;source.setAttribute("src",source.dataset.src||"");deferredVideo.dataset.loaded="1";deferredVideo.load();deferredVideo.play().catch(()=>{root.classList.add("fly-video-fallback")});};
   const idle=(window as Window&typeof globalThis&{requestIdleCallback?: (cb:()=>void,options?:{timeout:number})=>number}).requestIdleCallback;if(matchMedia("(max-width: 899px)").matches){loadVideo();document.addEventListener("visibilitychange",()=>{if(!document.hidden&&deferredVideo.paused)deferredVideo.play().catch(()=>{})})}else if(idle)idle(loadVideo,{timeout:2500});else window.setTimeout(loadVideo,1800);
-  const retry=()=>{if(deferredVideo.paused)playBg()};for(const event of ["pointerdown","touchstart","scroll"])window.addEventListener(event,retry,{once:true,passive:true});
+  const retry=()=>{if(deferredVideo.paused){deferredVideo.play().catch(()=>root.classList.add("fly-video-fallback"));}};for(const event of ["pointerdown","touchstart","scroll"])window.addEventListener(event,retry,{once:true,passive:true});
  }
  const burger=root.querySelector<HTMLButtonElement>(".fly-burger");
  const menu=root.querySelector<HTMLElement>(".fly-mobile-menu");
