@@ -263,7 +263,7 @@
   .fb-home-hero{padding-top:clamp(105px,18vh,150px)}
   .fb-home-title{font-size:clamp(38px,7.4vw,64px)}
   .fb-tools{grid-template-columns:1fr 1fr}
-  .fb-tool:nth-child(3){display:none}
+  .fb-tool:nth-child(3){display:block}
 }
 @media(max-width:640px){
   .fb-home-header{left:16px;right:16px;top:15px}
@@ -358,8 +358,8 @@
 .fb-folder-face b{position:absolute;right:12px;bottom:10px;font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.12em}
 .fb-folder strong{position:relative;z-index:2;font-size:18px;letter-spacing:-.03em}
 .fb-folder small{position:relative;z-index:2;margin-top:4px;color:rgba(255,255,255,.72);font-size:11px}
-.fb-folder-red{--folder:#e94b58}.fb-folder-yellow{--folder:#d8a72e}.fb-folder-purple{--folder:#8f67e8}
-.fb-home .fb-tools{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:min(1180px,calc(100% - clamp(32px,8vw,140px)));padding-bottom:0}
+.fb-folder-red{--folder:#e94b58}.fb-folder-yellow{--folder:#d8a72e}.fb-folder-purple{--folder:#8f67e8}.fb-folder-blue{--folder:#3f8cff}
+.fb-home .fb-tools{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;width:min(1180px,calc(100% - clamp(32px,8vw,140px)));padding-bottom:0}
 @media(max-width:760px){
  .fb-home-content{width:calc(100% - 32px);padding-top:64px}
  .fb-home .fb-tools{grid-template-columns:1fr;width:calc(100% - 32px)}
