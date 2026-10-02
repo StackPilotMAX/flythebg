@@ -1512,3 +1512,14 @@ body:not(.app-pending)::after{display:none}
 @media(max-width:720px){
  .fly-site:not(.fly-site-support) .fly-site-content{border-radius:22px 22px 0 0}
 }
+
+
+/* Full-width inner-page footer: opaque layer prevents the fixed hero video from showing through or clipping the footer. */
+.fly-site-footer{position:relative;z-index:20;isolation:isolate;width:100vw;max-width:none;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);display:grid;grid-template-columns:minmax(190px,1fr) minmax(320px,2fr);align-items:start;gap:24px 42px;min-height:230px;padding:52px max(24px,calc((100vw - 1240px)/2)) 36px;background:#070708!important;color:#fff;border-top:1px solid rgba(255,255,255,.12);box-shadow:0 -20px 60px rgba(0,0,0,.35)}
+.fly-site-footer nav{min-width:0;display:flex;flex-wrap:wrap;gap:12px 22px;justify-content:flex-start}
+.fly-site-footer .fly-social-links{grid-column:1/-1}
+.fly-site-footer .fly-footer-attribution{grid-column:1/-1;color:rgba(255,255,255,.5);font-size:12px;line-height:1.6}
+.fly-site-footer .fly-footer-attribution a{color:rgba(255,255,255,.84);text-decoration:underline;text-underline-offset:3px}
+.fly-site-footer .fly-footer-attribution a:hover{color:#fff}
+.fly-site-footer small{grid-column:1/-1;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.62);max-width:none}
+@media(max-width:720px){.fly-site-footer{grid-template-columns:1fr;gap:18px;min-height:0;padding:42px 20px 28px}.fly-site-footer nav{grid-column:1}.fly-site-footer .fly-social-links,.fly-site-footer .fly-footer-attribution,.fly-site-footer small{grid-column:1}}
