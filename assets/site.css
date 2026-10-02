@@ -1523,3 +1523,93 @@ body:not(.app-pending)::after{display:none}
 .fly-site-footer .fly-footer-attribution a:hover{color:#fff}
 .fly-site-footer small{grid-column:1/-1;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.62);max-width:none}
 @media(max-width:720px){.fly-site-footer{grid-template-columns:1fr;gap:18px;min-height:0;padding:42px 20px 28px}.fly-site-footer nav{grid-column:1}.fly-site-footer .fly-social-links,.fly-site-footer .fly-footer-attribution,.fly-site-footer small{grid-column:1}}
+
+
+/* Andromeda support journey — scroll-driven galaxy, restrained editorial content. */
+html{scroll-behavior:smooth}
+.fly-site-support{background:#020308;color:#fff;overflow:visible}
+.fly-site-support .fly-site-hero{background:#020308}
+.fly-site-support .fly-site-hero .fly-bg{z-index:0;position:fixed;inset:0}
+.fly-site-support .fly-site-hero .fly-bg-video{opacity:.17;filter:blur(3px) brightness(.55) saturate(.72);transform:scale(1.02)}
+.fly-site-support .fly-site-hero .fly-bg-shade{z-index:2;background:radial-gradient(circle at 50% 48%,rgba(2,4,12,.08),rgba(2,3,8,.46) 62%,rgba(2,3,8,.9) 100%),linear-gradient(180deg,rgba(1,2,6,.2),rgba(1,2,6,.58))}
+.fly-site-support .andromeda-canvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;display:block;mix-blend-mode:screen;opacity:.98}
+.fly-site-support .fly-page{z-index:3}
+.fly-site-support .fly-stats{display:none}
+.andromeda-shell-hero{position:relative!important;z-index:4}
+.andromeda-shell-badge{display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border:1px solid rgba(180,200,255,.25);border-radius:999px;background:rgba(4,7,17,.45);color:rgba(220,230,255,.74);font:700 10px/1 var(--fly-font-sans);letter-spacing:.16em;backdrop-filter:blur(12px)}
+.andromeda-shell-title{margin:22px 0 0;display:flex;flex-direction:column;align-items:center;color:#fff;font:400 clamp(42px,7vw,86px)/.95 var(--fly-font-display);letter-spacing:-.055em;text-shadow:0 8px 40px rgba(0,0,0,.45)}
+.andromeda-shell-title span:last-child{font-size:.34em;letter-spacing:.14em;margin-top:16px;color:rgba(213,224,255,.65)}
+.andromeda-shell-sub{max-width:610px;margin:22px auto 0;color:rgba(220,226,244,.68);font:400 13px/1.65 var(--fly-font-sans);text-align:center}
+.andromeda-shell-cta{display:inline-flex;align-items:center;justify-content:center;margin-top:24px;padding:11px 18px;border:1px solid rgba(255,255,255,.24);border-radius:999px;color:#fff;background:rgba(6,8,16,.48);font:700 12px/1 var(--fly-font-sans);text-decoration:none;backdrop-filter:blur(12px);transition:transform .2s,border-color .2s,background .2s}
+.andromeda-shell-cta:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.48);background:rgba(255,255,255,.09)}
+
+.fly-site-support .fly-site-content{width:100%;max-width:none;margin:0;padding:0;background:transparent;border-radius:0;backdrop-filter:none}
+.andromeda-support{position:relative;z-index:4;width:100%;overflow:visible}
+.andromeda-hero{min-height:92vh;display:grid;place-items:center;width:min(1180px,calc(100% - 32px));margin:0 auto;padding:80px 0 100px}
+.andromeda-hero-copy{width:min(700px,100%);padding:28px 30px;border:1px solid rgba(184,205,255,.18);border-radius:24px;background:linear-gradient(145deg,rgba(7,10,22,.76),rgba(4,5,13,.48));box-shadow:0 28px 90px rgba(0,0,0,.34);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.andromeda-hero-copy .eyebrow{margin:0;color:rgba(201,218,255,.6);letter-spacing:.17em}
+.andromeda-hero-copy h1{margin:14px 0 14px;font:400 clamp(40px,6vw,72px)/.98 var(--fly-font-display);letter-spacing:-.055em;color:#fff}
+.andromeda-hero-copy>p:not(.eyebrow){margin:0;color:rgba(228,233,247,.72);font:400 15px/1.75 var(--fly-font-sans)}
+.andromeda-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.andromeda-meta span{padding:8px 10px;border:1px solid rgba(200,216,255,.14);border-radius:999px;color:rgba(230,235,250,.7);background:rgba(255,255,255,.035);font:700 10px/1 var(--fly-font-sans);letter-spacing:.05em}
+.andromeda-scroll-cue{display:inline-flex;align-items:center;gap:10px;margin-top:26px;color:#fff;text-decoration:none;font:700 12px/1 var(--fly-font-sans)}
+.andromeda-scroll-cue span{display:grid;place-items:center;width:28px;height:28px;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(255,255,255,.05)}
+
+.andromeda-journey{position:relative;width:min(1120px,calc(100% - 32px));margin:0 auto;padding:10vh 0 8vh}
+.andromeda-index{position:sticky;top:120px;z-index:5;display:flex;flex-direction:column;gap:8px;width:72px;float:left;margin-left:-2px;padding:14px 0}
+.andromeda-index span{margin-bottom:5px;color:rgba(205,216,244,.35);font:800 8px/1 var(--fly-font-sans);letter-spacing:.16em;writing-mode:vertical-rl}
+.andromeda-index a{display:grid;place-items:center;width:34px;height:28px;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:rgba(220,228,248,.42);background:rgba(4,6,14,.26);font:700 9px/1 var(--fly-font-sans);text-decoration:none;backdrop-filter:blur(8px)}
+.andromeda-index a:hover{color:#fff;border-color:rgba(255,255,255,.28)}
+.andromeda-knowledge,.andromeda-support{width:min(720px,calc(100% - 100px));margin:0 auto;min-height:78vh;display:flex;flex-direction:column;justify-content:center;padding:90px 0}
+.andromeda-knowledge-first{padding-top:55px}
+.andromeda-kicker{margin:0 0 14px;color:rgba(168,194,255,.62);font:800 10px/1 var(--fly-font-sans);letter-spacing:.18em}
+.andromeda-knowledge h2,.andromeda-support h2{margin:0 0 18px;color:#fff;font:400 clamp(30px,4.2vw,48px)/1.05 var(--fly-font-display);letter-spacing:-.045em}
+.andromeda-knowledge>p:not(.andromeda-kicker),.andromeda-support>p:not(.andromeda-kicker){margin:0;color:rgba(222,228,244,.68);font:400 14px/1.85 var(--fly-font-sans)}
+.andromeda-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:30px}
+.andromeda-facts-four{grid-template-columns:repeat(4,1fr)}
+.andromeda-facts>div{padding:16px 14px;border-top:1px solid rgba(190,210,255,.18);background:linear-gradient(180deg,rgba(255,255,255,.035),transparent)}
+.andromeda-facts b{display:block;color:#fff;font:500 clamp(24px,3vw,36px)/1 var(--fly-font-display);letter-spacing:-.04em}
+.andromeda-facts span{display:block;margin-top:7px;color:rgba(207,216,238,.48);font:500 10px/1.45 var(--fly-font-sans)}
+.andromeda-diagram{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:30px}
+.andromeda-diagram span,.andromeda-light-row span{min-height:44px;display:flex;align-items:center;padding:0 12px;border:1px solid rgba(180,204,255,.12);border-radius:10px;background:rgba(255,255,255,.025);color:rgba(225,231,246,.62);font:700 9px/1.2 var(--fly-font-sans);letter-spacing:.08em}
+.andromeda-light-row{display:grid;gap:8px;margin-top:28px}
+.andromeda-light-row .warm{border-color:rgba(255,221,170,.18);color:#f4d7a9}
+.andromeda-light-row .cool{border-color:rgba(141,188,255,.2);color:#a9ccff}
+.andromeda-light-row .dust{border-color:rgba(180,180,190,.12);color:#a9a9b3}
+.andromeda-satellite-map{position:relative;width:min(440px,100%);height:220px;margin:34px auto 0;border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(255,229,184,.5) 0 3%,rgba(121,151,255,.08) 4% 22%,transparent 23%),radial-gradient(ellipse at center,transparent 0 38%,rgba(121,151,255,.08) 39% 40%,transparent 41%);border:1px solid rgba(180,205,255,.1);transform:scaleY(.38);overflow:visible}
+.andromeda-satellite-map b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scaleY(2.63);color:#fff;font:700 10px/1 var(--fly-font-sans);letter-spacing:.12em}
+.andromeda-satellite-map i{position:absolute;width:5px;height:5px;border-radius:50%;background:#c8d9ff;box-shadow:0 0 14px rgba(170,200,255,.65)}
+.andromeda-satellite-map i:nth-child(1){left:12%;top:30%}.andromeda-satellite-map i:nth-child(2){left:25%;top:72%}.andromeda-satellite-map i:nth-child(3){left:39%;top:8%}.andromeda-satellite-map i:nth-child(4){left:67%;top:20%}.andromeda-satellite-map i:nth-child(5){left:82%;top:66%}.andromeda-satellite-map i:nth-child(6){left:73%;top:84%}.andromeda-satellite-map i:nth-child(7){left:52%;top:94%}.andromeda-satellite-map i:nth-child(8){left:90%;top:36%}
+.andromeda-halo-note{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:30px}
+.andromeda-halo-note span{padding:10px 8px;border-left:1px solid rgba(180,205,255,.16);color:rgba(210,218,238,.46);font:700 8px/1.4 var(--fly-font-sans);letter-spacing:.1em}
+.andromeda-support{min-height:70vh;margin-top:5vh;padding:110px 30px;border:1px solid rgba(196,215,255,.16);border-radius:28px;background:linear-gradient(145deg,rgba(10,14,29,.84),rgba(4,6,15,.62));box-shadow:0 40px 120px rgba(0,0,0,.4);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.andromeda-support .andromeda-kicker,.andromeda-support h2,.andromeda-support>p{width:min(640px,100%);margin-left:auto;margin-right:auto}
+.andromeda-support-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:28px}
+.andromeda-support-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 17px;border-radius:999px;text-decoration:none;font:800 11px/1 var(--fly-font-sans);transition:transform .2s,border-color .2s,background .2s}
+.andromeda-donate{background:#fff;color:#06070a;border:1px solid #fff}
+.andromeda-github{background:rgba(255,255,255,.05);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.andromeda-support-actions a:hover{transform:translateY(-2px)}
+.andromeda-support small{display:block;width:min(620px,100%);margin:18px auto 0;color:rgba(205,214,235,.4);font:500 10px/1.6 var(--fly-font-sans);text-align:center}
+.andromeda-source{width:min(720px,calc(100% - 100px));margin:34px auto 0;padding:24px 0 80px;border-top:1px solid rgba(255,255,255,.08);color:rgba(190,200,220,.35);font:500 10px/1.7 var(--fly-font-sans)}
+.fly-site-support .fly-site-footer{position:relative;z-index:6;margin-top:0}
+
+@media(max-width:760px){
+ .fly-site-support .fly-site-hero .fly-bg-video{opacity:.1}
+ .andromeda-shell-title{font-size:clamp(38px,12vw,62px)}
+ .andromeda-hero{min-height:86vh;width:calc(100% - 24px);padding:50px 0 80px}
+ .andromeda-hero-copy{padding:22px 20px;border-radius:20px}
+ .andromeda-hero-copy h1{font-size:clamp(38px,11vw,56px)}
+ .andromeda-journey{width:calc(100% - 24px);padding-top:0}
+ .andromeda-index{display:none}
+ .andromeda-knowledge,.andromeda-support,.andromeda-source{width:100%}
+ .andromeda-knowledge,.andromeda-support{min-height:82vh;padding:72px 0}
+ .andromeda-facts,.andromeda-facts-four{grid-template-columns:1fr 1fr}
+ .andromeda-halo-note{grid-template-columns:1fr 1fr}
+ .andromeda-support{padding:80px 20px;border-radius:22px}
+ .andromeda-source{padding-bottom:50px}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ .fly-site-support .fly-site-hero .fly-bg-video{display:none}
+ .andromeda-shell-cta,.andromeda-support-actions a{transition:none}
+}
