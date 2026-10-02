@@ -1,4 +1,4 @@
-import { onRequest } from "../functions/api/remove-bg.js";
+import { onRequest } from "./functions/api/remove-bg.js";
 
 const ROUTE_META = {
   "/": { title: "FlyThe BG — Free Background Remover & Media Tools Online", description: "Remove backgrounds online with protected AI, compress images locally, and reduce video size with free browser-based media tools from FlyThe BG." },
