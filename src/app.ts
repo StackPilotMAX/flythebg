@@ -278,7 +278,7 @@ function toolPage(id:ToolId,num:string,title:string,description:string,accept:st
 
 function home():string{
  setSeo("FlyThe BG — Privacy-first media tools","Remove backgrounds with protected AI, compress images locally and create smaller videos in one focused media toolkit.");
- return `<main class="fb-home fb-intro" aria-label="FlyThe BG home">
+ return `<main class="fb-home" aria-label="FlyThe BG home">
   <video class="fb-home-video" aria-hidden="true" autoplay muted loop playsinline preload="auto" poster="/assets/flythebg-hero-poster.png" src="/assets/flythebg-hero.mp4"></video>
   <div class="fb-home-veil"></div>
   <div class="fb-home-frame">
@@ -555,6 +555,15 @@ function wireEditorial():void{
  }draw(0);
 }
 
+function wireHomeVisuals():void{
+ const doc=document.documentElement;
+ if(doc.dataset.flyHomeVisuals==="1")return;
+ doc.dataset.flyHomeVisuals="1";
+ const update=()=>{const y=window.scrollY||window.pageYOffset||0;const scrolled=y>28;document.querySelectorAll<HTMLElement>(".fb-home,.fly-site:not(.fly-site-support)").forEach(el=>el.classList.toggle("is-scrolled",scrolled));};
+ window.addEventListener("scroll",update,{passive:true});
+ window.addEventListener("resize",update,{passive:true});
+ update();
+}
 function wireFlyLanding():void{
  const root=document.querySelector<HTMLElement>(".fly-home, .fly-site");if(!root)return;
  const deferredVideo=root.querySelector<HTMLVideoElement>("[data-deferred-video]");
@@ -844,6 +853,7 @@ function render():void{
  wirePassportPhoto();
  wireSpaceExperience();
  wireFlyLanding();
+ wireHomeVisuals();
  wireEditorial();
  loadStars();
  revealElements();
