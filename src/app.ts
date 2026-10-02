@@ -246,7 +246,7 @@ function shell(content:string,title:string):string{
  const active=(route:string)=>path===route?' class="is-active" aria-current="page"':'';
  return `<div class="fly-site ${path==="/support"?"fly-site-support":""}">
  <section class="fly-site-hero">
-  <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" autoplay muted loop playsinline preload="auto" poster="${POSTER}" src="${VIDEO}" aria-hidden="true"></video><div class="fly-bg-shade"></div></div>
+  <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" autoplay muted loop playsinline preload="auto" poster="/assets/flythebg-hero-poster.png" src="/assets/flythebg-hero.mp4" aria-hidden="true"></video><div class="fly-bg-shade"></div></div>
   <div class="fly-page">
    <header class="fly-header"><a class="fly-logo" href="/" aria-label="FlyThe BG home"><img src="/assets/flythebg-logo.png" alt="FlyThe BG" class="site-logo"></a><nav class="fly-nav" aria-label="Primary navigation"><a href="/"${active("/")}>Home</a><a href="/features"${active("/features")}>Tools</a><a href="/about"${active("/about")}>About</a><a href="/contact"${active("/contact")}>Contact</a></nav><a class="fly-signin" href="/features">Get Started</a><button class="fly-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="fly-mobile-menu"><i></i><i></i><i></i></button></header>
    <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/passport-photo">Passport Photos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/blogs">Blogs</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
@@ -299,11 +299,36 @@ function home():string{
     </div>
    </section>
    <section class="fb-tools" aria-label="FlyThe BG tools">
-    <a class="fb-tool" href="/remove-bg"><small>01 · Protected AI</small><strong>Remove Background</strong><p>PNG, JPG and WEBP up to 15 MB.</p><span class="fb-tool-arrow" aria-hidden="true">↗</span></a>
-    <a class="fb-tool" href="/image-compressor"><small>02 · Browser local</small><strong>Compress Image</strong><p>Reduce image size without uploading the original.</p><span class="fb-tool-arrow" aria-hidden="true">↗</span></a>
-    <a class="fb-tool" href="/video-compressor"><small>03 · Browser local</small><strong>Compress Video</strong><p>Create a smaller WebM with visible progress.</p><span class="fb-tool-arrow" aria-hidden="true">↗</span></a>
+    <a class="fb-folder fb-folder-red" href="/remove-bg"><span class="fb-folder-tab"></span><span class="fb-folder-face"><span class="fb-folder-paper">REMOVE BG</span><span class="fb-folder-paper">PROTECTED AI</span><b>01</b></span><strong>Remove Background</strong><small>PNG · JPG · WEBP · 15 MB</small></a>
+    <a class="fb-folder fb-folder-yellow" href="/image-compressor"><span class="fb-folder-tab"></span><span class="fb-folder-face"><span class="fb-folder-paper">IMAGE</span><span class="fb-folder-paper">LOCAL</span><b>02</b></span><strong>Compress Image</strong><small>Browser-local compression</small></a>
+    <a class="fb-folder fb-folder-purple" href="/video-compressor"><span class="fb-folder-tab"></span><span class="fb-folder-face"><span class="fb-folder-paper">VIDEO</span><span class="fb-folder-paper">WEBM</span><b>03</b></span><strong>Compress Video</strong><small>Local processing · live progress</small></a>
+   </section>
+   <section class="fb-home-content" aria-label="Why FlyThe BG">
+    <div class="fb-section-heading"><p class="fb-section-kicker">WHY PEOPLE STAY</p><h2>Fast answers. Clear boundaries. Less friction.</h2><p>Start with a tool, understand what happens to your file, and keep moving without an account wall.</p></div>
+    <div class="fb-home-benefits">
+     <article><span>01</span><h3>Local when possible</h3><p>Image and video compression are designed to run in your browser, keeping the original media on your device.</p></article>
+     <article><span>02</span><h3>Protected when needed</h3><p>Background removal uses the existing protected route so the private AI credential stays server-side.</p></article>
+     <article><span>03</span><h3>Designed for recovery</h3><p>Processing pages show progress, status and download recovery instead of leaving you guessing what happened.</p></article>
+    </div>
+    <div class="fb-home-how">
+     <div><p class="fb-section-kicker">THREE STEPS</p><h2>Pick. Process. Download.</h2><p>No complicated dashboard. Choose the job, follow the visible status, then take the result with you.</p></div>
+     <div class="fb-how-steps"><div><b>1</b><span>Choose your tool</span></div><div><b>2</b><span>Process your file</span></div><div><b>3</b><span>Download and go</span></div></div>
+    </div>
+    <section class="fb-home-faq" aria-labelledby="home-faq-title">
+     <div class="fb-section-heading"><p class="fb-section-kicker">FAQ</p><h2 id="home-faq-title">Before you upload, know the boundary.</h2><a class="fb-text-link" href="/faq">Read all FAQs ↗</a></div>
+     <div class="fb-faq-list">
+      <details open><summary>Which tools send my file to a server?</summary><p>Remove Background uses the protected FlyThe BG route. Image and video compression are designed to run locally in your browser.</p></details>
+      <details><summary>Do I need an account?</summary><p>No. The core tools are available without a FlyThe BG account.</p></details>
+      <details><summary>Can I use the tools on mobile?</summary><p>Yes. The site uses touch-friendly controls and browser file pickers, although media API and codec support varies by browser.</p></details>
+      <details><summary>What happens if a download is missed?</summary><p>The processing pages provide a recovery download action in the current browser tab.</p></details>
+     </div>
+    </section>
+    <section class="fb-home-final">
+     <p class="fb-section-kicker">READY WHEN YOU ARE</p><h2>Give the next file one less headache.</h2><p>Choose the workflow that matches the job and get straight to the useful part.</p><div class="fb-home-cta"><a class="fb-btn solid" href="/features">Explore all tools ↗</a><a class="fb-btn ghost" href="/support">Support the project</a></div>
+    </section>
    </section>
   </div>
+  <footer class="fb-home-footer"><div><a class="fb-footer-brand" href="/">FlyThe BG</a><p>Privacy-first media tools for practical work.</p></div><nav aria-label="Homepage footer"><a href="/features">Tools</a><a href="/faq">FAQ</a><a href="/blogs">Blogs</a><a href="/about">About</a><a href="/contact">Contact</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/support">Support</a></nav><small>© 2026 FlyThe BG · support@flythebg.com</small></footer>
  </main>`;
 }
 function notFound():string{return shell(`<main class="page prose reveal"><p class="eyebrow">404 · PAGE NOT FOUND</p><h1>That page has flown away.</h1><p>The address may be outdated or mistyped. The tools and guides are still here.</p><div class="home-final-actions"><a class="fly-cta" href="/">Back home</a><a class="text-link" href="/features">Open the toolkit ↗</a><a class="text-link" href="/faq">Read the FAQ ↗</a></div></main>`,"404 — FlyThe BG");}
@@ -562,16 +587,33 @@ function wireHomeVisuals():void{
  const update=()=>{const y=window.scrollY||window.pageYOffset||0;const scrolled=y>28;document.querySelectorAll<HTMLElement>(".fb-home,.fly-site:not(.fly-site-support)").forEach(el=>el.classList.toggle("is-scrolled",scrolled));};
  window.addEventListener("scroll",update,{passive:true});
  window.addEventListener("resize",update,{passive:true});
+ document.querySelectorAll<HTMLElement>(".fb-folder").forEach(folder=>{
+  folder.addEventListener("pointermove",event=>{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const r=folder.getBoundingClientRect();folder.style.setProperty("--mx",((event.clientX-r.left-r.width/2)*.045)+"px");folder.style.setProperty("--my",((event.clientY-r.top-r.height/2)*.045)+"px");});
+  folder.addEventListener("pointerleave",()=>{folder.style.setProperty("--mx","0px");folder.style.setProperty("--my","0px");});
+ });
  update();
 }
 function wireFlyLanding():void{
  const root=document.querySelector<HTMLElement>(".fly-home, .fly-site");if(!root)return;
+ const bgVideo=root.querySelector<HTMLVideoElement>(".fly-bg-video");
+ if(bgVideo){
+  bgVideo.muted=true;bgVideo.setAttribute("webkit-playsinline","");
+  const playBg=()=>{if(!bgVideo.paused||document.hidden)return;bgVideo.play().catch(()=>root.classList.add("fly-video-fallback"));};
+  bgVideo.addEventListener("error",()=>root.classList.add("fly-video-fallback"));
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
+   bgVideo.play().catch(()=>{});
+   bgVideo.addEventListener("canplay",playBg,{once:true});
+   bgVideo.addEventListener("loadeddata",playBg,{once:true});
+   document.addEventListener("visibilitychange",()=>{if(!document.hidden)playBg()});
+   for(const event of ["pointerdown","touchstart","scroll"])window.addEventListener(event,playBg,{once:true,passive:true});
+  }
+ }
  const deferredVideo=root.querySelector<HTMLVideoElement>("[data-deferred-video]");
  if(deferredVideo){deferredVideo.muted=true;deferredVideo.setAttribute("webkit-playsinline","");deferredVideo.addEventListener("error",()=>root.classList.add("fly-video-fallback"));}
  if(deferredVideo&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
   const loadVideo=()=>{const source=deferredVideo.querySelector<HTMLElement>("[data-src]");if(!source||deferredVideo.dataset.loaded==="1")return;source.setAttribute("src",source.dataset.src||"");deferredVideo.dataset.loaded="1";deferredVideo.load();deferredVideo.play().catch(()=>{root.classList.add("fly-video-fallback")});};
   const idle=(window as Window&typeof globalThis&{requestIdleCallback?: (cb:()=>void,options?:{timeout:number})=>number}).requestIdleCallback;if(matchMedia("(max-width: 899px)").matches){loadVideo();document.addEventListener("visibilitychange",()=>{if(!document.hidden&&deferredVideo.paused)deferredVideo.play().catch(()=>{})})}else if(idle)idle(loadVideo,{timeout:2500});else window.setTimeout(loadVideo,1800);
-  const retry=()=>{if(deferredVideo.paused)deferredVideo.play().catch(()=>{})};for(const event of ["pointerdown","touchstart","scroll"])window.addEventListener(event,retry,{once:true,passive:true});
+  const retry=()=>{if(deferredVideo.paused)playBg()};for(const event of ["pointerdown","touchstart","scroll"])window.addEventListener(event,retry,{once:true,passive:true});
  }
  const burger=root.querySelector<HTMLButtonElement>(".fly-burger");
  const menu=root.querySelector<HTMLElement>(".fly-mobile-menu");
