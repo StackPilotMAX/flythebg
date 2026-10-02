@@ -277,162 +277,35 @@ function toolPage(id:ToolId,num:string,title:string,description:string,accept:st
 }
 
 function home():string{
- setSeo("FlyThe BG — Media Tools Designed To Fly","Remove backgrounds with protected AI, compress images locally and create smaller videos in one focused media toolkit.");
- return `<main class="fly-home">
-  <div class="fly-bg" aria-hidden="true">
-   <video class="fly-bg-video" autoplay muted loop playsinline preload="auto" poster="${POSTER}" data-deferred-video aria-hidden="true">
-    <source data-src="${VIDEO}" type="video/mp4">
-   </video>
-   <div class="fly-bg-shade"></div>
-  </div>
-  <div class="fly-page">
-   <header class="fly-header">
-    <a class="fly-logo" href="/" aria-label="FlyThe BG home"><img src="/assets/flythebg-logo.png" alt="FlyThe BG" class="site-logo"></a>
-    <nav class="fly-nav" aria-label="Primary navigation">
-     <a class="is-active" href="/">Home</a>
-     <a href="/features">Tools</a>
-     <a href="/about">About</a>
-     <a href="/contact">Contact</a>
+ setSeo("FlyThe BG — Privacy-first media tools","Remove backgrounds with protected AI, compress images locally and create smaller videos in one focused media toolkit.");
+ return `<main class="fb-home fb-intro" aria-label="FlyThe BG home">
+  <video class="fb-home-video" aria-hidden="true" autoplay muted loop playsinline preload="auto" poster="/assets/flythebg-hero-poster.png" src="/assets/flythebg-hero.mp4"></video>
+  <div class="fb-home-veil"></div>
+  <div class="fb-home-frame">
+   <header class="fb-home-header">
+    <a class="fb-brand" href="/" aria-label="FlyThe BG home"><img class="fb-brand-logo" src="/assets/flythebg-logo.svg" alt="FlyThe BG" width="170" height="36"></a>
+    <nav class="fb-home-nav" aria-label="Primary">
+     <a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Video</a><a href="/blogs">Blogs</a>
     </nav>
-    <a class="fly-signin" href="/features">Get Started</a>
-    <button class="fly-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="fly-mobile-menu"><i></i><i></i><i></i></button>
+    <div class="fb-home-actions"><a class="fb-btn ghost" href="/faq">FAQ</a><a class="fb-btn solid" href="/remove-bg">Try for free</a><a class="fb-btn ghost fb-home-menu" href="/features">Menu</a></div>
    </header>
-   <div class="fly-mobile-overlay" data-menu-close></div>
-   <nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation">
-    <a class="is-active" href="/">Home</a>
-    <a href="/features">Tools</a>
-    <a href="/remove-bg">Remove BG</a>
-    <a href="/image-compressor">Image Compressor</a>
-    <a href="/video-compressor">Video Compressor</a>
-    <a href="/about">About</a>
-    <a href="/faq">FAQ</a>
-    <a href="/blogs">Blogs</a>
-    <a href="/contact">Contact</a>
-    <a href="/support">Support</a>
-    <a href="/privacy">Privacy</a>
-    <a class="fly-mobile-cta" href="/features">Get Started</a>
-   </nav>
-   <section class="fly-hero">
-    <div class="fly-trust anim" style="--d:.05s">
-     <div class="fly-avatars" aria-hidden="true">
-      <span><span class="fly-avatar-inner">✦</span></span>
-      <span><span class="fly-avatar-inner">◌</span></span>
-      <span><span class="fly-avatar-inner">↗</span></span>
-     </div>
-     <div class="fly-trust-pill">Built for creators &amp; teams</div>
+   <section class="fb-home-hero">
+    <div class="fb-pill"><strong>FlyThe BG</strong><span>Privacy-first media tools</span></div>
+    <h1 class="fb-home-title"><span>Make media lighter.</span><span>Keep your workflow moving.</span></h1>
+    <p class="fb-home-sub">Remove image backgrounds with protected AI, compress images locally, and create smaller videos in your browser.</p>
+    <div class="fb-home-cta">
+     <a class="fb-btn solid" href="/remove-bg">Remove background <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M5 10h9M10 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+     <a class="fb-btn ghost" href="/features">Explore tools <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h12M10 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
-    <h1 class="fly-headline" aria-label="Media tools designed to fly"><span>Media Tools</span><span>Designed To Fly</span></h1>
-    <p class="fly-subhead anim" style="--d:.28s">Remove backgrounds with protected AI, compress images and create smaller videos with tools designed for fast, focused work.</p>
-    <a class="fly-cta anim" style="--d:.4s" href="#home-tools">Get Started</a>
    </section>
-   <footer class="fly-stats" aria-label="FlyThe BG highlights">
-    <div class="fly-stat anim" style="--d:.5s"><span class="fly-stat-icon">&lt;</span><span class="fly-stat-value" data-count="15" data-decimals="0" data-suffix=" MB">0</span><span class="fly-stat-label">Background upload limit</span></div>
-    <div class="fly-stat anim" style="--d:.58s"><span class="fly-stat-icon">%</span><span class="fly-stat-value" data-count="2" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Browser-local tools</span></div>
-    <div class="fly-stat anim" style="--d:.66s"><span class="fly-stat-icon">*</span><span class="fly-stat-value" data-count="0" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Accounts required</span></div>
-    <div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value" data-count="1" data-decimals="0" data-suffix="">0</span><span class="fly-stat-label">Protected AI route</span></div>
-   </footer>
+   <section class="fb-tools" aria-label="FlyThe BG tools">
+    <a class="fb-tool" href="/remove-bg"><small>01 · Protected AI</small><strong>Remove Background</strong><p>PNG, JPG and WEBP up to 15 MB.</p><span class="fb-tool-arrow" aria-hidden="true">↗</span></a>
+    <a class="fb-tool" href="/image-compressor"><small>02 · Browser local</small><strong>Compress Image</strong><p>Reduce image size without uploading the original.</p><span class="fb-tool-arrow" aria-hidden="true">↗</span></a>
+    <a class="fb-tool" href="/video-compressor"><small>03 · Browser local</small><strong>Compress Video</strong><p>Create a smaller WebM with visible progress.</p><span class="fb-tool-arrow" aria-hidden="true">↗</span></a>
+   </section>
   </div>
-  <section class="home-scroll-section home-tools-section" id="home-tools" aria-labelledby="home-tools-title">
-   <div class="home-section-heading">
-    <p class="eyebrow">START HERE</p>
-    <h2 id="home-tools-title">Four tools. Clear boundaries.</h2>
-    <p>Open a folder to peek inside. Each tool keeps its processing boundary visible before you start.</p>
-   </div>
-   <div class="home-folder-grid">
-    <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-remove-bg" style="--folder-color:#7C3AED;--folder-back:#5B21B6">
-      <span class="folder-canvas" aria-hidden="true">
-       <span class="folder-paper paper-one"><span class="paper-icon">✦</span><small>AI</small></span>
-       <span class="folder-paper paper-two"><span class="paper-icon">PNG</span><small>JPG · WEBP</small></span>
-       <span class="folder-paper paper-three"><span class="paper-icon">↗</span><small>15 MB</small></span>
-       <span class="folder-back"><span class="folder-tab"></span></span>
-       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">REMOVE BG</span></span>
-      </span>
-     </button>
-     <div class="home-folder-info" id="folder-remove-bg">
-      <span>01 · PROTECTED AI</span><strong>Remove Background</strong><small>Send one image through the protected processing route.</small>
-      <a href="/remove-bg" class="text-link">Open tool ↗</a>
-     </div>
-    </article>
-    <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-image-compressor" style="--folder-color:#2563EB;--folder-back:#1D4ED8">
-      <span class="folder-canvas" aria-hidden="true">
-       <span class="folder-paper paper-one"><span class="paper-icon">IMG</span><small>JPG · PNG</small></span>
-       <span class="folder-paper paper-two"><span class="paper-icon">%</span><small>Smaller</small></span>
-       <span class="folder-paper paper-three"><span class="paper-icon">↘</span><small>Local</small></span>
-       <span class="folder-back"><span class="folder-tab"></span></span>
-       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">COMPRESS</span></span>
-      </span>
-     </button>
-     <div class="home-folder-info" id="folder-image-compressor">
-      <span>02 · BROWSER-LOCAL</span><strong>Compress Image</strong><small>Reduce image size directly on your device.</small>
-      <a href="/image-compressor" class="text-link">Open tool ↗</a>
-     </div>
-    </article>
-    <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-video-compressor" style="--folder-color:#EF4444;--folder-back:#B91C1C">
-      <span class="folder-canvas" aria-hidden="true">
-       <span class="folder-paper paper-one"><span class="paper-icon">▶</span><small>VIDEO</small></span>
-       <span class="folder-paper paper-two"><span class="paper-icon">WEBM</span><small>Smaller</small></span>
-       <span class="folder-paper paper-three"><span class="paper-icon">↘</span><small>Local</small></span>
-       <span class="folder-back"><span class="folder-tab"></span></span>
-       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">VIDEO</span></span>
-      </span>
-     </button>
-     <div class="home-folder-info" id="folder-video-compressor">
-      <span>03 · BROWSER-LOCAL</span><strong>Compress Video</strong><small>Create a smaller WebM without uploading the original.</small>
-      <a href="/video-compressor" class="text-link">Open tool ↗</a>
-     </div>
-    </article>
-    <article class="home-folder-card">
-     <button class="interactive-folder" type="button" data-folder-toggle aria-expanded="false" aria-controls="folder-passport-photo" style="--folder-color:#FACC15;--folder-back:#CA8A04">
-      <span class="folder-canvas" aria-hidden="true">
-       <span class="folder-paper paper-one"><span class="paper-icon">ID</span><small>PHOTO</small></span>
-       <span class="folder-paper paper-two"><span class="paper-icon">CM</span><small>INCHES</small></span>
-       <span class="folder-paper paper-three"><span class="paper-icon">A4</span><small>PRINT</small></span>
-       <span class="folder-back"><span class="folder-tab"></span></span>
-       <span class="folder-flap folder-flap-left"></span><span class="folder-flap folder-flap-right"><span class="folder-label">PASSPORT</span></span>
-      </span>
-     </button>
-     <div class="home-folder-info" id="folder-passport-photo">
-      <span>04 · PRINT STUDIO</span><strong>Passport Size Visa Photo Maker</strong><small>Crop, background, exact size, paper layout and printable copies.</small>
-      <a href="/passport-photo" class="text-link">Open tool ↗</a>
-     </div>
-    </article>
-
-   </div>
-  </section>
-  <section class="home-scroll-section home-privacy-section" aria-labelledby="home-privacy-title">
-  <section class="home-scroll-section home-faq-section" aria-labelledby="home-faq-title">
-   <div class="home-section-heading"><p class="eyebrow">REAL QUESTIONS</p><h2 id="home-faq-title">The things people usually want to know first.</h2><p>Answers are written around the actual decisions people make before uploading a file.</p></div>
-   <div class="home-faq-list">
-    <details open><summary>Will my image be stored after I remove the background?</summary><p>FlyThe BG does not provide persistent user file storage for the tool. The image is forwarded to the background-removal processor for the requested job and is not intentionally written to a FlyThe BG storage bucket or gallery. Independent infrastructure may have temporary runtime handling or logs; see the privacy policy for the boundary.</p></details>
-    <details><summary>Can I use FlyThe BG on my phone?</summary><p>Yes. The interface is designed for touch screens, mobile navigation, file selection and recovery downloads. Browser capabilities can still vary by device and file type.</p></details>
-    <details><summary>What happens if I accidentally cancel the download?</summary><p>The result stays available in the current browser tab for recovery. Use the visible download button again rather than re-uploading your source file.</p></details>
-    <details><summary>Do I have to create an account?</summary><p>No FlyThe BG account is required for the current tools.</p></details>
-    <details><summary>Which tools send a file to a server?</summary><p>Remove Background sends the selected image through the protected FlyThe BG processing route. Image and video compression are designed to stay local in the browser.</p></details>
-    <details><summary>Why can background removal sometimes take longer?</summary><p>The protected AI processor can need time to wake from a cold start. The website is built to tolerate that startup rather than treating a short delay as an immediate failure.</p></details>
-    <details><summary>Will compressing my image upload it?</summary><p>No. Image compression is performed with browser APIs on your device.</p></details>
-    <details><summary>Can I use the result commercially?</summary><p>FlyThe BG does not decide whether you have the rights to the source material or output. Make sure the files, logos, photographs and other content you use are yours or properly licensed for your intended use.</p></details>
-   </div>
-   <a class="text-link" href="/faq">See the complete FAQ ↗</a>
-  </section>
-  <section class="home-scroll-section home-blog-section" aria-labelledby="home-blog-title">
-   <div class="home-section-heading"><p class="eyebrow">FROM THE JOURNAL</p><h2 id="home-blog-title">Practical guides for real workflows.</h2><p>No filler. Short explanations about files, formats, privacy and browser-based media work.</p></div>
-   <div class="home-blog-grid">
-    <a href="/blogs/remove-background-online-privacy"><span>GUIDE</span><strong>What actually happens when you remove a background online?</strong><small>Privacy, processing and what to check before uploading.</small></a>
-    <a href="/blogs/compress-images-in-browser"><span>GUIDE</span><strong>How browser-based image compression works</strong><small>When local processing is enough and what it changes.</small></a>
-    <a href="/blogs/webm-video-compression-guide"><span>GUIDE</span><strong>Why your compressed video may become WebM</strong><small>A practical guide to browser codecs and compatibility.</small></a>
-   </div>
-   <a class="text-link" href="/blogs">Read the FlyThe BG Blogs ↗</a>
-  </section>
-  <section class="home-scroll-section home-final-cta">
-   <p class="eyebrow">READY WHEN YOU ARE</p><h2>Pick a tool and keep moving.</h2><div class="home-final-actions"><a class="fly-cta" href="/features">Open the toolkit</a><a class="text-link" href="/support">Support the project ↗</a></div>
-  </section>
- <footer class="fly-site-footer fly-home-footer"><a class="fly-footer-brand" href="/">FlyThe BG</a><nav aria-label="Footer navigation"><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/blogs">Blogs</a><a href="/support">Support</a><a href="/contact">Contact</a><a href="/code-of-conduct">Code of Conduct</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav><div class="fly-social-links"><a href="${FLYTHEBG_INSTAGRAM}" target="_blank" rel="noopener noreferrer" aria-label="FlyThe BG on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i> @flythebg</a><a href="${GITHUB_REPO}" target="_blank" rel="noopener noreferrer" aria-label="FlyThe BG GitHub repository"><i class="fa-brands fa-github" aria-hidden="true"></i> FlyThe BG repo</a><a href="${GITHUB_PROFILE}" target="_blank" rel="noopener noreferrer" aria-label="StackPilotMAX GitHub profile"><i class="fa-brands fa-github" aria-hidden="true"></i> StackPilotMAX</a><a href="${OWNER_INSTAGRAM}" target="_blank" rel="noopener noreferrer" aria-label="Project owner on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i> @aadarshf1</a></div><small>By using FlyThe BG, you accept our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>. This website contains advertising. FlyThe BG is an independent, non-registered website/project and is not operated as a registered company or business entity. © 2026 FlyThe BG · support@flythebg.com</small></footer>
  </main>`;
 }
-
 function notFound():string{return shell(`<main class="page prose reveal"><p class="eyebrow">404 · PAGE NOT FOUND</p><h1>That page has flown away.</h1><p>The address may be outdated or mistyped. The tools and guides are still here.</p><div class="home-final-actions"><a class="fly-cta" href="/">Back home</a><a class="text-link" href="/features">Open the toolkit ↗</a><a class="text-link" href="/faq">Read the FAQ ↗</a></div></main>`,"404 — FlyThe BG");}
 
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose a tool.<br>and get to work.</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a><a href="/passport-photo"><span>04</span><div><b>Passport Size Visa Photo Maker</b><small>Crop · background · exact size · printable sheets</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>Tip:</b> For large video files, close unnecessary browser tabs to keep more memory available.</div></main>`,"Get Started — FlyThe BG");}
