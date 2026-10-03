@@ -10,11 +10,7 @@
   "icons": [
     {
       "src": "/assets/flythebg-logo.png",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    },
-    {
+          {
       "src": "/assets/flythebg-logo.png",
       "sizes": "any",
       "type": "image/png",
