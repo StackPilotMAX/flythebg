@@ -1,6 +1,6 @@
 import "./privacy-consent";
 type ToolId = "remove-bg" | "image-compressor" | "video-compressor" | "passport-photo";
-type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/passport-photo" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/changelog";
+type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/passport-photo" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/affiliates" | "/changelog";
 
 const VIDEO="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/4b73c700-3112-4c07-bd48-0af2893dff7c.mp4";
 const POSTER="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0bf7409c-9fa2-4bef-a49d-34903dcc91ad.png";
@@ -218,6 +218,7 @@ function shell(content:string,title:string):string{
   "/accessibility":"FlyThe BG accessibility statement covering touch controls, keyboard use, reduced motion and reporting problems.",
   "/security":"FlyThe BG security guidance and private vulnerability reporting process.",
   "/cookies":"FlyThe BG notice about cookies and similar browser or advertising technologies.",
+  "/affiliates":"FlyThe BG affiliate, advertising and referral disclosure.",
   "/changelog":"Recent FlyThe BG product, privacy, navigation and reliability changes.",
  };
  setSeo(title,descriptions[path]||descriptions["/"]);
