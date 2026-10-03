@@ -9,14 +9,14 @@
   "theme_color": "#080b09",
   "icons": [
     {
-      "src": "/assets/flythebg-icon.svg",
+      "src": "/assets/flythebg-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "/assets/flythebg-icon.png",
-      "sizes": "128x128",
+      "src": "/assets/flythebg-logo.png",
+      "sizes": "any",
       "type": "image/png",
       "purpose": "any maskable"
     }
