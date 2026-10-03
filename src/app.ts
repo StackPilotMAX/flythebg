@@ -35,6 +35,7 @@ function setSeo(title:string,description:string):void{
   "/security":"FlyThe BG security, vulnerability reporting",
   "/accessibility":"FlyThe BG accessibility",
   "/cookies":"FlyThe BG cookies",
+  "/affiliates":"FlyThe BG affiliate disclosure, advertising and referral transparency",
   "/code-of-conduct":"FlyThe BG code of conduct",
   "/changelog":"FlyThe BG changelog"
  };
