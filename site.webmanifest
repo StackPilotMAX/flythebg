@@ -1,0 +1,24 @@
+{
+  "name": "FlyThe BG",
+  "short_name": "FlyThe BG",
+  "description": "Privacy-focused background removal, image compression and video compression tools.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#080b09",
+  "theme_color": "#080b09",
+  "icons": [
+    {
+      "src": "/assets/flythebg-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/flythebg-icon.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
