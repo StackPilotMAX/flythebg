@@ -9,7 +9,7 @@ on:
         required: false
         type: string
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: flythebg-main-${{ github.run_id }}
   cancel-in-progress: false
@@ -45,6 +45,21 @@ jobs:
         id: build
         continue-on-error: true
         run: npm run build
+      - name: Persist compiled frontend bundle
+        id: persist_bundle
+        if: ${{ steps.build.outcome == 'success' && github.event.head_commit.message != 'chore: sync compiled frontend bundle' }}
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/app.js
+          if git diff --cached --quiet; then
+            echo "Compiled frontend bundle is already current."
+          else
+            git commit -m "chore: sync compiled frontend bundle"
+            git push origin HEAD:main
+          fi
+
       - name: Verify deployment artifacts
         id: artifacts
         if: ${{ steps.build.outcome == 'success' }}
