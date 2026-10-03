@@ -21,6 +21,7 @@ const ROUTE_META = {
   "/accessibility": { title: "Accessibility — FlyThe BG Website & Tools", description: "Read how FlyThe BG approaches keyboard access, touch controls, reduced motion, readable content, and reporting accessibility barriers." },
   "/security": { title: "Security at FlyThe BG — Vulnerability Reporting", description: "Learn how FlyThe BG protects its media tools and how to report a security vulnerability or privacy-sensitive problem." },
   "/cookies": { title: "Cookies & Similar Technologies — FlyThe BG", description: "Read about cookies and similar browser or advertising technologies that may be used by FlyThe BG and its service providers." },
+  "/affiliates": { title: "Affiliate & Referral Disclosure — FlyThe BG", description: "FlyThe BG disclosure for advertising, referral and affiliate relationships, including optional attribution and consent controls." },
   "/changelog": { title: "FlyThe BG Changelog — Product & Privacy Updates", description: "See recent FlyThe BG changes across media tools, privacy, navigation, accessibility, performance, reliability, and SEO updates over time." },
 };
 const ROUTES = new Set(Object.keys(ROUTE_META));
