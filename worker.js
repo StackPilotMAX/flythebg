@@ -167,7 +167,8 @@ function applyRouteMeta(html, canonical, meta, isMissing) {
   output = output.replace(/\s*<script type="application\/ld\+json"[^>]*>[^<]*<\/script>/gi, "");
   output = output.replace("</head>", '<meta name="csp-nonce" content="' + nonce + '"><link rel="canonical" href="' + escapeHtml(canonical) + '"><script type="application/ld+json" data-fly-server-schema nonce="' + nonce + '">' + schema + '</script></head>');
   output = output.replace(/<meta name="robots"[^>]*>/i, isMissing ? '<meta name="robots" content="noindex,follow,noarchive">' : '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">');
-  output = output.replace(/<div id="app">[\s\S]*?<\/div>/i, '<div id="app">' + buildSeoFallback(route, meta, canonical) + "</div>");
+  // Keep the real client app shell intact. The server fallback must not replace #app,
+  // otherwise the interactive site becomes permanently hidden behind SEO text.
   return { body: output, status: 200, nonce };
 }
 
