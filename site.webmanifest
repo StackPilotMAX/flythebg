@@ -9,7 +9,7 @@
   "theme_color": "#080b09",
   "icons": [
     {
-      "src": "/assets/flythebg-logo.svg",
+      "src": "/assets/flythebg-logo.png",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
