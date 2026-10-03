@@ -1160,19 +1160,6 @@ body:has(.experience){
 .fly-logo{overflow:visible;min-width:clamp(120px,15vw,180px);height:clamp(40px,5vw,52px)}
 @media(max-width:720px){.fly-logo{min-width:118px;height:38px}.fly-logo .site-logo{height:38px;max-width:118px}}
 
-/* Stable first paint: keep server SEO fallback hidden until the SPA has mounted. */
-body.app-pending #app .seo-fallback{visibility:hidden}
-body.app-pending #app{min-height:100svh;display:grid;place-items:center}
-body.app-pending #app:after{content:"Loading FlyThe BG…";color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
-body:not(.app-pending) #app:after{display:none}
-
-
-/* Deterministic first paint: never expose Worker fallback while the SPA is mounting. */
-body.app-pending #app{visibility:hidden;min-height:100svh}
-body.app-pending::after{content:"Loading FlyThe BG…";position:fixed;inset:0;display:grid;place-items:center;z-index:2147483647;color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;pointer-events:none}
-body:not(.app-pending)::after{display:none}
-
-
 /* Interactive folder tool gallery — native CSS/TS adaptation of the supplied React concept. */
 .home-tools-section{padding-top:clamp(70px,9vw,118px)}
 .home-folder-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2.4vw,30px);align-items:start}
