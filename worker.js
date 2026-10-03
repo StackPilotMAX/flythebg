@@ -57,8 +57,8 @@ function buildStructuredData(route, canonical, meta) {
     alternateName: "FlyTheBG",
     url: SITE_URL + "/",
     description: "Independent privacy-focused media tools and background-removal project.",
-    logo: SITE_URL + "/assets/flythebg-icon.png",
-    image: SITE_URL + "/assets/flythebg-icon.png",
+    logo: { "@type": "ImageObject", "url": SITE_URL + "/assets/flythebg-icon.svg", "contentUrl": SITE_URL + "/assets/flythebg-icon.svg" },
+    image: SITE_URL + "/assets/flythebg-icon.svg",
     email: "support@flythebg.com",
     sameAs: [GITHUB_URL, INSTAGRAM_URL]
   };
