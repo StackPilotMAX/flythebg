@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+<title>FlyThe BG</title><desc>FlyThe BG logo</desc>
+<rect width="128" height="128" rx="28" fill="#080b09"/>
+<path d="M28 34h42c16 0 28 10 28 24 0 8-4 15-11 19 8 4 13 11 13 20 0 14-12 25-30 25H28V34Zm22 17v18h18c6 0 10-4 10-9s-4-9-10-9H50Zm0 35v19h20c7 0 11-4 11-10s-4-9-11-9H50Z" fill="#fff"/>
+<path d="M19 26 39 10l8 9-20 16z" fill="#67e8f9"/>
+</svg>
