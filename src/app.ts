@@ -339,7 +339,50 @@ function home():string{
   <footer class="fb-home-footer"><div><a class="fb-footer-brand" href="/">FlyThe BG</a><p>Privacy-first media tools for practical work.</p></div><nav aria-label="Homepage footer"><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/passport-photo">Passport Photos</a><a href="/faq">FAQ</a><a href="/blogs">Blogs</a><a href="/about">About</a><a href="/contact">Contact</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/support-the-developer">Support the Developer</a></nav><div class="fb-footer-attribution"><span>UI by</span> <a href="https://motionsites.ai/" target="_blank" rel="noopener noreferrer">motionsites.ai</a></div><small>© 2026 FlyThe BG · support@flythebg.com</small></footer>
  </main>`;
 }
-function notFound():string{return shell(`<main class="page prose reveal"><p class="eyebrow">404 · PAGE NOT FOUND</p><h1>That page has flown away.</h1><p>The address may be outdated or mistyped. The tools and guides are still here.</p><div class="home-final-actions"><a class="fly-cta" href="/">Back home</a><a class="text-link" href="/features">Open the toolkit ↗</a><a class="text-link" href="/faq">Read the FAQ ↗</a></div></main>`,"404 — FlyThe BG");}
+function notFound():string{
+ return `<main class="fb-404-page" aria-labelledby="fb-404-title">
+  <div class="fb-404-bg" aria-hidden="true">
+   <div class="fb-404-bg-text" data-404-number>404</div>
+   <div class="fb-404-oval" data-404-oval></div>
+  </div>
+  <nav class="fb-404-nav" aria-label="404 navigation">
+   <a class="fb-404-brand" href="/" aria-label="FlyThe BG home">
+    <span class="fb-404-brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span>FlyThe BG</span>
+   </a>
+   <div class="fb-404-links">
+    <a href="/about">About</a><a href="/features">Tools</a><a href="/blogs">Blogs</a><a href="/faq">FAQ</a><a href="/contact">Contact</a>
+   </div>
+   <button class="fb-404-menu" type="button" data-404-menu aria-expanded="false" aria-controls="fb-404-menu-panel" aria-label="Open 404 menu">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Menu</span>
+   </button>
+  </nav>
+  <div class="fb-404-video-wrap" aria-hidden="true">
+   <div class="fb-404-video-inner"><video autoplay loop muted playsinline preload="auto" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260713_234424_b1332b69-2e69-4302-8dbc-40f86846afbd.mp4"></video></div>
+  </div>
+  <section class="fb-404-bottom">
+   <h1 id="fb-404-title">Oops, something went wrong!</h1>
+   <a href="/" class="fb-404-home"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.8 5.2 7 10l4.8 4.8M7.2 10h9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Back to Home</span></a>
+  </section>
+  <div class="fb-404-overlay" data-404-overlay hidden>
+   <div class="fb-404-backdrop" data-404-close></div>
+   <aside class="fb-404-panel" id="fb-404-menu-panel" role="dialog" aria-modal="true" aria-label="404 menu">
+    <header class="fb-404-panel-head">
+     <a class="fb-404-brand" href="/" data-404-close><span class="fb-404-brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>FlyThe BG</span></a>
+     <button class="fb-404-close" type="button" data-404-close aria-label="Close menu"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    </header>
+    <nav class="fb-404-menu-items" aria-label="404 menu links">
+     <a href="/about">About FlyThe BG</a>
+     <a href="/features">Explore Tools</a>
+     <a href="/blogs">Read the Blogs</a>
+     <a href="/faq">Read the FAQ</a>
+     <a href="/contact">Contact FlyThe BG</a>
+    </nav>
+    <div class="fb-404-menu-cta"><a href="/" data-404-close><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11.8 5.2 7 10l4.8 4.8M7.2 10h9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a></div>
+   </aside>
+  </div>
+ </main>`;
+}
 
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose a tool.<br>and get to work.</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a><a href="/passport-photo"><span>04</span><div><b>Passport Size Visa Photo Maker</b><small>Crop · background · exact size · printable sheets</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>Tip:</b> For large video files, close unnecessary browser tabs to keep more memory available.</div></main>`,"Get Started — FlyThe BG");}
 
@@ -909,6 +952,48 @@ function wirePassportPhoto():void{
  updatePhoto();updatePaper();setColor("#FFFFFF");updateLayout();
 }
 
+function wireNotFound():void{
+ const root=document.querySelector<HTMLElement>(".fb-404-page");
+ if(!root)return;
+ const menu=root.querySelector<HTMLButtonElement>("[data-404-menu]");
+ const overlay=root.querySelector<HTMLElement>("[data-404-overlay]");
+ const panel=root.querySelector<HTMLElement>(".fb-404-panel");
+ const closeButtons=root.querySelectorAll<HTMLElement>("[data-404-close]");
+ const items=root.querySelectorAll<HTMLElement>(".fb-404-menu-items a");
+ const bgText=root.querySelector<HTMLElement>("[data-404-number]");
+ const oval=root.querySelector<HTMLElement>("[data-404-oval]");
+ const setScale=()=>{
+  if(!bgText||!oval)return;
+  const h=bgText.offsetHeight;
+  if(!h)return;
+  const scaleY=Math.max(.45,Math.min(4,window.innerHeight/h));
+  const y=scaleY*1.4;
+  bgText.style.transform="scale(1.15,"+y.toFixed(4)+")";
+  oval.style.transform="scaleY("+scaleY.toFixed(4)+")";
+ };
+ let previousOverflow=document.body.style.overflow;
+ const setMenu=(open:boolean)=>{
+  if(!overlay||!menu)return;
+  root.classList.toggle("is-menu-open",open);
+  menu.setAttribute("aria-expanded",String(open));
+  overlay.hidden=!open;
+  document.body.style.overflow=open?"hidden":previousOverflow;
+  if(open){window.setTimeout(()=>panel?.querySelector<HTMLElement>("a")?.focus(),250)}
+  else menu.focus();
+  items.forEach((item,index)=>{
+   item.style.transitionDelay=open?(150+index*60)+"ms":"0ms";
+  });
+ };
+ menu?.addEventListener("click",()=>setMenu(menu.getAttribute("aria-expanded")!=="true"));
+ root.querySelector("[data-404-close]")?.addEventListener("click",()=>setMenu(false));
+ overlay?.addEventListener("click",event=>{if((event.target as HTMLElement)?.matches("[data-404-close]"))setMenu(false)});
+ closeButtons.forEach(button=>button.addEventListener("click",()=>setMenu(false)));
+ document.addEventListener("keydown",event=>{if(event.key==="Escape"&&root.classList.contains("is-menu-open"))setMenu(false);});
+ window.addEventListener("resize",setScale,{passive:true});
+ setScale();
+ // Keep the isolated 404 mode active until navigation changes the page.
+ window.setTimeout(setScale,50);
+}
 function wireNavigation():void{
  document.addEventListener("click",event=>{
   const target=event.target as HTMLElement|null;
@@ -935,11 +1020,13 @@ function revealElements():void{
 function render():void{
  const app=document.querySelector<HTMLElement>("#app");
  if(!app)return;
+ document.body.classList.remove("fb-404-mode","fly-menu-open");
+ document.body.style.removeProperty("overflow");
  const route=normalizePath();
  if(!route){
   app.innerHTML=notFound();
-  wireFlyLanding();
-  revealElements();
+  document.body.classList.add("fb-404-mode");
+  wireNotFound();
   document.body.classList.remove("app-pending");
   return;
  }
