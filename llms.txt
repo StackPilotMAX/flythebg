@@ -1,28 +1,48 @@
 # FlyThe BG
 
-FlyThe BG is an independent web project providing free media tools focused on background removal, image compression, video compression, and clear privacy boundaries.
+> FlyThe BG is an independent, privacy-focused web toolkit for practical image and video work: protected AI background removal, browser-local image compression, browser-local video compression, and a passport, visa and ID photo sheet maker.
 
-## Primary pages
+FlyThe BG does not require an account for its core tools. Image and video compression are designed to run locally in the browser. Background removal uses the protected FlyThe BG API route and the private AI credential stays server-side. The passport photo maker combines crop selection, optional background removal, physical photo dimensions, background choices, paper sizing and printable sheet generation.
 
-- https://flythebg.com/ — FlyThe BG homepage and media toolkit
-- https://flythebg.com/remove-bg — Background removal with protected AI processing
-- https://flythebg.com/image-compressor — Browser-local image compression
-- https://flythebg.com/video-compressor — Browser-local WebM video compression
-- https://flythebg.com/features — Tool overview
-- https://flythebg.com/faq — Frequently asked questions
-- https://flythebg.com/privacy — Privacy policy
-- https://flythebg.com/terms — Terms of use
-- https://flythebg.com/blog — Media and privacy guides
+## Core tools
 
-## Entity
+- [Remove Background](https://flythebg.com/remove-bg): Remove backgrounds from PNG, JPG and WEBP images through the protected AI processing route.
+- [Image Compressor](https://flythebg.com/image-compressor): Compress images locally in the browser and create a smaller JPEG delivery copy.
+- [Video Compressor](https://flythebg.com/video-compressor): Process video locally in the browser and create a smaller WebM output when browser support permits.
+- [Passport Size Visa Photo Maker](https://flythebg.com/passport-photo): Crop a photo, keep or remove its background, choose physical dimensions and paper, and generate a printable sheet.
+- [All Tools](https://flythebg.com/features): Compare the available FlyThe BG workflows.
 
-FlyThe BG is the site and project name. The project is maintained through the StackPilotMAX/flythebg GitHub repository.
+## Publisher information
 
-## Processing boundaries
+- [Homepage](https://flythebg.com/): Overview of the project, tools, privacy boundaries and workflows.
+- [About FlyThe BG](https://flythebg.com/about): Project purpose, privacy-first design and how the tools are structured.
+- [FAQ](https://flythebg.com/faq): Answers about uploads, processing, privacy, limits, downloads and mobile use.
+- [Privacy Policy](https://flythebg.com/privacy): Processing, providers, retention and privacy boundaries.
+- [Terms of Use](https://flythebg.com/terms): Terms, acceptable use, third-party services and responsibilities.
+- [Contact](https://flythebg.com/contact): Product support, privacy, accessibility and security contact.
+- [Support the Developer](https://flythebg.com/support-the-developer): Optional support for maintaining the independent project.
 
-Image compression and video compression are designed to run locally in the browser. Background removal uses a protected server-side AI processing route when the user starts that tool. Refer to the Privacy Policy for the current processing and retention details.
+## Practical guides
 
-## Official references
+- [Blogs](https://flythebg.com/blogs): First-party guides covering media formats, compression, privacy and practical workflows.
+- [Remove Background Online: Privacy Guide](https://flythebg.com/blogs/remove-background-online-privacy): What can happen to an image during online background removal and what privacy questions to ask.
+- [How to Compress Images in Your Browser](https://flythebg.com/blogs/compress-images-in-browser): Browser-local compression, dimensions, quality and file-size trade-offs.
+- [WebM Video Compression Guide](https://flythebg.com/blogs/webm-video-compression-guide): Codecs, WebM, browser support and video file size.
+- [Passport Photo Sizes](https://flythebg.com/blogs/passport-photo-size-guide): Centimetres, inches, pixels and physical photo dimensions.
+- [Passport Photo Printing Guide](https://flythebg.com/blogs/passport-photo-printing-guide): A4 and other paper sizes, layout and print scaling.
+- [PNG vs JPG](https://flythebg.com/blogs/png-vs-jpg-guide): Choosing formats for transparency, photos, graphics and delivery.
+- [Image File Size Guide](https://flythebg.com/blogs/image-file-size-guide): Practical ways to reduce image size while preserving useful quality.
+- [Transparent Backgrounds](https://flythebg.com/blogs/transparent-background-guide): Alpha transparency, PNG and common use cases.
+- [Social Media Image Sizes](https://flythebg.com/blogs/social-media-image-sizes): A practical workflow for dimensions and file size.
+- [Email Image Sizes](https://flythebg.com/blogs/email-image-size-guide): Image dimensions, attachments and loading considerations.
+- [Website Image Optimization](https://flythebg.com/blogs/website-image-optimization): Dimensions, compression, formats and browser delivery.
+- [Why Video Files Get So Large](https://flythebg.com/blogs/video-file-size-guide): Resolution, bitrate, duration, codec and frame rate.
+- [Browser Media Privacy](https://flythebg.com/blogs/browser-media-privacy): What browser-local processing means for device privacy.
+- [WebP vs JPG](https://flythebg.com/blogs/webp-vs-jpg-guide): Quality, size, compatibility and transparency trade-offs.
+- [How to Choose an Image Format](https://flythebg.com/blogs/how-to-choose-image-format): A practical format decision guide.
 
-- https://github.com/StackPilotMAX/flythebg
-- https://www.instagram.com/flythebg/
+## Machine-readable sources
+
+- [Sitemap](https://flythebg.com/sitemap.xml): Complete list of published HTML URLs intended for discovery by search engines.
+- [Robots policy](https://flythebg.com/robots.txt): Public crawler access policy; the processing API is excluded from crawling.
+- [Project source](https://github.com/StackPilotMAX/flythebg): Public project repository and implementation source.
