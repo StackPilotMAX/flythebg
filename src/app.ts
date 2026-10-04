@@ -91,6 +91,7 @@ function setSeo(title:string,description:string):void{
   "name":"FlyThe BG",
   "url":siteUrl,
   "description":"Independent privacy-focused media tools and background-removal project.",
+  "logo":{"@type":"ImageObject","url":siteUrl+"favicon.png","contentUrl":siteUrl+"favicon.png"},
   "email":"support@flythebg.com",
   "sameAs":[GITHUB_URL,FLYTHEBG_INSTAGRAM]
  };
