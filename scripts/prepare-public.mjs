@@ -5,6 +5,7 @@ await mkdir("public/assets", { recursive: true });
 
 await cp("index.html", "public/index.html");
 await cp("assets/app.js", "public/assets/app.js");
+await cp("assets/privacy-consent.js", "public/assets/privacy-consent.js");
 await cp("assets/flythebg-logo.png", "public/assets/flythebg-logo.png");
 await cp("assets/site.css", "public/assets/site.css");
 await cp("assets/pill-nav.css", "public/assets/pill-nav.css");
