@@ -8,8 +8,11 @@
     "deploy": "npm run build && wrangler deploy",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {
+  "dependencies": {
     "typescript": "5.8.3",
     "wrangler": "4.141.0"
+  },
+  "engines": {
+    "node": ">=22 <25"
   }
 }
