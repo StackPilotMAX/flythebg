@@ -1512,14 +1512,9 @@ body:has(.experience){
 @media(max-width:720px){.fly-site-footer{grid-template-columns:1fr;gap:18px;min-height:0;padding:42px 20px 28px}.fly-site-footer nav{grid-column:1}.fly-site-footer .fly-social-links,.fly-site-footer .fly-footer-attribution,.fly-site-footer small{grid-column:1}}
 
 
-/* Andromeda support journey — scroll-driven galaxy, restrained editorial content. */
 html{scroll-behavior:smooth}
-.fly-site-support{background:#020308;color:#fff;overflow:visible}
-.fly-site-support .fly-site-hero{background:#020308}
-.fly-site-support .fly-site-hero .fly-bg{z-index:0;position:fixed;inset:0}
-.fly-site-support .fly-site-hero .fly-bg-video{opacity:.17;filter:blur(3px) brightness(.55) saturate(.72);transform:scale(1.02)}
-.fly-site-support .fly-site-hero .fly-bg-shade{z-index:2;background:radial-gradient(circle at 50% 48%,rgba(2,4,12,.08),rgba(2,3,8,.46) 62%,rgba(2,3,8,.9) 100%),linear-gradient(180deg,rgba(1,2,6,.2),rgba(1,2,6,.58))}
-.fly-site-support /* Support the Developer — creative page using the same shared site frame. */
+
+/* Support the Developer — creative page using the same shared site frame. */
 .support-developer{max-width:1050px!important}
 .support-dev-hero{text-align:center;padding:clamp(28px,5vw,64px) 0 12px}
 .support-dev-hero h1{margin:14px auto 18px;max-width:900px;font-family:var(--fly-font-display);font-weight:400;font-size:clamp(42px,6.4vw,78px);line-height:.98;letter-spacing:-.055em;color:#fff}
