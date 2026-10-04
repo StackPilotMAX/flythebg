@@ -1563,3 +1563,65 @@ html{scroll-behavior:smooth}
  .tool-editorial-grid{grid-template-columns:1fr}
  .tool-editorial-grid article{min-height:0}
 }
+
+/* Isolated FlyThe BG 404 experience. Nothing here is shared with normal site components. */
+body.fb-404-mode{overflow:hidden!important;background:linear-gradient(180deg,#FF8233 0%,#FDAC55 100%)!important;color:#fff}
+body.fb-404-mode:before,body.fb-404-mode:after{display:none!important}
+body.fb-404-mode #app{width:100%;height:100%;min-height:100vh}
+.fb-404-page{position:relative;width:100%;height:100vh;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;background:linear-gradient(180deg,#FF8233 0%,#FDAC55 100%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff;isolation:isolate}
+.fb-404-bg{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.8;display:flex;align-items:center;justify-content:center;-webkit-mask-image:linear-gradient(to bottom,#000 40%,transparent 95%);mask-image:linear-gradient(to bottom,#000 40%,transparent 95%)}
+.fb-404-bg-text{position:absolute;left:50%;top:50%;font-size:clamp(200px,48vw,800px);font-weight:900;line-height:1;letter-spacing:-.08em;white-space:nowrap;color:#fff;transform:translate(-50%,-50%) scale(1.15,1);transform-origin:center;will-change:transform}
+.fb-404-oval{position:absolute;left:50%;top:50%;height:clamp(22vh,26vh,50vh);width:clamp(120px,20vw,400px);border-radius:999px;background:#fff;transform:translate(-50%,-50%) scaleY(1);transform-origin:center;will-change:transform}
+.fb-404-nav{position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:16px 16px 20px}
+.fb-404-brand{display:inline-flex;align-items:center;color:#fff;text-decoration:none;font-size:clamp(18px,2vw,22px);font-weight:800;letter-spacing:-.03em;white-space:nowrap}
+.fb-404-brand-mark{display:grid;grid-template-columns:repeat(2,10px);grid-template-rows:repeat(2,10px);gap:2px;margin-right:7px}
+.fb-404-brand-mark i{display:block;width:10px;height:10px;background:#fff;border-radius:50%}
+.fb-404-links{display:none;align-items:center;gap:4px;margin-left:auto;margin-right:8px}
+.fb-404-links a{display:inline-flex;align-items:center;padding:6px 16px;border-radius:999px;background:#fff;color:#F16524;text-decoration:none;font-size:13px;font-weight:600;transition:opacity .2s ease}
+.fb-404-links a:hover{opacity:.9}
+.fb-404-menu{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 16px;border:0;border-radius:999px;background:#F16524;color:#fff;font:600 13px/1 Inter,ui-sans-serif,sans-serif;cursor:pointer;transition:opacity .2s ease}
+.fb-404-menu:hover{opacity:.9}
+.fb-404-menu svg{width:16px;height:16px}
+.fb-404-video-wrap{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;margin-top:calc(-6vh - 40px);pointer-events:none}
+.fb-404-video-inner{width:120vw;height:85vh;display:flex;align-items:center;justify-content:center}
+.fb-404-video-inner video{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;mix-blend-mode:darken}
+.fb-404-bottom{position:relative;z-index:30;margin-top:auto;padding:0 16px 32px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.fb-404-bottom h1{margin:0 0 12px;color:#fff;font-size:clamp(18px,2.2vw,28px);font-weight:500;line-height:1.25;letter-spacing:-.02em}
+.fb-404-home,.fb-404-menu-cta a{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:999px;background:#F16524;color:#fff;text-decoration:none;font-size:14px;font-weight:700;transition:transform .22s ease,box-shadow .22s ease}
+.fb-404-home:hover{transform:scale(1.05);box-shadow:0 14px 34px rgba(241,101,36,.28)}
+.fb-404-home svg,.fb-404-menu-cta svg{width:16px;height:16px}
+.fb-404-overlay{position:fixed;inset:0;z-index:50;overflow:hidden;transition:opacity .5s cubic-bezier(.16,1,.3,1);opacity:1}
+.fb-404-overlay[hidden]{display:block;visibility:hidden;opacity:0;pointer-events:none}
+.fb-404-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:opacity .5s ease}
+.fb-404-panel{position:absolute;top:0;right:0;height:100%;width:100%;max-width:380px;display:flex;flex-direction:column;background:linear-gradient(135deg,#FF6B1A 0%,#FF9642 100%);transform:translateX(0);transition:transform .5s cubic-bezier(.16,1,.3,1);box-shadow:-18px 0 70px rgba(0,0,0,.18)}
+.fb-404-overlay[hidden] .fb-404-panel{transform:translateX(100%)}
+.fb-404-panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 16px}
+.fb-404-panel-head .fb-404-brand{font-size:20px}
+.fb-404-close{width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;display:grid;place-items:center;cursor:pointer;transition:background .2s ease}
+.fb-404-close:hover{background:rgba(255,255,255,.3)}
+.fb-404-close svg{width:20px;height:20px}
+.fb-404-menu-items{display:flex;flex-direction:column;gap:10px;padding:10px 20px}
+.fb-404-menu-items a{padding:16px 24px;border-radius:16px;background:rgba(255,255,255,.1);color:#fff;text-decoration:none;font-size:18px;font-weight:700;opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease,background .3s ease}
+.fb-404-menu-items a:hover{background:rgba(255,255,255,.2)}
+.fb-404-page.is-menu-open .fb-404-menu-items a{opacity:1;transform:translateY(0)}
+.fb-404-menu-cta{position:absolute;left:0;right:0;bottom:0;padding:24px}
+.fb-404-menu-cta a{width:100%;padding:16px 24px;background:#fff;color:#F16524;transition:transform .22s ease}
+.fb-404-page.is-menu-open .fb-404-menu-cta a{animation:fb404CtaIn .45s ease .45s both}
+@keyframes fb404CtaIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(min-width:640px){
+ .fb-404-nav{padding:20px 24px}
+ .fb-404-menu{padding:10px 20px}
+ .fb-404-bottom{padding-bottom:64px}
+ .fb-404-home{padding:16px 32px;font-size:16px}
+ .fb-404-links{display:flex}
+ .fb-404-video-inner{width:70vw;height:70vh}
+}
+@media(min-width:768px){
+ .fb-404-nav{padding:20px 48px}
+ .fb-404-video-inner{width:62vw;height:78vh}
+ .fb-404-bottom h1{font-size:32px}
+ .fb-404-bottom{padding-left:24px;padding-right:24px}
+}
+@media(prefers-reduced-motion:reduce){
+ .fb-404-overlay,.fb-404-panel,.fb-404-backdrop,.fb-404-menu-items a,.fb-404-home,.fb-404-menu-cta a,.fb-404-menu{transition:none!important;animation:none!important}
+}
