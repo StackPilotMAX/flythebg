@@ -1545,3 +1545,21 @@ html{scroll-behavior:smooth}
  .support-dev-note{grid-template-columns:1fr;gap:14px}
  .support-dev-actions a{width:100%}
 }
+
+
+/* Publisher-content sections used around functional tools so the page remains useful even when no file is selected. */
+.tool-editorial{max-width:850px;margin:48px auto 10px;padding:34px 0 8px;border-top:1px solid rgba(255,255,255,.14)}
+.tool-editorial>div:first-child{max-width:760px}
+.tool-editorial h2{margin:0;font-size:clamp(30px,4.5vw,52px);line-height:1.02;letter-spacing:-.045em;font-weight:560}
+.tool-editorial>div:first-child>p:not(.eyebrow){margin:16px 0 0;color:var(--muted);font-size:16px;line-height:1.75}
+.tool-editorial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:28px}
+.tool-editorial-grid article{min-height:180px;padding:22px;border:1px solid rgba(255,255,255,.11);border-radius:18px;background:rgba(255,255,255,.025)}
+.tool-editorial-grid h3{margin:0;font-size:19px;letter-spacing:-.025em}
+.tool-editorial-grid p{margin:9px 0 0;color:var(--muted);font-size:13px;line-height:1.65}
+.tool-editorial-grid a,.tool-editorial-links a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.tool-editorial-links{margin:22px 0 0;color:#9fa6ae;font-size:12px;line-height:1.7}
+@media(max-width:720px){
+ .tool-editorial{margin-top:36px;padding-top:28px}
+ .tool-editorial-grid{grid-template-columns:1fr}
+ .tool-editorial-grid article{min-height:0}
+}
