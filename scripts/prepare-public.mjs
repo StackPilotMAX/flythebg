@@ -14,7 +14,7 @@ await cp("assets/pill-nav.js", "public/assets/pill-nav.js");
 await cp("assets/flythebg-home.css", "public/assets/flythebg-home.css");
 await cp("assets/flythebg-home-fixes.css", "public/assets/flythebg-home-fixes.css");
 
-for (const file of ["robots.txt", "sitemap.xml", "security.txt", "ads.txt", "site.webmanifest"]) {
+for (const file of ["robots.txt", "sitemap.xml", "security.txt", "ads.txt", "site.webmanifest", "llms.txt"]) {
   await cp(file, "public/" + file);
 }
 
