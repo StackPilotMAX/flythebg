@@ -376,7 +376,9 @@ export default {
     const html = await assetResponse.text();
     const canonicalPath = route || url.pathname.replace(/\/+$/, "") || "/";
     const fallback = buildSeoFallback(route, meta, url.origin + canonicalPath);
-    const seededHtml = html.replace('<div id="app"></div>', '<div id="app">' + fallback + '</div>');
+    // Keep the server-readable publisher fallback available to non-JS crawlers without
+    // placing crawler-only text inside the visible application shell during reloads.
+    const seededHtml = html.replace("</body>", '<noscript id="seo-fallback">' + fallback + '</noscript></body>');
     const transformed = applyRouteMeta(seededHtml, url.origin + canonicalPath, meta, isMissing, route);
     const response = new Response(transformed.body, { status: isMissing ? 404 : transformed.status, headers: new Headers(assetResponse.headers) });
     response.headers.set("Content-Type","text/html; charset=utf-8");
