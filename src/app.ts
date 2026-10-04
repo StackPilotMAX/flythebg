@@ -1,6 +1,6 @@
 import "./privacy-consent.js";
 type ToolId = "remove-bg" | "image-compressor" | "video-compressor" | "passport-photo";
-type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/passport-photo" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/blogs/passport-photo-size-guide" | "/blogs/passport-photo-printing-guide" | "/blogs/png-vs-jpg-guide" | "/blogs/image-file-size-guide" | "/blogs/transparent-background-guide" | "/blogs/social-media-image-sizes" | "/blogs/email-image-size-guide" | "/blogs/website-image-optimization" | "/blogs/video-file-size-guide" | "/blogs/browser-media-privacy" | "/blogs/webp-vs-jpg-guide" | "/blogs/how-to-choose-image-format" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/affiliates" | "/changelog";
+type Route = "/" | "/remove-bg" | "/image-compressor" | "/video-compressor" | "/passport-photo" | "/features" | "/about" | "/faq" | "/privacy" | "/terms" | "/contact" | "/support" | "/support-the-developer" | "/blogs" | "/blogs/remove-background-online-privacy" | "/blogs/compress-images-in-browser" | "/blogs/webm-video-compression-guide" | "/blogs/passport-photo-size-guide" | "/blogs/passport-photo-printing-guide" | "/blogs/png-vs-jpg-guide" | "/blogs/image-file-size-guide" | "/blogs/transparent-background-guide" | "/blogs/social-media-image-sizes" | "/blogs/email-image-size-guide" | "/blogs/website-image-optimization" | "/blogs/video-file-size-guide" | "/blogs/browser-media-privacy" | "/blogs/webp-vs-jpg-guide" | "/blogs/how-to-choose-image-format" | "/code-of-conduct" | "/accessibility" | "/security" | "/cookies" | "/affiliates" | "/changelog";
 
 const VIDEO="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/4b73c700-3112-4c07-bd48-0af2893dff7c.mp4";
 const POSTER="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/0bf7409c-9fa2-4bef-a49d-34903dcc91ad.png";
@@ -31,7 +31,8 @@ function setSeo(title:string,description:string):void{
   "/privacy":"FlyThe BG privacy policy, image processing privacy",
   "/terms":"FlyThe BG terms, media tools terms",
   "/contact":"FlyThe BG contact, support",
-  "/support":"FlyThe BG support, open source media tools",
+  "/support":"Support the FlyThe BG developer, independent media tools project",
+  "/support-the-developer":"Support the FlyThe BG developer, independent media tools project",
   "/security":"FlyThe BG security, vulnerability reporting",
   "/accessibility":"FlyThe BG accessibility",
   "/cookies":"FlyThe BG cookies",
@@ -210,7 +211,8 @@ function shell(content:string,title:string):string{
   "/privacy":"FlyThe BG privacy policy covering local compression, background removal, providers, retention and rights.",
   "/terms":"FlyThe BG terms covering tool use, downloads, third-party services, availability and user responsibilities.",
   "/contact":"Contact FlyThe BG for support, privacy requests, corrections and security reports.",
-  "/support":"Optional ways to support the FlyThe BG project through GitHub and Buy Me a Coffee.",
+  "/support":"Support the FlyThe BG developer through GitHub and Buy Me a Coffee.",
+  "/support-the-developer":"Support the FlyThe BG developer through GitHub and Buy Me a Coffee.",
   "/blogs":"FlyThe BG Blogs with practical guides about media files, privacy, compression and browser workflows.",
   "/blogs/remove-background-online-privacy":"A practical guide to what happens when you remove a background online and how to assess privacy boundaries.",
   "/blogs/compress-images-in-browser":"A practical guide to browser-based image compression and what changes when processing stays on your device.",
@@ -234,7 +236,8 @@ function shell(content:string,title:string):string{
  "/privacy":["YOUR PRIVACY","Privacy First","Designed To Fly"],
  "/terms":["OUR TERMS","Simple Terms","Designed To Fly"],
  "/contact":["GET IN TOUCH","Talk To Us","Designed To Fly"],
- "/support":["KEEP IT GOING","Support The Project","Designed To Fly"],
+ "/support":["SUPPORT THE DEVELOPER","Keep The Tools Moving","Built With Care"],
+  "/support-the-developer":["SUPPORT THE DEVELOPER","Keep The Tools Moving","Built With Care"],
  "/blogs":["FLYTHE BG BLOGS","Practical Guides","Designed To Work"],
  "/blogs/remove-background-online-privacy":["GUIDE","Background Removal","Without the Guesswork"],
  "/blogs/compress-images-in-browser":["GUIDE","Compress Images","Without Uploading"],
@@ -247,12 +250,12 @@ function shell(content:string,title:string):string{
  };
  const [eyebrow,line1,line2]=labels[path]||((path.startsWith("/blogs/"))?["GUIDE","FlyThe BG Journal","Practical Knowledge"]:labels["/features"]);
  const active=(route:string)=>path===route?' class="is-active" aria-current="page"':'';
- return `<div class="fly-site ${path==="/support"?"fly-site-support":""}">
+ return `<div class="fly-site">
  <section class="fly-site-hero">
-  <div class="fly-bg" aria-hidden="true">${path==="/support"?"":"<video class=\"fly-bg-video\" autoplay muted loop playsinline preload=\"auto\" poster=\"/assets/flythebg-hero-poster.png\" src=\"/assets/flythebg-hero.mp4\" aria-hidden=\"true\"></video>"}<div class="fly-bg-shade"></div></div>
+  <div class="fly-bg" aria-hidden="true"><video class="fly-bg-video" autoplay muted loop playsinline preload="auto" poster="/assets/flythebg-hero-poster.png" src="/assets/flythebg-hero.mp4" aria-hidden="true"></video><div class="fly-bg-shade"></div></div>
   <div class="fly-page">
-   <header class="ft-pill-nav fly-global-nav"><a class="ft-pill-logo" href="/" aria-label="FlyThe BG home"><img src="/assets/flythebg-logo.png" alt="" width="38" height="38"><span>FlyThe BG</span></a><nav class="ft-pill-desktop" aria-label="Main navigation"><ul><li><a class="ft-pill" href="/">Home</a></li><li><a class="ft-pill" href="/features">Tools</a></li><li><a class="ft-pill" href="/passport-photo">Passport</a></li><li><a class="ft-pill" href="/blogs">Blogs</a></li><li><a class="ft-pill" href="/about">About</a></li><li><a class="ft-pill" href="/faq">FAQ</a></li><li><a class="ft-pill" href="/contact">Contact</a></li></ul></nav><button class="ft-pill-toggle" type="button" aria-expanded="false" aria-controls="ft-pill-mobile" aria-label="Open navigation"><span></span><span></span><span></span></button><nav class="ft-pill-mobile" id="ft-pill-mobile" aria-label="Mobile navigation" inert><ul><li><a href="/">Home</a></li><li><a href="/features">Tools</a></li><li><a href="/remove-bg">Remove BG</a></li><li><a href="/image-compressor">Images</a></li><li><a href="/video-compressor">Videos</a></li><li><a href="/passport-photo">Passport Photos</a></li><li><a href="/about">About</a></li><li><a href="/faq">FAQ</a></li><li><a href="/blogs">Blogs</a></li><li><a href="/contact">Contact</a></li><li><a href="/support">Support</a></li></ul><div class="ft-pill-mobile-foot"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></div></nav></header>
-   <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/passport-photo">Passport Photos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support">Support</a><a href="/blogs">Blogs</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
+   <header class="ft-pill-nav fly-global-nav"><a class="ft-pill-logo" href="/" aria-label="FlyThe BG home"><img src="/assets/flythebg-logo.png" alt="" width="38" height="38"><span>FlyThe BG</span></a><nav class="ft-pill-desktop" aria-label="Main navigation"><ul><li><a class="ft-pill" href="/">Home</a></li><li><a class="ft-pill" href="/features">Tools</a></li><li><a class="ft-pill" href="/passport-photo">Passport</a></li><li><a class="ft-pill" href="/blogs">Blogs</a></li><li><a class="ft-pill" href="/about">About</a></li><li><a class="ft-pill" href="/faq">FAQ</a></li><li><a class="ft-pill" href="/contact">Contact</a></li></ul></nav><button class="ft-pill-toggle" type="button" aria-expanded="false" aria-controls="ft-pill-mobile" aria-label="Open navigation"><span></span><span></span><span></span></button><nav class="ft-pill-mobile" id="ft-pill-mobile" aria-label="Mobile navigation" inert><ul><li><a href="/">Home</a></li><li><a href="/features">Tools</a></li><li><a href="/remove-bg">Remove BG</a></li><li><a href="/image-compressor">Images</a></li><li><a href="/video-compressor">Videos</a></li><li><a href="/passport-photo">Passport Photos</a></li><li><a href="/about">About</a></li><li><a href="/faq">FAQ</a></li><li><a href="/blogs">Blogs</a></li><li><a href="/contact">Contact</a></li><li><a href="/support-the-developer">Support the Developer</a></li></ul><div class="ft-pill-mobile-foot"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></div></nav></header>
+   <div class="fly-mobile-overlay" data-menu-close></div><nav class="fly-mobile-menu" id="fly-mobile-menu" hidden aria-label="Mobile navigation"><a href="/">Home</a><a href="/features">Tools</a><a href="/remove-bg">Remove BG</a><a href="/image-compressor">Images</a><a href="/video-compressor">Videos</a><a href="/passport-photo">Passport Photos</a><a href="/about">About</a><a href="/faq">FAQ</a><a href="/contact">Contact</a><a href="/support-the-developer">Support the Developer</a><a href="/blogs">Blogs</a><a href="/code-of-conduct">Code</a><a href="/accessibility">Accessibility</a><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms</a></nav>
    ${path==="/support"?"":'<section class="fly-hero"><div class="fly-trust anim" style="--d:.05s"><div class="fly-avatars" aria-hidden="true"><span><span class="fly-avatar-inner">✦</span></span><span><span class="fly-avatar-inner">◌</span></span><span><span class="fly-avatar-inner">↗</span></span></div><div class="fly-trust-pill">' + eyebrow + '</div></div><h2 class="fly-headline"><span>' + line1 + '</span><span>' + line2 + '</span></h2><p class="fly-subhead anim" style="--d:.28s">FlyThe BG brings practical media tools together in one focused experience.</p><a class="fly-cta anim" style="--d:.4s" href="#page-content">Explore ' + line1 + ' ↓</a></section>'}
    <div class="fly-stats"><div class="fly-stat anim" style="--d:.5s"><span class="fly-stat-icon">&lt;</span><span class="fly-stat-value">15 MB</span><span class="fly-stat-label">Background upload limit</span></div><div class="fly-stat anim" style="--d:.58s"><span class="fly-stat-icon">%</span><span class="fly-stat-value">2</span><span class="fly-stat-label">Browser-local tools</span></div><div class="fly-stat anim" style="--d:.66s"><span class="fly-stat-icon">*</span><span class="fly-stat-value">0</span><span class="fly-stat-label">Accounts required</span></div><div class="fly-stat anim" style="--d:.74s"><span class="fly-stat-icon">#</span><span class="fly-stat-value">1</span><span class="fly-stat-label">Protected AI route</span></div></div>
   </div>
@@ -270,7 +273,7 @@ function aiPulse():string{return `<section class="section ai-section reveal"><di
 </div><p class="micro-note">Model names and capabilities move fast. Snapshot, not endorsement.</p></section>`;}
 
 function postWork(kind:string):void{
- const modal=document.createElement("div");modal.className="modal-backdrop";modal.innerHTML=`<div class="celebrate" role="dialog" aria-modal="true"><button class="modal-x" aria-label="Close">×</button><div class="confetti">✦ ✨ ✦</div><p class="eyebrow">WORK COMPLETE</p><h2>Processing complete.</h2><p>Your ${kind} is ready. If FlyThe BG saved you time, you can optionally support the project:</p><div class="modal-actions"><a class="button primary" href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">⭐ Give it a GitHub star</a><a class="button coffee" href="/support">☕ Support the project</a><button class="button ghost dismiss">Maybe later</button></div><small>No pressure. FlyThe BG never assumes or records that a Buy Me a Coffee payment happened.</small></div>`;
+ const modal=document.createElement("div");modal.className="modal-backdrop";modal.innerHTML=`<div class="celebrate" role="dialog" aria-modal="true"><button class="modal-x" aria-label="Close">×</button><div class="confetti">✦ ✨ ✦</div><p class="eyebrow">WORK COMPLETE</p><h2>Processing complete.</h2><p>Your ${kind} is ready. If FlyThe BG saved you time, you can optionally support the project:</p><div class="modal-actions"><a class="button primary" href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">⭐ Give it a GitHub star</a><a class="button coffee" href="/support-the-developer">☕ Support the Developer</a><button class="button ghost dismiss">Maybe later</button></div><small>No pressure. FlyThe BG never assumes or records that a Buy Me a Coffee payment happened.</small></div>`;
  document.body.appendChild(modal);modal.querySelector(".modal-x")?.addEventListener("click",()=>modal.remove());modal.querySelector(".dismiss")?.addEventListener("click",()=>modal.remove());modal.addEventListener("click",e=>{if(e.target===modal)modal.remove()});
 }
 
@@ -322,7 +325,7 @@ function home():string{
      </div>
     </section>
     <section class="fb-home-final">
-     <p class="fb-section-kicker">READY WHEN YOU ARE</p><h2>Give the next file one less headache.</h2><p>Choose the workflow that matches the job and get straight to the useful part.</p><div class="fb-home-cta"><a class="fb-btn solid" href="/features">Explore all tools ↗</a><a class="fb-btn ghost" href="/support">Support the project</a></div>
+     <p class="fb-section-kicker">READY WHEN YOU ARE</p><h2>Give the next file one less headache.</h2><p>Choose the workflow that matches the job and get straight to the useful part.</p><div class="fb-home-cta"><a class="fb-btn solid" href="/features">Explore all tools ↗</a><a class="fb-btn ghost" href="/support-the-developer">Support the Developer</a></div>
     </section>
    </section>
   </div>
@@ -334,62 +337,36 @@ function notFound():string{return shell(`<main class="page prose reveal"><p clas
 function features():string{return shell(`<main class="page reveal"><div class="page-hero center-heading"><p class="eyebrow">GET STARTED</p><h1>Choose a tool.<br>and get to work.</h1><p>Focused workspaces, visible progress and plain-English privacy boundaries.</p></div><div class="tool-links"><a href="/remove-bg"><span>01</span><div><b>Remove Background</b><small>Protected AI · PNG/JPG/WEBP · 15 MB</small></div><strong>Open ↗</strong></a><a href="/image-compressor"><span>02</span><div><b>Image Compressor</b><small>Runs locally in your browser</small></div><strong>Open ↗</strong></a><a href="/video-compressor"><span>03</span><div><b>Video Compressor</b><small>Local WebM with live progress</small></div><strong>Open ↗</strong></a><a href="/passport-photo"><span>04</span><div><b>Passport Size Visa Photo Maker</b><small>Crop · background · exact size · printable sheets</small></div><strong>Open ↗</strong></a></div><div class="tip-card"><b>Tip:</b> For large video files, close unnecessary browser tabs to keep more memory available.</div></main>`,"Get Started — FlyThe BG");}
 
 function passportPhotoPage():string{return shell(`<main class="passport-page-shell passport-one-page reveal"><section class="passport-hero"><p class="eyebrow">PRINT STUDIO · 04</p><h1>Passport Size Visa Photo Maker</h1><p>Create exact-size passport, visa and ID photo sheets from any source image. One page, clear checks, printable output.</p></section><section class="passport-card"><div class="passport-step-head"><span>01</span><div><p class="eyebrow">START</p><h2>Upload your photo</h2><p>PNG, JPG or WEBP · up to 15 MB</p></div></div><label class="passport-upload-zone" for="passport-input"><input id="passport-input" type="file" accept="image/png,image/jpeg,image/webp" hidden><strong>Drop your photo here</strong><span>or choose a file from your device</span></label><div class="passport-upload-preview" id="passport-upload-preview" hidden><img id="passport-source" alt="Selected source photo" hidden><div><b id="passport-file-name">Photo ready</b><small id="passport-file-meta"></small><button class="button ghost" type="button" id="passport-change">Choose another</button></div></div><label class="passport-consent"><input type="checkbox" id="passport-consent" required><span class="passport-consent-check" aria-hidden="true">✓</span><span>I accept the <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms</a>. If I choose background removal, my image will be sent through FlyThe BG’s protected AI route.</span></label><p class="passport-status" id="passport-status" role="status">Choose a photo to continue.</p></section><section class="passport-card"><div class="passport-step-head"><span>02</span><div><p class="eyebrow">SELECT</p><h2>Select the exact area you need</h2><p>Draw a crop area directly on the image. Any source dimension is supported.</p></div></div><div class="passport-crop-layout"><div class="passport-crop-stage" id="passport-crop-stage"><p class="passport-crop-placeholder" id="passport-crop-placeholder">Upload a photo above to open the crop editor.</p><img id="passport-crop-image" alt="Photo crop editor" hidden><div id="passport-crop-box" class="passport-crop-box" hidden><span>Selected area</span></div></div><div class="passport-crop-controls"><button class="button primary" type="button" id="passport-select-area" disabled>Draw / redraw area</button><button class="button ghost" type="button" id="passport-default-area" disabled>Default passport photo area</button><button class="button ghost" type="button" id="passport-reset-area" disabled>Reset to full photo</button><p>Draw from one corner to another. The final photo is fitted to the requested physical ratio without stretching.</p><div class="passport-selection-readout" id="passport-selection-readout">No area selected yet.</div><div class="passport-processing" id="passport-processing" hidden role="status" aria-live="polite"><div class="passport-processing-spinner" aria-hidden="true"></div><div class="passport-processing-copy"><strong id="passport-processing-title">Preparing your photo…</strong><p id="passport-processing-detail">Please keep this page open while we process your image.</p><div class="passport-processing-track"><span></span></div><small>AI background removal can take 20–30 seconds or longer when the processor is waking up.</small></div></div><div class="passport-processed-preview" id="passport-processed-preview" hidden><strong>Prepared photo preview</strong><img id="passport-processed-image" alt="Prepared passport photo" hidden></div></div></section><section class="passport-card"><div class="passport-step-head"><span>03</span><div><p class="eyebrow">BACKGROUND</p><h2>Keep or remove the background</h2><p>Remove uses the existing FlyThe BG rembg route and its existing Cloudflare Worker credential. No Hugging Face Space changes are made.</p></div></div><div class="passport-choice-grid"><button type="button" class="passport-choice is-selected" data-bg-choice="keep" aria-pressed="true"><strong>Keep background</strong><span>Use the selected photo as-is.</span></button><button type="button" class="passport-choice" data-bg-choice="remove" aria-pressed="false"><strong>Remove background</strong><span>Uses the same /api/remove-bg endpoint as the existing tool.</span></button></div><button class="button primary passport-bg-action" type="button" id="passport-bg-process" disabled>Prepare background</button></section><section class="passport-card"><div class="passport-step-head"><span>04</span><div><p class="eyebrow">PHOTO SIZE</p><h2>Set the physical photo size</h2><p>Use a preset or enter your own dimensions in centimetres or inches.</p></div></div><div class="passport-form-grid"><label>Unit<select id="passport-photo-unit"><option value="cm">Centimetres (cm)</option><option value="in">Inches (in)</option></select></label><label>Preset<select id="passport-photo-preset"><option value="35x45">35 × 45 mm / 3.5 × 4.5 cm</option><option value="2x2in">2 × 2 in</option><option value="33x48">33 × 48 mm / 3.3 × 4.8 cm</option><option value="50x50">50 × 50 mm / 5 × 5 cm</option><option value="custom">Custom</option></select></label><label>Width<input id="passport-photo-width" type="number" min=".1" step=".01" value="3.5"></label><label>Height<input id="passport-photo-height" type="number" min=".1" step=".01" value="4.5"></label></div></section><section class="passport-card"><div class="passport-step-head"><span>05</span><div><p class="eyebrow">BACKGROUND STYLE</p><h2>Choose the final background</h2><p>Start with recommended colours, then use HEX, RGB, a colour picker or your own background image.</p></div></div><div class="passport-swatches" id="passport-swatches"><button type="button" data-bg-color="#FFFFFF" class="is-selected" style="--swatch:#fff"><span>White</span></button><button type="button" data-bg-color="#F5F5F5" style="--swatch:#f5f5f5"><span>Soft white</span></button><button type="button" data-bg-color="#EAF2F8" style="--swatch:#eaf2f8"><span>Cool white</span></button><button type="button" data-bg-color="#DDEBFF" style="--swatch:#ddebff"><span>Light blue</span></button><button type="button" data-bg-color="#E8E8E8" style="--swatch:#e8e8e8"><span>Light grey</span></button></div><div class="passport-color-controls"><label>Colour picker<input id="passport-color" type="color" value="#FFFFFF"></label><label>HEX<input id="passport-hex" value="#FFFFFF" maxlength="7"></label><label>RGB<input id="passport-rgb" value="255, 255, 255"></label></div><label class="passport-image-bg">Optional custom background image<input id="passport-bg-image" type="file" accept="image/png,image/jpeg,image/webp"></label></section><section class="passport-card"><div class="passport-step-head"><span>06</span><div><p class="eyebrow">PAPER</p><h2>Choose your print sheet</h2><p>More than 10 common paper sizes are included. Values can be viewed in cm or inches.</p></div></div><div class="passport-form-grid"><label>Unit<select id="passport-paper-unit"><option value="cm">Centimetres (cm)</option><option value="in">Inches (in)</option></select></label><label>Paper size<select id="passport-paper-preset"></select></label><label>Paper width<input id="passport-paper-width" type="number" min=".1" step=".01"></label><label>Paper height<input id="passport-paper-height" type="number" min=".1" step=".01"></label></div><div class="passport-layout-summary" id="passport-layout-summary">Choose a paper size to calculate the sheet.</div></section><section class="passport-card"><div class="passport-step-head"><span>07</span><div><p class="eyebrow">OUTPUT</p><h2>Choose copies and generate</h2><p>The calculator checks the physical sheet before generation and warns when your requested dimensions cannot fit.</p></div></div><div class="passport-output-controls"><label>Number of photos<input id="passport-copies" type="number" min="1" max="200" value="6"></label><div class="passport-capacity" id="passport-capacity"></div><button class="button primary passport-generate" type="button" id="passport-generate" disabled>Generate printable sheet</button></div><div class="passport-result" id="passport-result" hidden></div></section></main>`,"Passport Size Visa Photo Maker — FlyThe BG");}
-function support():string{return shell(`<main class="andromeda-support-page">
-<section class="andromeda-intro">
- <div class="andromeda-intro-inner">
-  <p class="eyebrow">A JOURNEY THROUGH M31</p>
-  <h1>Learn more about the Andromeda Galaxy.</h1>
-  <p>Scroll to travel from the quiet edge of space into the glowing heart of Andromeda. Every visual in this journey is generated in code — stars, dust, orbiting companions and planets are drawn in your browser.</p>
-  <a class="andromeda-begin" href="#andromeda-story">Begin the journey <span>↓</span></a>
+function support():string{return shell(`<main class="page support-developer reveal">
+<section class="support-dev-hero">
+ <p class="eyebrow">SUPPORT THE DEVELOPER</p>
+ <h1>Help keep FlyThe BG<br>independent and improving.</h1>
+ <p>FlyThe BG is built and maintained as an independent project. Your support helps cover hosting, infrastructure, AI processing costs, maintenance and time spent improving the tools.</p>
+ <div class="support-dev-actions">
+  <a class="support-dev-primary" href="${COFFEE_URL}" target="_blank" rel="noopener noreferrer">☕ Support via Buy Me a Coffee ↗</a>
+  <a class="support-dev-secondary" href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">★ Support on GitHub ↗</a>
+ </div>
+ <small>Payments and donations are handled by the external service you choose. FlyThe BG does not receive your payment credentials.</small>
+</section>
+<section class="support-dev-grid" aria-label="What your support helps with">
+ <article><span>01</span><h2>Keep the site online</h2><p>Hosting, domains, deployment infrastructure and the small operational costs behind a public tool.</p></article>
+ <article><span>02</span><h2>Keep building</h2><p>New features, bug fixes, accessibility work, mobile improvements and better workflows across the toolkit.</p></article>
+ <article><span>03</span><h2>Keep processing available</h2><p>Protected AI background removal and the infrastructure around the services that make the tools useful.</p></article>
+</section>
+<section class="support-dev-note">
+ <div><p class="eyebrow">NO PRESSURE</p><h2>The core tools stay free to use.</h2></div>
+ <p>There is no subscription wall on this support page. Support is optional and simply gives the developer more room to maintain the project and work on what comes next.</p>
+</section>
+<section class="support-dev-final">
+ <p class="eyebrow">THANK YOU</p>
+ <h2>Every contribution helps.</h2>
+ <p>Even a small contribution, a GitHub star or simply sharing FlyThe BG helps an independent project grow.</p>
+ <div class="support-dev-actions">
+  <a class="support-dev-primary" href="${COFFEE_URL}" target="_blank" rel="noopener noreferrer">Support the Developer ↗</a>
+  <a class="support-dev-secondary" href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">View the Project ↗</a>
  </div>
 </section>
-<section class="andromeda-story" id="andromeda-story">
- <div class="andromeda-visual" aria-hidden="true">
-  <canvas id="andromeda-canvas" class="andromeda-canvas"></canvas>
-  <div class="andromeda-visual-label">M31 · CODED VISUALIZATION</div>
- </div>
- <div class="andromeda-chapters">
-  <article class="andromeda-chapter is-first">
-   <p class="andromeda-kicker">01 / MEET ANDROMEDA</p>
-   <h2>Our neighbouring spiral galaxy, seen from 2.5 million light-years away.</h2>
-   <p>Andromeda, also called Messier 31 or M31, is the nearest major galaxy to the Milky Way. Its enormous stellar disk is tilted from our viewpoint, which gives the galaxy its distinctive flattened appearance.</p>
-   <div class="andromeda-facts"><div><b>2.5M</b><span>light-years from Earth</span></div><div><b>200K+</b><span>light-years across in broad descriptions</span></div><div><b>≈1T</b><span>stars in broad estimates</span></div></div>
-  </article>
-  <article class="andromeda-chapter">
-   <p class="andromeda-kicker">02 / INSIDE THE GALAXY</p>
-   <h2>Scroll deeper and the stars begin to reveal the structure.</h2>
-   <p>The bright central bulge is surrounded by a vast stellar disk, threaded by dust lanes and regions where younger stars form. The visualization exaggerates these layers so the structure can be understood as you move through it.</p>
-   <div class="andromeda-diagram"><span>BRIGHT CORE</span><span>STELLAR DISK</span><span>STAR-FORMING REGIONS</span><span>DUST LANES</span></div>
-  </article>
-  <article class="andromeda-chapter">
-   <p class="andromeda-kicker">03 / THE STAR FIELD</p>
-   <h2>Now the camera leaves the galaxy and the neighbourhood appears.</h2>
-   <p>As you continue scrolling, the visual changes from a galaxy-wide view into a coded deep-space scene. Thousands of stars, glowing bodies and orbital paths drift into view to make the scale of the neighbourhood tangible.</p>
-   <div class="andromeda-facts"><div><b>100M+</b><span>stars resolved in major Hubble mosaics</span></div><div><b>36</b><span>dwarf satellite galaxies mapped in a 2025 Hubble survey</span></div><div><b>M32</b><span>one of M31's prominent companions</span></div></div>
-  </article>
-  <article class="andromeda-chapter">
-   <p class="andromeda-kicker">04 / A LIVING NEIGHBOURHOOD</p>
-   <h2>Stars, companions and planets — all moving through one scene.</h2>
-   <p>Andromeda is not a lone island. Smaller companion galaxies orbit the system, while stars and gas move through a much larger halo. The planets you see here are artistic scale cues, not a catalogue of known planets around Andromeda's stars.</p>
-   <div class="andromeda-planet-notes"><span>ORBITING BODIES</span><span>STELLAR HALO</span><span>DUST &amp; GAS</span><span>INTERGALACTIC SPACE</span></div>
-  </article>
-  <article class="andromeda-chapter andromeda-fade-chapter">
-   <p class="andromeda-kicker">05 / WHY IT MATTERS</p>
-   <h2>A distant galaxy can still tell us how galaxies grow.</h2>
-   <p>Hubble observations let astronomers study stellar populations, dust, satellites and the halo of M31 in remarkable detail. The more we learn about Andromeda, the better we understand galaxy formation — including the history of our own Milky Way.</p>
-  </article>
- </div>
-</section>
-<section class="andromeda-help" id="andromeda-help">
- <div class="andromeda-help-card">
-  <p class="eyebrow">KEEP FLYTHE BG RUNNING</p>
-  <h2>Please help us keep this website online.</h2>
-  <p>FlyThe BG is an independent project. If these tools or this Andromeda journey were useful, you can support the project through the external services below. Your support helps with hosting, infrastructure, maintenance and future work.</p>
-  <div class="andromeda-help-actions"><a class="andromeda-donate" href="${COFFEE_URL}" target="_blank" rel="noopener noreferrer">Support via Buy Me a Coffee ↗</a><a class="andromeda-github" href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">Support with GitHub ↗</a></div>
-  <small>Payment is handled by the external service. FlyThe BG does not receive card details or treat a redirect as proof of payment.</small>
- </div>
-</section>
-</main>`,"Support FlyThe BG — Learn About Andromeda");}
+</main>`,"Support the Developer — FlyThe BG");}
 
 function about():string{return shell(`<main class="page prose reveal"><p class="eyebrow">ABOUT FLYTHE BG</p><h1>Useful tools.<br>clear communication.</h1><p>FlyThe BG is an independent project focused on practical media utilities with data minimisation as a design goal. The UI is playful; the security boundary is not.</p><h2>How it works</h2><p>Compression runs locally in your browser. Background removal uses a protected server route so the private AI credential never reaches your device.</p><h2>Independent, non-registered project</h2><p>FlyThe BG is currently not operated as a registered company or business entity. The website may display advertising from third-party advertising providers. Project communication is available through <a href="mailto:support@flythebg.com">support@flythebg.com</a>, Instagram <a href="${OWNER_INSTAGRAM}" target="_blank" rel="noopener noreferrer">@aadarshf1</a>, and the project Instagram <a href="${FLYTHEBG_INSTAGRAM}" target="_blank" rel="noopener noreferrer">@flythebg</a>.</p><p>GitHub: <a href="${GITHUB_REPO}" target="_blank" rel="noopener noreferrer">FlyThe BG repository</a> · <a href="${GITHUB_PROFILE}" target="_blank" rel="noopener noreferrer">StackPilotMAX</a>.</p></main>`,"About — FlyThe BG");}
 
@@ -741,76 +718,8 @@ function wireFlyLanding():void{
   stats.forEach(s=>observer.observe(s));
  }else stats.forEach(s=>animate(s));
 }
-function wireSupportGalaxy():void{
- const root=document.querySelector<HTMLElement>(".andromeda-support-page"),canvas=document.getElementById("andromeda-canvas") as HTMLCanvasElement|null;
- if(!root||!canvas||canvas.dataset.ready==="1")return;canvas.dataset.ready="1";
- const ctx=canvas.getContext("2d",{alpha:true});if(!ctx)return;
- const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
- type Star={x:number;y:number;z:number;s:number;b:number;t:number};
- type Planet={a:number;r:number;size:number;speed:number;phase:number;ring:boolean};
- const stars:Star[]=[];const planets:Planet[]=[];let seed=314159;
- const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
- const gauss=()=>{const u=Math.max(rand(),1e-9),v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(Math.PI*2*v)};
- const count=matchMedia("(max-width:700px)").matches?52000:90000;
- for(let i=0;i<count;i++){
-  const q=i/count;let x=0,y=0,z=0,s=.6+rand()*1.5,b=.35+rand()*.65,t=0;
-  if(q<.18){const rr=Math.abs(gauss())*.2,a=rand()*Math.PI*2;x=rr*Math.cos(a);y=rr*Math.sin(a)*.7;z=(rand()-.5)*.2;s=.8+rand()*2.3;b=.5+rand()*.5;t=1}
-  else if(q<.93){const rr=.08+Math.sqrt(rand())*1.05,arm=(i%5)*(Math.PI*2/5),a=arm+rr*6.8+(rand()-.5)*.8;x=rr*Math.cos(a);y=rr*Math.sin(a)*.34;z=(rand()-.5)*(.035+rr*.13);s=.35+rand()*1.3+(rr<.3?1.1:0);b*=Math.abs(Math.sin(a*2.6+rr*7))<.12?.35:1;t=rand()<.14?2:0}
-  else{const rr=1.2+Math.pow(rand(),.45)*2.1,a=rand()*Math.PI*2;x=rr*Math.cos(a);y=rr*Math.sin(a)*.52;z=(rand()-.5)*1.2;s=.25+rand()*.9;b=.2+rand()*.5;t=3}
-  stars.push({x,y,z,s,b,t});
- }
- for(let i=0;i<9;i++)planets.push({a:.7+i*.52,r:42+i*19,size:3+i%3*1.8,speed:.18+i*.025,phase:rand()*Math.PI*2,ring:i%3===0});
- let width=0,height=0,dpr=1,target=0,progress=0,raf=0,last=performance.now();
- const resize=()=>{dpr=Math.min(devicePixelRatio||1,2);width=innerWidth;height=innerHeight;canvas.width=Math.max(1,Math.round(width*dpr));canvas.height=Math.max(1,Math.round(height*dpr));canvas.style.width=width+"px";canvas.style.height=height+"px";ctx.setTransform(dpr,0,0,dpr,0,0)};
- const clamp=(n:number)=>Math.max(0,Math.min(1,n));
- const update=()=>{
-  const box=root.getBoundingClientRect(),travel=Math.max(1,root.offsetHeight-innerHeight);
-  target=clamp(-box.top/travel);
-  if(!raf)raf=requestAnimationFrame(frame);
- };
- const draw=(now:number)=>{
-  const dt=Math.min(.05,(now-last)/1000);last=now;
-  progress+=((reduced?0:target)-progress)*.065;
-  ctx.clearRect(0,0,width,height);
-  const stage2=clamp((progress-.18)/.34),stage3=clamp((progress-.52)/.28),stage4=clamp((progress-.72)/.22);
-  const cx=width*.28+Math.sin(progress*Math.PI*1.7)*width*.025,cy=height*.5;
-  const galaxyAlpha=1-stage3*.92;
-  const zoom=.7+progress*2.8;
-  const spin=progress*Math.PI*1.45+now*.000018;
-  const tilt=.34+progress*.2;
-  ctx.save();ctx.globalAlpha=galaxyAlpha;
-  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(width,height)*(.08+progress*.1));
-  glow.addColorStop(0,"rgba(255,237,192,.95)");glow.addColorStop(.24,"rgba(255,216,155,.42)");glow.addColorStop(1,"rgba(110,145,255,0)");
-  ctx.fillStyle=glow;ctx.fillRect(0,0,width,height);
-  const c=Math.cos(spin),si=Math.sin(spin);
-  for(let pass=0;pass<3;pass++){
-   ctx.fillStyle=pass===0?"#ece7da":pass===1?"#a9caff":"#fff2c4";
-   for(let i=pass;i<stars.length;i+=3){
-    const p=stars[i],bx=p.x*zoom*width*.18,by=p.y*zoom*width*.18/Math.max(.2,tilt),rx=bx*c-by*si,ry=bx*si+by*c,depth=p.z*zoom*width*.02,sx=cx+rx+depth,sy=cy+ry-depth*.4,size=Math.max(.3,p.s*(.4+progress*1.1)),alpha=Math.min(.9,p.b*(p.t===3?.7:1));
-    if(size<.45&&alpha<.15)continue;ctx.globalAlpha=galaxyAlpha*alpha;ctx.fillRect(sx,sy,size,size);
-   }
-  }
-  ctx.restore();
-  const spaceAlpha=stage2*.72;
-  if(spaceAlpha>.01){
-   ctx.save();ctx.globalAlpha=spaceAlpha;
-   for(let i=0;i<220;i++){const a=i*2.399+now*.000025,r=70+(i%13)*21+stage3*120,x=width*.28+Math.cos(a)*r,y=height*.5+Math.sin(a)*r*.55;ctx.fillStyle=i%7===0?"#fff1c2":"#a9caff";ctx.fillRect(x,y,1+(i%3)*.55,1+(i%3)*.55)}
-   const px=width*.28,py=height*.5,orbitScale=1+stage4*.7;
-   for(let i=0;i<planets.length;i++){const p=planets[i],a=p.phase+now*.0001*p.speed*1000*orbitScale,ox=Math.cos(a)*p.r*orbitScale,oy=Math.sin(a)*p.r*.58*orbitScale;
-    ctx.beginPath();ctx.strokeStyle="rgba(150,180,255,.16)";ctx.lineWidth=1;ctx.ellipse(px,py,p.r*orbitScale,p.r*.58*orbitScale,0,0,Math.PI*2);ctx.stroke();
-    const g=ctx.createRadialGradient(px+ox-p.size*.4,py+oy-p.size*.4,0,px+ox,py+oy,p.size*2.8);g.addColorStop(0,"rgba(255,248,220,1)");g.addColorStop(.3,"rgba(150,195,255,.92)");g.addColorStop(1,"rgba(90,120,210,0)");
-    ctx.fillStyle=g;ctx.beginPath();ctx.arc(px+ox,py+oy,p.size*2.8,0,Math.PI*2);ctx.fill();
-    if(p.ring){ctx.strokeStyle="rgba(220,230,255,.5)";ctx.beginPath();ctx.ellipse(px+ox,py+oy,p.size*2.2,p.size*.75,-.2,0,Math.PI*2);ctx.stroke()}
-   }
-   ctx.restore();
-  }
-  const fade=ctx.createLinearGradient(0,0,width,0);fade.addColorStop(0,"rgba(2,3,8,0)");fade.addColorStop(.62,"rgba(2,3,8,.05)");fade.addColorStop(1,"rgba(2,3,8,.92)");ctx.fillStyle=fade;ctx.fillRect(0,0,width,height);
- };
- const frame=(now:number)=>{draw(now);raf=0;if(Math.abs(target-progress)>.001)raf=requestAnimationFrame(frame)};
- resize();draw(performance.now());addEventListener("resize",resize,{passive:true});addEventListener("scroll",update,{passive:true});const chapters=[...root.querySelectorAll<HTMLElement>(".andromeda-chapter")];if("IntersectionObserver" in window){const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("is-active");else e.target.classList.remove("is-active")}),{rootMargin:"-35% 0px -35% 0px",threshold:0});chapters.forEach(c=>io.observe(c))}update();
-}
 
-function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/passport-photo":"/passport-photo","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/blogs":"/blogs","/blogs/remove-background-online-privacy":"/blogs/remove-background-online-privacy","/blogs/compress-images-in-browser":"/blogs/compress-images-in-browser","/blogs/webm-video-compression-guide":"/blogs/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/";}
+function normalizePath():Route{const p=window.location.pathname.replace(/\/+$/,"")||"/";const routes:Record<string,Route>={"/":"/","/remove-bg":"/remove-bg","/image-compressor":"/image-compressor","/video-compressor":"/video-compressor","/passport-photo":"/passport-photo","/features":"/features","/about":"/about","/faq":"/faq","/privacy":"/privacy","/terms":"/terms","/contact":"/contact","/support":"/support","/support-the-developer":"/support-the-developer","/blogs":"/blogs","/blogs/remove-background-online-privacy":"/blogs/remove-background-online-privacy","/blogs/compress-images-in-browser":"/blogs/compress-images-in-browser","/blogs/webm-video-compression-guide":"/blogs/webm-video-compression-guide","/code-of-conduct":"/code-of-conduct","/accessibility":"/accessibility","/security":"/security","/cookies":"/cookies","/changelog":"/changelog"};return routes[p]||"/";}
 function downloadBlob(blob:Blob,filename:string,tool?:ToolId):void{const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();if(tool){const workspace=document.querySelector<HTMLElement>(`[data-dropzone="${tool}"]`)?.closest(".tool-workspace");if(workspace){workspace.querySelector(".download-recovery")?.remove();const recovery=document.createElement("div");recovery.className="download-recovery";recovery.innerHTML=`<span><strong>Your file is ready.</strong> If the browser download was cancelled or missed, use Download again.</span><button type="button" class="button primary">Download again</button>`;recovery.querySelector("button")?.addEventListener("click",()=>{const retry=document.createElement("a");retry.href=url;retry.download=filename;retry.rel="noopener";document.body.appendChild(retry);retry.click();retry.remove();});workspace.appendChild(recovery);}}setTimeout(()=>URL.revokeObjectURL(url),300000);}
 function setProgress(tool:ToolId,value:number,label?:string):void{const n=Math.max(0,Math.min(100,value));const bar=document.querySelector<HTMLElement>(`[data-progress="${tool}"]`);if(bar)bar.style.width=`${n}%`;const text=document.querySelector<HTMLElement>(`[data-progress-label="${tool}"]`);if(text)text.textContent=label??`${Math.round(n)}%`;}
 function updateStatus(tool:ToolId,message:string):void{const el=document.querySelector<HTMLElement>(`[data-status="${tool}"]`);if(el)el.textContent=message;}
@@ -1036,6 +945,7 @@ function render():void{
   case "/terms":page=terms();break;
   case "/contact":page=contact();break;
   case "/support":page=support();break;
+  case "/support-the-developer":page=support();break;
   case "/blogs":page=blog();break;
   case "/blogs/remove-background-online-privacy":page=blogPrivacy();break;
   case "/blogs/compress-images-in-browser":page=blogImage();break;
@@ -1054,7 +964,7 @@ function render():void{
  wireSpaceExperience();
  wireFlyLanding();
  wireHomeVisuals();
- wireSupportGalaxy();
+
  wireEditorial();
  loadStars();
  revealElements();
