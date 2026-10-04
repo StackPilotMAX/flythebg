@@ -70,8 +70,8 @@ function buildStructuredData(route, canonical, meta) {
     alternateName: "FlyTheBG",
     url: SITE_URL + "/",
     description: "Independent privacy-focused media tools and background-removal project.",
-    logo: { "@type": "ImageObject", "url": SITE_URL + "/assets/flythebg-logo.png", "contentUrl": SITE_URL + "/assets/flythebg-logo.png" },
-    image: SITE_URL + "/assets/flythebg-logo.png",
+    logo: { "@type": "ImageObject", "url": SITE_URL + "/favicon.png", "contentUrl": SITE_URL + "/favicon.png" },
+    image: SITE_URL + "/favicon.png",
     email: "support@flythebg.com",
     sameAs: [GITHUB_URL, INSTAGRAM_URL]
   };
@@ -82,12 +82,41 @@ function buildStructuredData(route, canonical, meta) {
     url: SITE_URL + "/",
     description: "Media tools for background removal, image compression and browser-based video compression.",
     inLanguage: "en",
-    publisher: { "@id": SITE_URL + "/#organization" }
+    publisher: { "@id": SITE_URL + "/#organization" },
+    copyrightHolder: { "@id": SITE_URL + "/#organization" }
   };
   const graph = [organization, website];
+  const toolFeatures = {
+    "/remove-bg": [
+      "Protected AI background removal",
+      "PNG JPG WEBP input",
+      "15 MB maximum image size",
+      "Transparent PNG output"
+    ],
+    "/image-compressor": [
+      "Browser-local image compression",
+      "Image resizing",
+      "JPEG delivery output",
+      "No original upload required"
+    ],
+    "/video-compressor": [
+      "Browser-local video processing",
+      "WebM output",
+      "Visible processing progress",
+      "No original upload required"
+    ],
+    "/passport-photo": [
+      "Freeform photo cropping",
+      "Keep or remove background",
+      "Centimetre and inch dimensions",
+      "Multiple paper sizes",
+      "Printable photo sheets"
+    ]
+  };
+
   const application = {
     "@type": ["SoftwareApplication", "WebApplication"],
-    "@id": TOOL_ROUTES.has(route || "") ? canonical : SITE_URL + "/#application",
+    "@id": TOOL_ROUTES.has(route || "") ? canonical + "#application" : SITE_URL + "/#application",
     name: TOOL_ROUTES.has(route || "") ? meta.title.replace(" — FlyThe BG", "") : "FlyThe BG",
     url: canonical,
     description: meta.description,
@@ -95,14 +124,49 @@ function buildStructuredData(route, canonical, meta) {
     operatingSystem: "Web",
     browserRequirements: "Requires JavaScript and a modern web browser.",
     isAccessibleForFree: true,
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    inLanguage: "en",
+    featureList: toolFeatures[route || ""] || [
+      "Protected AI background removal",
+      "Browser-local image compression",
+      "Browser-local video compression",
+      "Passport and visa photo sheet generation"
+    ],
+    offers: { "@type": "Offer", price: 0, priceCurrency: "USD" },
+    creator: { "@id": SITE_URL + "/#organization" },
     publisher: { "@id": SITE_URL + "/#organization" }
+  };
+
+  const addWebPage = (types = ["WebPage"]) => {
+    graph.push({
+      "@type": types,
+      "@id": canonical + "#webpage",
+      url: canonical,
+      name: meta.title,
+      description: meta.description,
+      inLanguage: "en",
+      isPartOf: { "@id": SITE_URL + "/#website" },
+      publisher: { "@id": SITE_URL + "/#organization" },
+      about: { "@id": SITE_URL + "/#organization" },
+      mainEntity: TOOL_ROUTES.has(route || "") ? { "@id": canonical + "#application" } : undefined
+    });
   };
 
   if (route === "/") {
     graph.push(application);
+    graph.push({
+      "@type": ["WebPage", "CollectionPage"],
+      "@id": canonical + "#webpage",
+      url: canonical,
+      name: meta.title,
+      description: meta.description,
+      inLanguage: "en",
+      isPartOf: { "@id": SITE_URL + "/#website" },
+      publisher: { "@id": SITE_URL + "/#organization" },
+      mainEntity: { "@id": SITE_URL + "/#application" }
+    });
     return { "@context": "https://schema.org", "@graph": graph };
   }
+
   if (TOOL_ROUTES.has(route || "")) graph.push(application);
 
   const breadcrumb = buildBreadcrumb(route, meta, canonical);
@@ -114,22 +178,53 @@ function buildStructuredData(route, canonical, meta) {
       description: meta.description,
       url: canonical,
       inLanguage: "en",
-      mainEntityOfPage: canonical,
+      mainEntityOfPage: { "@id": canonical + "#webpage" },
       author: { "@id": SITE_URL + "/#organization" },
       publisher: { "@id": SITE_URL + "/#organization" },
-      articleSection: "FlyThe BG Journal"
+      image: SITE_URL + "/favicon.png",
+      articleSection: "FlyThe BG Journal",
+      isPartOf: { "@id": SITE_URL + "/#website" }
+    });
+    addWebPage(["WebPage", "Article"]);
+  } else if (route === "/about") {
+    addWebPage(["AboutPage"]);
+  } else if (route === "/contact") {
+    addWebPage(["ContactPage"]);
+  } else if (route === "/faq") {
+    const faqEntities = [
+      ["Is my uploaded image saved anywhere?", "FlyThe BG does not provide an account gallery, persistent media library, database record or storage bucket for uploaded media. The background-removal image is forwarded for the requested processing job and is not intentionally written to persistent FlyThe BG storage."],
+      ["Does Hugging Face keep my image?", "Hugging Face/Gradio is independent infrastructure used for processing, not a FlyThe BG storage service. Temporary runtime handling can occur while a job executes, and provider logging or retention rules may apply outside FlyThe BG's control."],
+      ["What is actually sent to the internet?", "Remove Background needs a network request to the protected FlyThe BG route. Image and video compression are designed to happen in your browser."],
+      ["What if I cancel the download by mistake?", "The processed result remains available in the current tab for recovery."],
+      ["Can I use FlyThe BG from an iPhone or Android phone?", "Yes. The interface supports touch-sized controls, mobile navigation and browser file pickers."],
+      ["Do I need to sign up or give you my email?", "No account is required for the current tools. Email is only needed if you choose to contact the project directly."],
+      ["Are the compressed files stored on FlyThe BG?", "Image and video compression are designed to run locally in your browser."],
+      ["Can I process someone else's photo?", "Only when you have the necessary rights and permission."]
+    ];
+    addWebPage(["FAQPage"]);
+    const faqPage = graph[graph.length - 1];
+    faqPage.mainEntity = faqEntities.map(([name, text], index) => ({
+      "@type": "Question",
+      "@id": canonical + "#question-" + (index + 1),
+      name,
+      acceptedAnswer: { "@type": "Answer", text }
+    }));
+  } else if (route === "/blogs") {
+    addWebPage(["CollectionPage"]);
+    const articleRoutes = Object.keys(ROUTE_META).filter(key => key.startsWith("/blogs/"));
+    graph.push({
+      "@type": "ItemList",
+      "@id": canonical + "#article-list",
+      name: "FlyThe BG practical guides",
+      itemListElement: articleRoutes.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: ROUTE_META[item].title,
+        url: SITE_URL + item
+      }))
     });
   } else {
-    graph.push({
-      "@type": "WebPage",
-      "@id": canonical + "#webpage",
-      name: meta.title,
-      description: meta.description,
-      url: canonical,
-      inLanguage: "en",
-      isPartOf: { "@id": SITE_URL + "/#website" },
-      publisher: { "@id": SITE_URL + "/#organization" }
-    });
+    addWebPage();
   }
   if (breadcrumb) graph.push(breadcrumb);
   return { "@context": "https://schema.org", "@graph": graph };
@@ -180,7 +275,7 @@ function applyRouteMeta(html, canonical, meta, isMissing, route) {
   output = output.replace(/\s*<link rel="canonical"[^>]*>/i, "");
   output = output.replace(/\s*<meta name="csp-nonce"[^>]*>/i, "");
   output = output.replace(/\s*<script type="application\/ld\+json"[^>]*>[^<]*<\/script>/gi, "");
-  output = output.replace("</head>", '<meta name="csp-nonce" content="' + nonce + '"><link rel="canonical" href="' + escapeHtml(canonical) + '"><script type="application/ld+json" data-fly-server-schema nonce="' + nonce + '">' + schema + '</script></head>');
+  output = output.replace("</head>", '<meta name="csp-nonce" content="' + nonce + '"><link rel="canonical" href="' + escapeHtml(canonical) + '"><link rel="describedby" href="/llms.txt"><script type="application/ld+json" data-fly-server-schema nonce="' + nonce + '">' + schema + '</script></head>');
   output = output.replace(/<meta name="robots"[^>]*>/i, isMissing ? '<meta name="robots" content="noindex,follow,noarchive">' : '<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">');
   // Keep the real client app shell intact. The server fallback must not replace #app,
   // otherwise the interactive site becomes permanently hidden behind SEO text.
