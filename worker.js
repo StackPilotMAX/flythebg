@@ -17,6 +17,18 @@ const ROUTE_META = {
   "/blogs/remove-background-online-privacy": { title: "Remove Background Online: Privacy Guide | FlyThe BG", description: "Learn what happens when you remove an image background online, what data may leave your device, and which privacy questions to ask." },
   "/blogs/compress-images-in-browser": { title: "How to Compress Images in Your Browser | FlyThe BG", description: "Learn how browser-based image compression works, how file size changes, and why keeping the original image on your device matters." },
   "/blogs/webm-video-compression-guide": { title: "WebM Video Compression Guide — Codecs & Size | FlyThe BG", description: "Learn how WebM video compression works in browsers, how codecs affect size and quality, and what to check for compatibility." },
+  "/blogs/passport-photo-size-guide": { title: "Passport Photo Sizes: CM, Inches & Pixels | FlyThe BG", description: "Understand passport and visa photo dimensions in centimetres, inches, and pixels, and how physical print size relates to image resolution." },
+  "/blogs/passport-photo-printing-guide": { title: "How to Print Passport Photos on A4 and Other Paper Sizes | FlyThe BG", description: "Learn how to arrange passport photos on A4 and other paper sizes, choose print dimensions, and avoid scaling problems." },
+  "/blogs/png-vs-jpg-guide": { title: "PNG vs JPG: Which Image Format Should You Use? | FlyThe BG", description: "Compare PNG and JPG for transparency, file size, editing, screenshots, photos, and practical web workflows." },
+  "/blogs/image-file-size-guide": { title: "How to Reduce Image File Size Without Ruining Quality | FlyThe BG", description: "Practical ways to reduce image file size while keeping useful visual quality for websites, documents, messages, and uploads." },
+  "/blogs/transparent-background-guide": { title: "Transparent Backgrounds Explained: PNG, Alpha and Use Cases | FlyThe BG", description: "Understand transparent backgrounds, alpha channels, PNG files, and when transparency is useful for practical media workflows." },
+  "/blogs/social-media-image-sizes": { title: "Social Media Image Sizes: A Practical Workflow | FlyThe BG", description: "A practical guide to preparing image dimensions and file sizes for common social media workflows without unnecessary resizing." },
+  "/blogs/email-image-size-guide": { title: "Email Image Sizes: Make Images Easier to Send | FlyThe BG", description: "Learn how image dimensions and file size affect email attachments, inline images, loading time, and deliverability." },
+  "/blogs/website-image-optimization": { title: "Website Image Optimization Basics | FlyThe BG", description: "Learn the practical basics of image dimensions, compression, formats, and browser delivery for faster websites." },
+  "/blogs/video-file-size-guide": { title: "Why Video Files Get So Large | FlyThe BG", description: "Understand why video files become large and which factors—resolution, bitrate, duration, codec, and frame rate—matter most." },
+  "/blogs/browser-media-privacy": { title: "Browser-Local Media Processing and Privacy | FlyThe BG", description: "Learn what browser-local media processing means, what stays on your device, and where network requests can still occur." },
+  "/blogs/webp-vs-jpg-guide": { title: "WebP vs JPG: When Each One Makes Sense | FlyThe BG", description: "Compare WebP and JPG for quality, file size, compatibility, transparency, and everyday web and image workflows." },
+  "/blogs/how-to-choose-image-format": { title: "How to Choose an Image Format in Seconds | FlyThe BG", description: "A practical decision guide for choosing PNG, JPG, or WebP based on transparency, photo content, editing, and delivery needs." },
   "/code-of-conduct": { title: "Code of Conduct — FlyThe BG Community", description: "Read the FlyThe BG community standards for respectful, constructive, inclusive, and privacy-conscious participation across the project." },
   "/accessibility": { title: "Accessibility — FlyThe BG Website & Tools", description: "Read how FlyThe BG approaches keyboard access, touch controls, reduced motion, readable content, and reporting accessibility barriers." },
   "/security": { title: "Security at FlyThe BG — Vulnerability Reporting", description: "Learn how FlyThe BG protects its media tools and how to report a security vulnerability or privacy-sensitive problem." },
@@ -27,7 +39,7 @@ const ROUTE_META = {
 const ROUTES = new Set(Object.keys(ROUTE_META));
 function normalizeRoute(pathname) {
   const normalized = pathname.replace(/\/+$/, "") || "/";
-  return ROUTES.has(normalized) ? normalized : "/";
+  return ROUTES.has(normalized) ? normalized : null;
 }
 const SITE_URL = "https://flythebg.com";
 const GITHUB_URL = "https://github.com/StackPilotMAX/flythebg";
@@ -35,9 +47,9 @@ const INSTAGRAM_URL = "https://www.instagram.com/flythebg/";
 const TOOL_ROUTES = new Set(["/remove-bg","/image-compressor","/video-compressor","/passport-photo"]);
 
 function buildBreadcrumb(route, meta, canonical) {
-  if (route === "/") return null;
+  if (!route || route === "/") return null;
   const items = [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL + "/" }];
-  if (route.startsWith("/blogs/")) {
+  if (route && route.startsWith("/blogs/")) {
     items.push({ "@type": "ListItem", position: 2, name: "Blogs", item: SITE_URL + "/blogs" });
     items.push({ "@type": "ListItem", position: 3, name: meta.title });
   } else if (TOOL_ROUTES.has(route)) {
@@ -74,8 +86,8 @@ function buildStructuredData(route, canonical, meta) {
   const graph = [organization, website];
   const application = {
     "@type": ["SoftwareApplication", "WebApplication"],
-    "@id": TOOL_ROUTES.has(route) ? canonical : SITE_URL + "/#application",
-    name: TOOL_ROUTES.has(route) ? meta.title.replace(" — FlyThe BG", "") : "FlyThe BG",
+    "@id": TOOL_ROUTES.has(route || "") ? canonical : SITE_URL + "/#application",
+    name: TOOL_ROUTES.has(route || "") ? meta.title.replace(" — FlyThe BG", "") : "FlyThe BG",
     url: canonical,
     description: meta.description,
     applicationCategory: "MultimediaApplication",
@@ -90,10 +102,10 @@ function buildStructuredData(route, canonical, meta) {
     graph.push(application);
     return { "@context": "https://schema.org", "@graph": graph };
   }
-  if (TOOL_ROUTES.has(route)) graph.push(application);
+  if (TOOL_ROUTES.has(route || "")) graph.push(application);
 
   const breadcrumb = buildBreadcrumb(route, meta, canonical);
-  if (route.startsWith("/blogs/")) {
+  if (route && route.startsWith("/blogs/")) {
     graph.push({
       "@type": "BlogPosting",
       "@id": canonical + "#article",
@@ -125,6 +137,9 @@ function buildStructuredData(route, canonical, meta) {
 
 function buildSeoFallback(route, meta, canonical) {
   const link = (href, label) => '<a href="' + href + '">' + label + "</a>";
+  if (!route) {
+    return '<main class="seo-fallback" aria-label="Page not found"><p class="eyebrow">404 · PAGE NOT FOUND</p><h1>That page has flown away.</h1><p>The address you requested is not a published FlyThe BG page.</p><h2>Try a published tool or guide</h2><p>' + link("/", "FlyThe BG home") + ', ' + link("/features", "the media toolkit") + ', or ' + link("/blogs", "the FlyThe BG Blogs") + '.</p>' + '<p>For questions, see the ' + link("/faq", "FAQ") + ' or ' + link("/contact", "contact page") + '.</p></main>';
+  }
   const common = [
     '<p>FlyThe BG is an independent web project for practical media processing. It combines protected AI background removal with browser-local image and video compression, so each tool can make its processing boundary clear before you start.</p>',
     '<p>For privacy details, see ' + link("/privacy", "the FlyThe BG Privacy Policy") + '. For answers about files, limits, mobile use, and downloads, visit ' + link("/faq", "the FAQ") + '.</p>'
@@ -150,10 +165,9 @@ function buildSeoFallback(route, meta, canonical) {
   return '<main class="seo-fallback" aria-label="FlyThe BG page content"><p class="eyebrow">FLYTHE BG</p><h1>' + meta.title + '</h1>' + sections + common.join("") + '<p><a href="' + canonical + '">Canonical page: ' + meta.title + "</a></p></main>";
 }
 
-function applyRouteMeta(html, canonical, meta, isMissing) {
+function applyRouteMeta(html, canonical, meta, isMissing, route) {
   const escapeHtml = value => String(value).replace(/[&<>"]/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[char]));
   const nonce = crypto.randomUUID().replace(/-/g, "");
-  const route = normalizeRoute(new URL(canonical).pathname);
   const schema = JSON.stringify(buildStructuredData(route, canonical, meta)).replace(/</g, "\\u003c");
   let output = html;
   output = output.replace(/<title>[^<]*<\/title>/i, "<title>" + escapeHtml(meta.title) + "</title>");
@@ -257,11 +271,18 @@ export default {
     const assetResponse = await env.ASSETS.fetch(request);
     const contentType = assetResponse.headers.get("Content-Type") || "";
     if (!contentType.includes("text/html")) return withSecurityHeaders(assetResponse);
+
     const route = normalizeRoute(url.pathname);
-    const meta = ROUTE_META[route] || ROUTE_META["/"];
+    const isMissing = !route;
+    const meta = isMissing
+      ? { title: "Page not found — FlyThe BG", description: "The requested FlyThe BG page does not exist." }
+      : ROUTE_META[route];
     const html = await assetResponse.text();
-    const transformed = applyRouteMeta(html, url.origin + route, meta, false);
-    const response = new Response(transformed.body, { status: transformed.status, headers: new Headers(assetResponse.headers) });
+    const canonicalPath = route || url.pathname.replace(/\/+$/, "") || "/";
+    const fallback = buildSeoFallback(route, meta, url.origin + canonicalPath);
+    const seededHtml = html.replace('<div id="app"></div>', '<div id="app">' + fallback + '</div>');
+    const transformed = applyRouteMeta(seededHtml, url.origin + canonicalPath, meta, isMissing, route);
+    const response = new Response(transformed.body, { status: isMissing ? 404 : transformed.status, headers: new Headers(assetResponse.headers) });
     response.headers.set("Content-Type","text/html; charset=utf-8");
     response.headers.set("Cache-Control","public, max-age=0, must-revalidate");
     const secured = withSecurityHeaders(response);
